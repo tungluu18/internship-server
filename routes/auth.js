@@ -1,11 +1,18 @@
 const express = require('express');
-const bodyParser = require('body-parser');
+const bodyParser = require('body-parser').json();
 const validInput = require('./validInput');
 const knex = require('knex')(require('../knexfile'));
 const secure = require('./secure');
 
 const router = express();
-router.use(bodyParser.json());
+router.use(bodyParser);
+// setting CORS
+router.use((req, res, next) => {   // hỗ trợ nhận request post/get chứa cookie dạng json từ client
+    res.header('Access-Control-Allow-Origin', 'http://localhost:3001');
+    res.header('Access-Control-Allow-Headers', 'Content-Type,X-Requested-With');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+    next();
+}); 
 
 router.post('/', (req, res, next) => {
     const username = req.body.username;
@@ -16,9 +23,7 @@ router.post('/', (req, res, next) => {
         res.status(400);
         return res.send(result);
     }
-
-    //return res.send("ahihi");
-
+    
     knex('user').where('username', username).then((result) => {
         if (result.length == 0) return res.send({success:false, payload:{}, error:"username khong ton tai"});        
         
