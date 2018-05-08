@@ -30,7 +30,7 @@ router.post('/', (req, res, next) => {
         if (secure.compare(password, result[0].password)) {
             return res.send({success:true, payload:{
                 token: secure.createUserToken(username),
-                typeUser: result[0].type,
+                userType: result[0].type,
                 expiresIn:86400                    
             }, error:null});                        
         }
