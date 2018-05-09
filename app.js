@@ -4,7 +4,7 @@ const app = express();
 // setting CORS
 app.use((req, res, next) => {   // hỗ trợ nhận request post/get chứa cookie dạng json từ client
     res.header('Access-Control-Allow-Origin', 'http://localhost:3001');
-    res.header('Access-Control-Allow-Headers', 'Content-Type,X-Requested-With');
+    res.header('Access-Control-Allow-Headers', 'Content-Type,X-Requested-With,Authorization');
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
     next();
 });  
