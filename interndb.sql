@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 06, 2018 at 04:21 PM
+-- Generation Time: May 09, 2018 at 09:01 AM
 -- Server version: 5.7.17-log
 -- PHP Version: 5.6.30
 
@@ -60,6 +60,25 @@ INSERT INTO `knex_migrations_lock` (`is_locked`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `student`
+--
+
+CREATE TABLE `student` (
+  `id` int(10) NOT NULL,
+  `name` varchar(50) COLLATE utf8mb4_vietnamese_ci NOT NULL,
+  `class` varchar(20) COLLATE utf8mb4_vietnamese_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
+
+--
+-- Dumping data for table `student`
+--
+
+INSERT INTO `student` (`id`, `name`, `class`) VALUES
+(1, 'Lưu Quang Tùng', 'QH2016-I/CQ-C-CLC');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `user`
 --
 
@@ -80,6 +99,26 @@ INSERT INTO `user` (`id`, `username`, `password`, `type`, `created_at`, `updated
 (1, 'tungluu18', '$2a$10$bkxorEHhZO6tIKmhdgIofOldMivKsFyWXh0XnJBIMI2FqXcU/wKBu', 'student', '2018-05-06 21:11:45', '2018-05-06 21:11:45'),
 (2, 'giangth2310', '$2a$10$6.Kd/DlcBUtyZiucn3zmoutCzKFxQw2N7aPuv8gnRuIitahMWkHQi', 'student', '2018-05-06 21:13:42', '2018-05-06 21:13:42');
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `id` int(10) NOT NULL,
+  `username` varchar(30) COLLATE utf8mb4_vietnamese_ci NOT NULL,
+  `password` varchar(200) COLLATE utf8mb4_vietnamese_ci NOT NULL,
+  `type` varchar(10) COLLATE utf8mb4_vietnamese_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `username`, `password`, `type`) VALUES
+(1, 'tungluu18', '123456', 'boss');
+
 --
 -- Indexes for dumped tables
 --
@@ -91,9 +130,21 @@ ALTER TABLE `knex_migrations`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `student`
+--
+ALTER TABLE `student`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `user`
 --
 ALTER TABLE `user`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -106,10 +157,30 @@ ALTER TABLE `user`
 ALTER TABLE `knex_migrations`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
+-- AUTO_INCREMENT for table `student`
+--
+ALTER TABLE `student`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `student`
+--
+ALTER TABLE `student`
+  ADD CONSTRAINT `student_ibfk_1` FOREIGN KEY (`id`) REFERENCES `users` (`id`);
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
