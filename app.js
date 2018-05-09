@@ -2,8 +2,7 @@ const express = require('express');
 const app = express();
 
 // routing 
-const authRoute = require("./routes/auth");
-app.use('/api/auth', authRoute);
+require("./routes/control").route(app);
 
 // setting CORS
 app.use((req, res, next) => {   // hỗ trợ nhận request post/get chứa cookie dạng json từ client
