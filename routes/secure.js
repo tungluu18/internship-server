@@ -10,8 +10,8 @@ module.exports = {
     compare: function(raw, hash) {
         return bcrypt.compareSync(raw, hash);
     },
-    createUserToken: function(username) {
-        return jwt.sign({id : username}, secretCode, {expiresIn : 86400});
+    createUserToken: function(user, expire) {
+        return jwt.sign({id: user.id, userType: user.type, expiresIn: expire}, secretCode, {expiresIn : 86400});
     },
     verifyUserToken: function(token) {
         try {
