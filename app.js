@@ -1,9 +1,6 @@
 const express = require('express');
 const app = express();
 
-// routing 
-require("./routes/control").route(app);
-
 // setting CORS
 app.use((req, res, next) => {   // hỗ trợ nhận request post/get chứa cookie dạng json từ client
     res.header('Access-Control-Allow-Origin', 'http://localhost:3001');
@@ -12,10 +9,19 @@ app.use((req, res, next) => {   // hỗ trợ nhận request post/get chứa coo
     next();
 });  
 
-const cookieParser = require('cookie-parser')
-app.use(cookieParser());  // hộ trợ đọc cookie từ client
 
-//PORT: listen on port 3000 unless there exists a preconfigured port
+// Hỗ trợ đọc cookie từ client
+const cookieParser = require('cookie-parser')
+app.use(cookieParser());  
+
+
+
+// routing 
+require("./control/control").route(app);
+
+
+
+// PORT: listen on port 3000 unless there exists a preconfigured port
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Listening on ${port}...`);

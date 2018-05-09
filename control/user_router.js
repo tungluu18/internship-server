@@ -4,9 +4,7 @@ module.exports = {
     getAvatar: function(req, res, idUser) {
         knex('user').where({'id': idUser})
         .then((rows) => {                        
-            if (rows.length == 0) return res.sendStatus(400);
-            const typeOfUser = rows[0].type;
-            console.log(typeOfUser);
+            if (rows.length == 0) return res.sendStatus(400);            
             return knex(`${typeOfUser}`).where({'id': idUser});                                        
         })
         .then((rows) => {
