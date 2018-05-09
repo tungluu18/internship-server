@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 09, 2018 at 04:09 PM
+-- Generation Time: May 09, 2018 at 04:15 PM
 -- Server version: 5.7.17-log
 -- PHP Version: 5.6.30
 
@@ -91,7 +91,7 @@ CREATE TABLE `lecturer` (
 --
 
 INSERT INTO `lecturer` (`id`, `name`) VALUES
-(6, NULL);
+(6, 'Lê Đình Thanh');
 
 -- --------------------------------------------------------
 
@@ -109,8 +109,8 @@ CREATE TABLE `partner` (
 --
 
 INSERT INTO `partner` (`id`, `name`) VALUES
-(3, NULL),
-(7, NULL);
+(3, 'SAMSUNG Việt Nam'),
+(7, 'Framgia');
 
 -- --------------------------------------------------------
 
@@ -129,8 +129,8 @@ CREATE TABLE `student` (
 --
 
 INSERT INTO `student` (`id`, `name`, `class`) VALUES
-(1, '', ''),
-(2, '', '');
+(1, 'Lưu Quang Tùng', 'QH2016-I/CQ-C-CLC'),
+(2, 'Trương Hoàng Giang', 'QH2016-I/CQ-C-CLC');
 
 -- --------------------------------------------------------
 
