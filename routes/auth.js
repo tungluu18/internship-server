@@ -25,17 +25,17 @@ router.post('/', (req, res, next) => {
     }
     
     knex('user').where('username', username).then((result) => {
-        if (result.length == 0) return res.send({success:false, payload:{}, error:"username khong ton tai"});        
+        if (result.length == 0) return res.send({success:false, payload:{}, error:{message:"username không tồn tại"}});        
         
         if (secure.compare(password, result[0].password)) {
             return res.send({success:true, payload:{
                 token: secure.createUserToken(username),
                 userType: result[0].type,
-                expiresIn:86400                    
+                expiresIn: 86400                    
             }, error:null});                        
         }
 
-        return res.send({success:false, payload:{}, error:"mat khau sai"});
+        return res.send({success:false, payload:{}, error:{message:"Nhập sai password"}});
     });    
 })
 
