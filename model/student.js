@@ -1,7 +1,7 @@
 const knex = require('knex')(require('../knexfile'));
 
 module.exports = {
-    getAll: function(res) {
+    getAll: function(callback) {
         let result = [];        
         knex('student').select()
         .then((rows) => {                        
@@ -10,11 +10,11 @@ module.exports = {
         })
         .then((rows) => {
             for (Element of rows) Element.id = undefined;
-            for (var i = 0; i < result.length; ++i) result[i].editable = rows[i];
-            return res.send(result);
+            for (var i = 0; i < result.length; ++i) result[i].editable = rows[i];                        
+            callback(null, result);
         })
         .catch((err) => {
-            console.log(err);
+            callback(err, null);            
         })
     }
 }

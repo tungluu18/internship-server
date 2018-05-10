@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 10, 2018 at 08:19 AM
+-- Generation Time: May 10, 2018 at 04:04 PM
 -- Server version: 5.7.17-log
 -- PHP Version: 5.6.30
 
@@ -36,6 +36,7 @@ CREATE TABLE `admin` (
 --
 
 INSERT INTO `admin` (`id`, `name`) VALUES
+(5, NULL),
 (8, NULL);
 
 -- --------------------------------------------------------
@@ -194,6 +195,7 @@ INSERT INTO `user` (`id`, `username`, `password`, `type`, `avatar`) VALUES
 (2, 'giangth2310', '$2a$10$x.THs51X7VVtuUFy/qaXDeLC99FnLrZmx4HNLp7UonnBceyPHSfly', 'student', '/avatar/2.jpg'),
 (3, 'samsungvn', '$2a$10$P2unJ0iu1smIsIuJq.meROfDxiOYk6/.pvBqV6NNUsFA7d5OtL.9W', 'partner', '/avatar/3.jpg'),
 (4, 'tranquangbach', '$2a$10$ecbRK4snDNwdjs91qcPxf.DHHfgk4hA/xCmmoJghC5DlohOglJemi', 'student', NULL),
+(5, 'quanlysinhvien', '$2a$10$LnkVas0fW3e.n0OK.sAKTu7yD5EkTF3tH1C98khPPhhElKfDcWua2', 'admin', NULL),
 (6, 'ledinhthanh', '$2a$10$UccMFPoyBKiv/tKTCMBg4eVOV7/SHGbjb.w83EXb.yDaXtgBWfxSq', 'lecturer', NULL),
 (7, 'framgia', '$2a$10$FL0Gqr0DkjxEUafk8BWZpO.oIFMcjxm85sUvIEmFrrNfkE6Ya33Im', 'partner', NULL),
 (8, 'pdt', '$2a$10$rJGuw8GzppfOwRQ7Cvr5f.7kLkPehpCy1oe/uk9ZRqeGYug3jT/0C', 'admin', NULL);

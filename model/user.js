@@ -3,29 +3,27 @@ const secure = require('../control/secure');
 const linkData = 'http://localhost:3000/data';
 
 module.exports = {
-    add(username, password, type, res) {                    
+    add(username, password, type, callback) {                    
+        if (type !== 'student' && type !== 'admin' && type !== 'lecturer' && type !=='partner')
+            return callback('Loại tài khoản không hợp lệ');
+
         password = secure.encrypt(password);
         let newId = 1;
+
         knex('user').select().then((rows) => {                        
-            //console.log(rows);
-            for (let element of rows) {
-                //console.log(element.id);
-                if (element.id != newId) break; else newId++;           
-            }
+            for (let element of rows) if (element.id != newId) break; else newId++;                       
             for (let element of rows) if (element.username === username) return Promise.reject("Username đã tồn tại");                        
-            //console.log(newId);
             return knex('user').insert({'id':newId, 'username':username, 'password':password, 'type':type});
         }).then (() => {            
-            //console.log(newId);            
             return knex(`${type}`).insert({'id':newId});
         }).then(() => {
-            if (type == 'student') return knex('studenteditable').insert({'id':newId});
+            if (type == 'student') return knex('studenteditable').insert({'id':newId});            
             return Promise.resolve();
         }).then (() => {
-            res.send("Tạo tài khoản thành công");                              
+            callback(null, null);
         }).catch((err) => {
             console.log(err);
-            res.send(err);
+            callback(err, null);
         });
     },
 
@@ -33,29 +31,31 @@ module.exports = {
         knex('user').where({'id':req.body.id}).delete().then(() => {
             res.send("Xóa thành công");
         }).catch ((err) => {
-            res.status(400);
-            console.log(err);
-            res.send(err);
+            res.sendstatus(200);
         })
     },   
     
-    getAvatar: function(res, idUser) {
-        let name = null, avatar = null, typeOfUser;
-        knex('user').where({'id': idUser})
-        .then((rows) => {                        
-            if (rows.length == 0) return Promise.reject("id không tồn tại");                        
+    getById: function(id, callback) {
+        knex('user').where('id', id)
+        .then((result) => {callback(null, result)})
+        .catch((err) => {callback(err, null);});
+    },
 
+    getAvatar: function(id, callback) {
+        let name = null, avatar = null, typeOfUser;
+        knex('user').where({'id': id})
+        .then((rows) => {                                    
+            if (rows.length == 0) return Promise.reject("id không tồn tại");                        
             typeOfUser = rows[0].type;
-            if (rows[0].data != null) avatar = linkData + rows[0].avatar;
-            return knex(`${typeOfUser}`).where({'id': idUser});                                        
+            if (rows[0].avatar != null) avatar = linkData + rows[0].avatar;
+            return knex(`${typeOfUser}`).where({'id': id});                                        
         })
-        .then((rows) => {
-            if (rows.length != 0) name = rows[0].name;            
-            res.send({'name':name, 'avatar':avatar});
+        .then((rows) => {            
+            if (rows.length != 0) name = rows[0].name;  
+            callback(null, {'name':name, 'avatar':avatar});
         })    
-        .catch((err) => {
-            console.log(err)
-            res.send(err);
+        .catch((err) => {            
+            callback(err, null);
         })    
     }
 }
