@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const secretCode = "vietnamvodich";
+const tokenExpiration = 86400;
 
 module.exports = {
     encrypt: function(str) {
@@ -11,13 +12,29 @@ module.exports = {
         return bcrypt.compareSync(raw, hash);
     },
     createUserToken: function(user, expire) {
-        return jwt.sign({id: user.id, userType: user.type, expiresIn: expire}, secretCode, {expiresIn : 86400});
+        return jwt.sign({
+            id: user.id, 
+            userType: user.type, 
+            expiresIn: tokenExpiration
+        }, secretCode, {
+            expiresIn : tokenExpiration
+        });
     },
-    verifyUserToken: function(token) {
-        try {
-            return jwt.verify(token, secretCode);
-        } catch(err) {
-            return null;
+    verifyToken: function(req, res, next) {
+        // lấy header từ request
+        const token = req.headers['authorization'];
+        console.log(token);
+        // verify token
+        if (typeof token !== 'undefined') { // header của request không gửi kèm token
+            jwt.verify(token, secretCode, (err, authData) => {
+                if (err) {
+                    res.sendStatus(403);                    
+                } else {
+                    next();
+                }
+            })
+        } else {
+            res.sendStatus(403);
         }
     }
 }
