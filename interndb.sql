@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 09, 2018 at 04:15 PM
+-- Generation Time: May 10, 2018 at 08:19 AM
 -- Server version: 5.7.17-log
 -- PHP Version: 5.6.30
 
@@ -121,16 +121,55 @@ INSERT INTO `partner` (`id`, `name`) VALUES
 CREATE TABLE `student` (
   `id` int(10) NOT NULL,
   `name` varchar(50) COLLATE utf8mb4_vietnamese_ci NOT NULL,
-  `class` varchar(20) COLLATE utf8mb4_vietnamese_ci NOT NULL
+  `mssv` varchar(10) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
+  `class` varchar(20) COLLATE utf8mb4_vietnamese_ci NOT NULL,
+  `khoa` int(10) DEFAULT NULL,
+  `nganh` varchar(50) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
+  `diachi` varchar(50) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
+  `ngaysinh` date DEFAULT NULL,
+  `emailVNU` varchar(50) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
+  `GPA` double DEFAULT NULL,
+  `namtotnghiep` year(4) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 
 --
 -- Dumping data for table `student`
 --
 
-INSERT INTO `student` (`id`, `name`, `class`) VALUES
-(1, 'Lưu Quang Tùng', 'QH2016-I/CQ-C-CLC'),
-(2, 'Trương Hoàng Giang', 'QH2016-I/CQ-C-CLC');
+INSERT INTO `student` (`id`, `name`, `mssv`, `class`, `khoa`, `nganh`, `diachi`, `ngaysinh`, `emailVNU`, `GPA`, `namtotnghiep`) VALUES
+(1, 'Lưu Quang Tùng', '16020036', 'QH2016-I/CQ-C-CLC', 61, 'Công nghệ thông tin', NULL, '1998-12-18', NULL, 2.9, 2020),
+(2, 'Trương Hoàng Giang', '160020069', 'QH2016-I/CQ-C-CLC', 61, 'Công nghệ thông tin', NULL, '1998-10-23', NULL, 3.9, 2020),
+(4, 'Trần Quang Bách', NULL, 'QH2016-I/CQ-C-A-C', 61, 'Khoa học máy tính', NULL, '1998-06-05', NULL, 4, 2020);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `studenteditable`
+--
+
+CREATE TABLE `studenteditable` (
+  `id` int(10) NOT NULL,
+  `email` varchar(50) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
+  `skypeID` varchar(50) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
+  `facebook` varchar(50) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
+  `phone` varchar(20) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
+  `vitri` varchar(50) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
+  `kynang` varchar(200) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
+  `chungchi` varchar(200) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
+  `kinhnghiem` varchar(200) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
+  `sothich` varchar(200) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
+  `dinhhuong` varchar(200) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
+  `ghichu` varchar(200) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
+
+--
+-- Dumping data for table `studenteditable`
+--
+
+INSERT INTO `studenteditable` (`id`, `email`, `skypeID`, `facebook`, `phone`, `vitri`, `kynang`, `chungchi`, `kinhnghiem`, `sothich`, `dinhhuong`, `ghichu`) VALUES
+(1, 'tungluu18@gmail.com', NULL, NULL, '0964 537 271', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(2, 'giangth2310@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(4, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -151,9 +190,10 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `username`, `password`, `type`, `avatar`) VALUES
-(1, 'tungluu18', '$2a$10$Zir6WjTWket3iLFT6FK1pueK7BBc8UY7ZWXlq44VqIOzkok2PyDwu', 'student', NULL),
-(2, 'giangth2310', '$2a$10$x.THs51X7VVtuUFy/qaXDeLC99FnLrZmx4HNLp7UonnBceyPHSfly', 'student', NULL),
-(3, 'samsungvn', '$2a$10$P2unJ0iu1smIsIuJq.meROfDxiOYk6/.pvBqV6NNUsFA7d5OtL.9W', 'partner', NULL),
+(1, 'tungluu18', '$2a$10$Zir6WjTWket3iLFT6FK1pueK7BBc8UY7ZWXlq44VqIOzkok2PyDwu', 'student', '/avatar/1.jpg'),
+(2, 'giangth2310', '$2a$10$x.THs51X7VVtuUFy/qaXDeLC99FnLrZmx4HNLp7UonnBceyPHSfly', 'student', '/avatar/2.jpg'),
+(3, 'samsungvn', '$2a$10$P2unJ0iu1smIsIuJq.meROfDxiOYk6/.pvBqV6NNUsFA7d5OtL.9W', 'partner', '/avatar/3.jpg'),
+(4, 'tranquangbach', '$2a$10$ecbRK4snDNwdjs91qcPxf.DHHfgk4hA/xCmmoJghC5DlohOglJemi', 'student', NULL),
 (6, 'ledinhthanh', '$2a$10$UccMFPoyBKiv/tKTCMBg4eVOV7/SHGbjb.w83EXb.yDaXtgBWfxSq', 'lecturer', NULL),
 (7, 'framgia', '$2a$10$FL0Gqr0DkjxEUafk8BWZpO.oIFMcjxm85sUvIEmFrrNfkE6Ya33Im', 'partner', NULL),
 (8, 'pdt', '$2a$10$rJGuw8GzppfOwRQ7Cvr5f.7kLkPehpCy1oe/uk9ZRqeGYug3jT/0C', 'admin', NULL);
@@ -193,6 +233,12 @@ ALTER TABLE `student`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `studenteditable`
+--
+ALTER TABLE `studenteditable`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `user`
 --
 ALTER TABLE `user`
@@ -226,7 +272,12 @@ ALTER TABLE `partner`
 -- AUTO_INCREMENT for table `student`
 --
 ALTER TABLE `student`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+--
+-- AUTO_INCREMENT for table `studenteditable`
+--
+ALTER TABLE `studenteditable`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `user`
 --
@@ -259,6 +310,12 @@ ALTER TABLE `partner`
 --
 ALTER TABLE `student`
   ADD CONSTRAINT `fk_student` FOREIGN KEY (`id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `studenteditable`
+--
+ALTER TABLE `studenteditable`
+  ADD CONSTRAINT `fk_studentEditable` FOREIGN KEY (`id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
