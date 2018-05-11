@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 10, 2018 at 04:04 PM
+-- Generation Time: May 11, 2018 at 04:10 PM
 -- Server version: 5.7.17-log
 -- PHP Version: 5.6.30
 
@@ -28,16 +28,20 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `admin` (
   `id` int(10) NOT NULL,
-  `name` varchar(50) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL
+  `name` varchar(50) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
+  `donvi` varchar(20) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
+  `vnumail` varchar(50) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
+  `mail` varchar(50) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
+  `phone` varchar(20) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 
 --
 -- Dumping data for table `admin`
 --
 
-INSERT INTO `admin` (`id`, `name`) VALUES
-(5, NULL),
-(8, NULL);
+INSERT INTO `admin` (`id`, `name`, `donvi`, `vnumail`, `mail`, `phone`) VALUES
+(5, 'Quản lý sinh viên', NULL, NULL, NULL, NULL),
+(8, 'Phòng Đào tạo', NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -84,15 +88,19 @@ INSERT INTO `knex_migrations_lock` (`is_locked`) VALUES
 
 CREATE TABLE `lecturer` (
   `id` int(10) NOT NULL,
-  `name` varchar(50) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL
+  `name` varchar(50) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
+  `mail` varchar(50) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
+  `vnumail` varchar(59) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
+  `phone` varchar(20) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
+  `ghichu` varchar(200) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 
 --
 -- Dumping data for table `lecturer`
 --
 
-INSERT INTO `lecturer` (`id`, `name`) VALUES
-(6, 'Lê Đình Thanh');
+INSERT INTO `lecturer` (`id`, `name`, `mail`, `vnumail`, `phone`, `ghichu`) VALUES
+(6, 'Lê Đình Thanh', 'ledinhthanh@gmail.com', 'thanhld@vnu.edu.vn', '0987 257 504 ', NULL);
 
 -- --------------------------------------------------------
 
@@ -102,16 +110,18 @@ INSERT INTO `lecturer` (`id`, `name`) VALUES
 
 CREATE TABLE `partner` (
   `id` int(10) NOT NULL,
-  `name` varchar(50) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL
+  `name` varchar(50) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
+  `contact` varchar(50) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
+  `thongtin` text COLLATE utf8mb4_vietnamese_ci
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 
 --
 -- Dumping data for table `partner`
 --
 
-INSERT INTO `partner` (`id`, `name`) VALUES
-(3, 'SAMSUNG Việt Nam'),
-(7, 'Framgia');
+INSERT INTO `partner` (`id`, `name`, `contact`, `thongtin`) VALUES
+(3, 'SAMSUNG Việt Nam', NULL, NULL),
+(7, 'Framgia', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -127,8 +137,8 @@ CREATE TABLE `student` (
   `khoa` int(10) DEFAULT NULL,
   `nganh` varchar(50) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
   `diachi` varchar(50) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
-  `ngaysinh` date DEFAULT NULL,
-  `emailVNU` varchar(50) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
+  `ngaysinh` varchar(10) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
+  `vnumail` varchar(50) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
   `GPA` double DEFAULT NULL,
   `namtotnghiep` year(4) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
@@ -137,10 +147,10 @@ CREATE TABLE `student` (
 -- Dumping data for table `student`
 --
 
-INSERT INTO `student` (`id`, `name`, `mssv`, `class`, `khoa`, `nganh`, `diachi`, `ngaysinh`, `emailVNU`, `GPA`, `namtotnghiep`) VALUES
-(1, 'Lưu Quang Tùng', '16020036', 'QH2016-I/CQ-C-CLC', 61, 'Công nghệ thông tin', NULL, '1998-12-18', NULL, 2.9, 2020),
-(2, 'Trương Hoàng Giang', '160020069', 'QH2016-I/CQ-C-CLC', 61, 'Công nghệ thông tin', NULL, '1998-10-23', NULL, 3.9, 2020),
-(4, 'Trần Quang Bách', NULL, 'QH2016-I/CQ-C-A-C', 61, 'Khoa học máy tính', NULL, '1998-06-05', NULL, 4, 2020);
+INSERT INTO `student` (`id`, `name`, `mssv`, `class`, `khoa`, `nganh`, `diachi`, `ngaysinh`, `vnumail`, `GPA`, `namtotnghiep`) VALUES
+(1, 'Lưu Quang Tùng', '16020036', 'QH2016-I/CQ-C-CLC', 61, 'Công nghệ thông tin', NULL, '1998-12-18', '16020036@vnu.edu.vn', 2.9, 2020),
+(2, 'Trương Hoàng Giang', '16020069', 'QH2016-I/CQ-C-CLC', 61, 'Công nghệ thông tin', NULL, '1998-10-23', '16020069@vnu.edu.vn', 3.9, 2020),
+(4, 'Trần Quang Bách', '16020001', 'QH2016-I/CQ-C-A-C', 61, 'Khoa học máy tính', NULL, '1998-06-05', '16020001@vnu.edu.vn', 4, 2020);
 
 -- --------------------------------------------------------
 
@@ -168,9 +178,9 @@ CREATE TABLE `studenteditable` (
 --
 
 INSERT INTO `studenteditable` (`id`, `email`, `skypeID`, `facebook`, `phone`, `vitri`, `kynang`, `chungchi`, `kinhnghiem`, `sothich`, `dinhhuong`, `ghichu`) VALUES
-(1, 'tungluu18@gmail.com', NULL, NULL, '0964 537 271', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(2, 'giangth2310@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(4, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+(1, 'tungluu18@gmail.com', 'asdasd', 'Tùng Lưu', '0964 537 271', 'Phó bí thư', 'Code bằng MS word', NULL, 'Lập trình pascal và C++ 3 năm', NULL, '2000$', NULL),
+(2, 'giangth2310@gmail.com', '123123', 'Trương Hoàng Giang', '0964 537 272', 'Phó chi hội', 'Debug bằng mắt', NULL, 'React + Redux + Angular', NULL, '5000$', NULL),
+(4, 'bachquangtran98@gmail.com', 'hahaahah', 'Bách Quang', '0964 537 272', 'Khối trưởng', 'Viết Server bằng Assembly', NULL, 'ML + AI + Python + Data Analyst', NULL, '10000$', NULL);
 
 -- --------------------------------------------------------
 
