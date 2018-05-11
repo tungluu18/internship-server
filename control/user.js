@@ -1,4 +1,9 @@
 const user = require('../model/user');
+const student = require('./student');
+//const lecturer = require('./lecturer');
+//const partner = require('./partner');
+//const admin = require('./admin');
+const jwt = require('jsonwebtoken');
 
 module.exports = {
     getById: function(req, res) {       
@@ -28,6 +33,28 @@ module.exports = {
         user.add(username, password, type, (err, result) => {
             if (err) res.send({error:err});
             res.send({error:"Tạo tài khoản thành công"});
+        })
+    },
+
+    update: function(req, res) {        
+        const id = req.params.id;                        
+        const decoded = jwt.decode(req.headers['authorization']);
+        
+        user.getType(id, (err, type) => {
+            if (err) {
+                res.send({error:err});
+                return;
+            }
+            
+            if (type == 'admin' || id == decoded.id) {                
+                user.update(id, req.body, (err) => {                                        
+                    if (err) {                        
+                        //console.log(err);                         
+                        res.sendStatus(404); 
+                    } else res.sendStatus(200);                    
+                })
+            }
+            else res.sendStatus(404);
         })
     }
 } 

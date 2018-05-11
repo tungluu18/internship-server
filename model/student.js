@@ -1,20 +1,35 @@
 const knex = require('knex')(require('../knexfile'));
+const _ = require('lodash');
 
 module.exports = {
     getAll: function(callback) {
         let result = [];        
+        let fixed = [], editable = [];        
         knex('student').select()
-        .then((rows) => {                        
-            for (Element of rows) result.push({fixed:Element, editable:{}});
+        .then((rows) => {                                    
+            fixed = rows;            
             return knex('studenteditable').select();            
         })
         .then((rows) => {
-            for (Element of rows) Element.id = undefined;
-            for (var i = 0; i < result.length; ++i) result[i].editable = rows[i];                        
+            editable = rows;                        
+            for (var i = 0; i < fixed.length; ++i) result.push(_.assignIn(fixed[i], editable[i]));            
             callback(null, result);
         })
         .catch((err) => {
+            console.log("ahihi");
             callback(err, null);            
         })
+    },
+
+    update: function(id, info, callback) {
+        //console.log(info);
+        knex('student').where('id', id).update(info)
+        .then(() => {
+            callback(null);
+        })
+        .catch((err) => {
+            //console.log(err);
+            callback(err);
+        });
     }
 }

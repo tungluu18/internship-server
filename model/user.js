@@ -2,6 +2,8 @@ const knex = require('knex')(require('../knexfile'));
 const secure = require('../control/secure');
 const linkData = 'http://localhost:3000/data';
 
+const student = require('./student');
+
 module.exports = {
     add(username, password, type, callback) {                    
         if (type !== 'student' && type !== 'admin' && type !== 'lecturer' && type !=='partner')
@@ -35,10 +37,19 @@ module.exports = {
         })
     },   
     
+    getType: function(id, callback) {
+        knex('user').where('id', id)
+        .then((rows) => {
+            if (rows.length === 0) callback(err, null);            
+            callback(null, rows[0].type);
+        })
+        .catch((err) => callback(err, null))
+    },
+
     getById: function(id, callback) {
         knex('user').where('id', id)
-        .then((result) => {callback(null, result)})
-        .catch((err) => {callback(err, null);});
+        .then((result) => callback(null, result))
+        .catch((err) => callback(err, null));
     },
 
     getAvatar: function(id, callback) {
@@ -57,5 +68,22 @@ module.exports = {
         .catch((err) => {            
             callback(err, null);
         })    
+    },
+
+    update: function(id, info, callback) {
+        info.id = undefined;
+        knex('user').where('id', id)
+        .then((rows) => {            
+            switch(rows[0].type) {
+                case 'student' : student.update(id, info, (err) => callback(err));
+                //case 'lecturer' : lecturer.update(id, info, (err) => {callback(err)});
+                //case 'partner' : partner.update(id, info, (err) => {callback(err);});
+                //case 'admin' : admin.update(id, info, (err) => {if (err) callback(err);})
+            }                        
+        })
+        .catch((err) => {
+            //console.log(err);
+            callback(err);            
+        })
     }
 }

@@ -34,7 +34,9 @@ module.exports = {
 
         // get thông tin tất cả đối tác
         app.get('/api/admin/info/partner', secure.verifyToken, (req, res) => partnerRouter.getAll(res));
-
+        
+        //put thông tin update cho tài khoản
+        app.put('/api/user/profile/update/:id', jsonParser, secure.verifyToken, (req, res) => userRouter.update(req, res));
         // testing....        
     }
 }

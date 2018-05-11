@@ -30,7 +30,7 @@ module.exports = {
             if (result.length == 0) return res.send({success:false, token:"", error:{message:"username không tồn tại"}});        
             
             if (this.compare(password, result[0].password)) {
-                return res.send({success:true, token: this.createUserToken(result[0], expiresIn=86400), error:null});
+                return res.send({success:true, token: this.createUserToken(result[0], expiresIn=tokenExpiration), error:null});
             }
     
             return res.send({success:false, token:"", error:{message:"Nhập sai password"}});
