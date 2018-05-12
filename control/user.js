@@ -13,7 +13,7 @@ module.exports = {
             res.send(result[0]);
         })  
     },
-
+    
     getAvatar: function(req, res) {
         user.getAvatar(req.query.id, (err, result) => {              
             if (err) res.send({error:err});
@@ -56,5 +56,14 @@ module.exports = {
             }
             else res.sendStatus(404);
         })
+    },
+
+    getType: async function(req, res) {
+        try {
+            let type = await user.getType2(req.params.id);
+            res.send(type);
+        } catch (err) {            
+            res.send({success: false, error: err.message})
+        }
     }
 } 

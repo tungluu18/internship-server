@@ -46,6 +46,16 @@ module.exports = {
         .catch((err) => callback(err, null))
     },
 
+    getType2: async function(id) {
+        try {
+            let result = await knex('user').where('id', id)
+            if (result.length == 0) return Promise.reject(new Error("id không tồn tại"))
+            return Promise.resolve(result[0].type)
+        } catch (err) {            
+            return Promise.reject(new Error("id không tồn tại"))
+        }
+    },
+
     getById: function(id, callback) {
         knex('user').where('id', id)
         .then((result) => callback(null, result))
@@ -75,8 +85,8 @@ module.exports = {
         knex('user').where('id', id)
         .then((rows) => {            
             switch(rows[0].type) {
-                case 'student' : student.update(id, info, (err) => callback(err));
-                //case 'lecturer' : lecturer.update(id, info, (err) => {callback(err)});
+                case 'student' : student.update(id, info, (err) => callback(err))
+                case 'lecturer' : lecturer.update(id, info)
                 //case 'partner' : partner.update(id, info, (err) => {callback(err);});
                 //case 'admin' : admin.update(id, info, (err) => {if (err) callback(err);})
             }                        
