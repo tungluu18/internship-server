@@ -56,8 +56,8 @@ module.exports = {
         
         try {
             const typeOfUser = await user.getType(decoded.id);
-            // if (id != decoded.id && typeOfUser != 'admin') 
-            //    return res.send({success: false, error: "không có quyền sửa tài khoản"})
+            if (id != decoded.id && typeOfUser != 'admin') 
+               return res.send({success: false, error: "không có quyền sửa tài khoản"})
 
             await user.update(decoded.id, id, req.body)
             res.send({success: true});
