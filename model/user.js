@@ -1,6 +1,5 @@
 const knex = require('knex')(require('../knexfile'));
 const secure = require('../control/secure');
-const linkData = 'http://localhost:3000';
 
 const student = require('./student');
 
@@ -23,8 +22,7 @@ module.exports = {
             return Promise.resolve();
         }).then (() => {
             callback(null, null);
-        }).catch((err) => {
-            console.log(err);
+        }).catch((err) => {            
             callback(err, null);
         });
     },
@@ -35,65 +33,71 @@ module.exports = {
         }).catch ((err) => {
             res.sendstatus(200);
         })
-    },   
-    
-    getType: function(id, callback) {
-        knex('user').where('id', id)
-        .then((rows) => {
-            if (rows.length === 0) callback(err, null);            
-            callback(null, rows[0].type);
-        })
-        .catch((err) => callback(err, null))
-    },
+    },       
 
-    getType2: async function(id) {
+    getType: async function(id) {
         try {
-            let result = await knex('user').where('id', id)
+            const result = await knex('user').where('id', id)           
             if (result.length == 0) return Promise.reject(new Error("id không tồn tại"))
             return Promise.resolve(result[0].type)
-        } catch (err) {            
-            return Promise.reject(new Error("id không tồn tại"))
+        } catch (err) {                        
+            return Promise.reject(new Error(err))
         }
     },
 
-    getById: function(id, callback) {
-        knex('user').where('id', id)
+    getAvatar: async function(id) {
+        try{            
+            const result = await knex(`user`).where('id', id)
+            if (result.length == 0) return Promise.reject(new Error("id không tồn tại"))
+            return Promise.resolve(result[0].avatar)
+        } catch (err) {
+            //console.log("ahihi")
+            return Promise.reject(new Error(err))
+        }
+    },
+
+    getName: async function(id) {
+        try {
+            const typeOfUser = await this.getType(id)
+            const result = await knex(`${typeOfUser}`).where('id', id)
+            if (result.length == 0) return Promise.reject(new Error("id không tồn tại"))
+            return Promise.resolve(result[0].name)
+        } catch (err) {
+            //console.log("ahihi")
+            return Promise.reject(new Error(err))
+        }
+    },
+
+    getById: async function(id) {
+        return knex('user').where('id', id)
+        /*knex('user').where('id', id)
         .then((result) => callback(null, result))
-        .catch((err) => callback(err, null));
+        .catch((err) => callback(err, null));*/
+    },    
+       
+    getByType: async function(type) {
+        return knex(`${type}`).select()
     },
 
-    getAvatar: function(id, callback) {
-        let name = null, avatar = null, typeOfUser;
-        knex('user').where({'id': id})
-        .then((rows) => {                                    
-            if (rows.length == 0) return Promise.reject("id không tồn tại");                        
-            typeOfUser = rows[0].type;
-            if (rows[0].avatar != null) avatar = linkData + rows[0].avatar;
-            return knex(`${typeOfUser}`).where({'id': id});                                        
-        })
-        .then((rows) => {            
-            if (rows.length != 0) name = rows[0].name;  
-            callback(null, {'name':name, 'avatar':avatar});
-        })    
-        .catch((err) => {            
-            callback(err, null);
-        })    
-    },
+    update: async function(requesterId, id, info) {        
+        const studentFixed = ['name', 'mssv', 'class', 'khoa', 'nganh', 'diachi', 'ngaysinh', 'vnumail', 'GPA', 'namtotnghiep']
+        const studentEditable = ['email', 'skypeID', 'facebook', 'phone', 'vitri', 'kynang', 'chungchi', 'kinhnghiem', 'sothich', 'dinhhuong', 'ghichu']        
+        
+        try {
+            const typeOfUser = await this.getType(id)
+            const typeOfRequester = await this.getType(requesterId)
 
-    update: function(id, info, callback) {
-        info.id = undefined;
-        knex('user').where('id', id)
-        .then((rows) => {            
-            switch(rows[0].type) {
-                case 'student' : student.update(id, info, (err) => callback(err))
-                case 'lecturer' : lecturer.update(id, info)
-                //case 'partner' : partner.update(id, info, (err) => {callback(err);});
-                //case 'admin' : admin.update(id, info, (err) => {if (err) callback(err);})
-            }                        
-        })
-        .catch((err) => {
-            //console.log(err);
-            callback(err);            
-        })
+            if (typeOfRequester == 'admin' && typeOfUser == 'admin') 
+                return Promise.reject(new Error("Thay đổi không hợp lệ"))
+            
+            //student can only update his/her editable properties
+            if (typeOfUser == 'student' && typeOfRequester == 'student')                 
+                for (p of studentFixed) info[p] = undefined                
+
+            await knex(`${typeOfUser}`).where('id', id).update(info)
+            return Promise.resolve()
+        } catch (err) {
+            return Promise.reject(new Error("Thông tin không hợp lệ"))
+        }
     }
 }

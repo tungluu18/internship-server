@@ -59,6 +59,7 @@ module.exports = {
     verifyToken: function(req, res, next) {
         // lấy header từ request
         const token = req.headers['authorization'];
+        //console.log(token);
         // verify token
         if (typeof token !== 'undefined') { // header của request không gửi kèm token
             jwt.verify(token, secretCode, (err, authData) => {

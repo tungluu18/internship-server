@@ -21,7 +21,7 @@ module.exports = {
         })
     },
 
-    update: function(id, info, callback) {
+    update: function(id, info) {
         //console.log(info);
         const editable = {
             email: info.email,
@@ -40,14 +40,13 @@ module.exports = {
         info.email = info.skypeID = info.facebook
         = info.phone = info.vitri = info.kynang
         = info.chungchi = info.kinhnghiem = info.sothich
-        = info.dinhhuong = info.ghichu = undefined;
+        = info.dinhhuong = info.ghichu = undefined
 
-        knex('student').where('id', id).update(info)
-        .then(() => knex('studenteditable').where('id', id).update(editable))
-        .then(() => callback(null))
-        .catch((err) => {
-            //console.log(err);
-            callback(err);
-        });
+        info.id = editable.id = id;
+
+        return Promise.all([
+            knex('student').where('id', id).update(info),
+            knex('studenteditable').where('id', id).update(editable)
+        ])        
     }
 }
