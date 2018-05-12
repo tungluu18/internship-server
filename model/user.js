@@ -1,6 +1,6 @@
 const knex = require('knex')(require('../knexfile'));
 const secure = require('../control/secure');
-const linkData = 'http://localhost:3000/data';
+const linkData = 'http://localhost:3000';
 
 const student = require('./student');
 

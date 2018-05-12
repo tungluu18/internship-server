@@ -43,8 +43,7 @@ module.exports = {
         = info.dinhhuong = info.ghichu = undefined;
 
         knex('student').where('id', id).update(info)
-        .then(() => knex('studenteditable').where('id', id).update(editable)            
-        )
+        .then(() => knex('studenteditable').where('id', id).update(editable))
         .then(() => callback(null))
         .catch((err) => {
             //console.log(err);
