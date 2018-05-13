@@ -4,35 +4,29 @@ const secure = require('../control/secure');
 const student = require('./student');
 
 module.exports = {
-    add(username, password, type, callback) {                    
+    add: async function(username, password, type) {                    
         if (type !== 'student' && type !== 'admin' && type !== 'lecturer' && type !=='partner')
-            return callback('Loại tài khoản không hợp lệ');
+            return Promise.reject(new Error('Loại tài khoản không hợp lệ'))
+        try {
+            const rows = await knex('user').select()
 
-        password = secure.encrypt(password);
-        let newId = 1;
+            //tìm id cho user mới khi chèn vào bảng : số nhỏ nhất chưa xuất hiện trong tập 'id'
+            let newId = 1;
+            for (let element of rows) if (element.id != newId) break; else newId++                       
 
-        knex('user').select().then((rows) => {                        
-            for (let element of rows) if (element.id != newId) break; else newId++;                       
-            for (let element of rows) if (element.username === username) return Promise.reject("Username đã tồn tại");                        
-            return knex('user').insert({'id':newId, 'username':username, 'password':password, 'type':type});
-        }).then (() => {            
-            return knex(`${type}`).insert({'id':newId});
-        }).then(() => {
-            if (type == 'student') return knex('studenteditable').insert({'id':newId});            
-            return Promise.resolve();
-        }).then (() => {
-            callback(null, null);
-        }).catch((err) => {            
-            callback(err, null);
-        });
+            for (let element of rows) if (element.username === username) return Promise.reject(new Error("Username đã tồn tại"))
+            await knex('user').insert({
+                'id':newId, 'type':type, 
+                'username':username, 'password': secure.encrypt(password)})
+            await knex(`${type}`).insert({'id': newId})
+            return Promise.resolve()
+        } catch (error) {
+            return Promise.reject(err)
+        }        
     },
 
-    deleteById(req, res) {        
-        knex('user').where({'id':req.body.id}).delete().then(() => {
-            res.send("Xóa thành công");
-        }).catch ((err) => {
-            res.sendstatus(200);
-        })
+    deleteById: function(id) {        
+        return knex('user').where('id', id).delete()
     },       
 
     getType: async function(id) {
@@ -50,8 +44,7 @@ module.exports = {
             const result = await knex(`user`).where('id', id)
             if (result.length == 0) return Promise.reject(new Error("id không tồn tại"))
             return Promise.resolve(result[0].avatar)
-        } catch (err) {
-            //console.log("ahihi")
+        } catch (err) {            
             return Promise.reject(new Error(err))
         }
     },
@@ -68,14 +61,11 @@ module.exports = {
         }
     },
 
-    getById: async function(id) {
-        return knex('user').where('id', id)
-        /*knex('user').where('id', id)
-        .then((result) => callback(null, result))
-        .catch((err) => callback(err, null));*/
+    getById: function(id) {
+        return knex('user').where('id', id)        
     },    
        
-    getByType: async function(type) {
+    getByType: function(type) {
         return knex(`${type}`).select()
     },
 
@@ -87,13 +77,13 @@ module.exports = {
             const typeOfUser = await this.getType(id)
             const typeOfRequester = await this.getType(requesterId)
 
-            if (typeOfRequester == 'admin' && typeOfUser == 'admin') 
+            if (typeOfUser == 'admin' && id != requesterId) //admin không được update profile của admin khác
                 return Promise.reject(new Error("Thay đổi không hợp lệ"))
             
-            //student can only update his/her editable properties
+            //student chỉ có thể update các thông tin trong tập editable
             if (typeOfUser == 'student' && typeOfRequester == 'student')                 
                 for (p of studentFixed) info[p] = undefined                
-
+            info['id'] = id       //'info' rỗng khi chèn vào bảng sẽ báo lỗi 
             await knex(`${typeOfUser}`).where('id', id).update(info)
             return Promise.resolve()
         } catch (err) {

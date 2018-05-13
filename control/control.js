@@ -20,13 +20,13 @@ module.exports = {
         app.get('/api/user/profile/avatar', secure.verifyToken, (req, res) => userController.getSidebar(req, res))
 
         // Đăng kí thêm tài khoản mới
-        app.post('/api/register', jsonParser, secure.verifyToken, (req, res) => userController.add(req, res))
+        app.post('/api/admin/createUser', jsonParser, secure.verifyToken, (req, res) => userController.add(req, res))
 
         //get thông tin user theo id
         app.get('/api/user', secure.verifyToken, (req, res) => userController.getById(req, res))
 
         //Xóa tài khoản
-        app.post('/api/delete', jsonParser, secure.verifyToken, (req, res) => userModel.deleteById(req, res))
+        app.delete('/api/user/profile/delete/:id', jsonParser, secure.verifyToken, (req, res) => userController.delete(req, res))
 
         // get thông tin tất cả sinh viên
         app.get('/api/admin/info/:userType', secure.verifyToken, (req, res) => userController.getAll(req, res))        

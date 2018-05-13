@@ -1,7 +1,7 @@
-const user = require('../model/user');
-const jwt = require('jsonwebtoken');
+const user      = require('../model/user');
+const jwt       = require('jsonwebtoken');
 
-const linkData = 'http://localhost:3000';
+const linkData  = 'http://localhost:3000';
 
 module.exports = {
     getById: async function(req, res) {       
@@ -35,30 +35,40 @@ module.exports = {
         }
     },
 
-    add: function(req, res) {
-        const username = req.body.username;
-        const password = req.body.password;
-        const type     = req.body.type;
+    add: async function(req, res) {
+        const username = req.body.username
+        const password = req.body.password
+        const type     = req.body.type
         
-        if (username === undefined || password === undefined || type === undefined) {
-            return res.send({error:"Tài khoản chưa đủ Tên tài khoản, Mật khẩu, Loại tài khoản."});
+        if (username === undefined || password === undefined || type === undefined) 
+            return res.send({error:"Tài khoản chưa đủ Tên tài khoản, Mật khẩu, Loại tài khoản."})
+        
+        try {
+            await user.add(username, password, type)
+            res.send({success: true, error: null})
+        } catch (err) {
+            res.send({success: false, error: err.message})
         }
-
-        user.add(username, password, type, (err, result) => {
-            if (err) return res.send({error:err});
-            return res.send("Tạo tài khoản thành công");
-        })
     },
     
+    delete: async function(req, res) {
+        try {
+            await user.deleteById(req.params.id)    
+            res.send({success: true, error: null})
+        } catch (err) {
+            res.send({success: false, error: err.message})
+        }
+        
+    },
+
     update: async function(req, res) {                
-        const id = req.params.id                       
-        const decoded = jwt.decode(req.headers['authorization'])
+        const id        = req.params.id                       
+        const decoded   = jwt.decode(req.headers['authorization'])
         
         try {
             const typeOfUser = await user.getType(decoded.id);
             if (id != decoded.id && typeOfUser != 'admin') 
-               return res.send({success: false, error: "không có quyền sửa tài khoản"})
-
+                return res.send({success: false, error: "không có quyền sửa tài khoản"})
             await user.update(decoded.id, id, req.body)
             res.send({success: true});
         } catch (err) {
