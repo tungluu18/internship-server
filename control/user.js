@@ -63,7 +63,6 @@ module.exports = {
     update: async function(req, res) {                
         const id        = req.params.id                       
         const decoded   = jwt.decode(req.headers['authorization'])
-        
         try {
             const typeOfUser = await user.getType(decoded.id);
             if (id != decoded.id && typeOfUser != 'admin') 
@@ -78,8 +77,7 @@ module.exports = {
     updatePassword: async function(req, res) {        
         const id = req.params.id            
         try {
-            const _user = await user.getById(id)               
-            const type = await user.getType(id)
+            const [_user, type] = await Promise.all([user.getById(id), user.getType(id)])            
             if (type != 'admin' && !secure.compare(req.body.password, _user.password))
                 return res.send({success: false, error: "Mật khẩu cũ không đúng"}) 
             if (req.body.newPassword != req.body.validateNewPassword) 
