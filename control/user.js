@@ -75,10 +75,11 @@ module.exports = {
     },
 
     updatePassword: async function(req, res) {        
-        const id = req.params.id            
+        const id = req.params.id     
+        const requesterId = jwt.decode(req.headers['authorization']).id        
         try {
-            const [_user, type] = await Promise.all([user.getById(id), user.getType(id)])            
-            if (type != 'admin' && !secure.compare(req.body.password, _user.password))
+            const [_user, requesterType] = await Promise.all([user.getById(id), user.getType(requesterId)])            
+            if (requesterType != 'admin' && !secure.compare(req.body.password, _user.password))
                 return res.send({success: false, error: "Mật khẩu cũ không đúng"}) 
             if (req.body.newPassword != req.body.validateNewPassword) 
                 return res.send({success: false, error: "Mật khẩu mới nhập chưa chính xác"})
