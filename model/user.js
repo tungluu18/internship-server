@@ -81,8 +81,8 @@ module.exports = {
             const typeOfUser = await this.getType(id)
             const typeOfRequester = await this.getType(requesterId)
 
-            if (typeOfUser == 'admin' && id != requesterId) //admin không được update profile của admin khác
-                return Promise.reject(new Error("Thay đổi không hợp lệ"))
+            // if (typeOfUser == 'admin' && id != requesterId) //admin không được update profile của admin khác
+            //     return Promise.reject(new Error("Thay đổi không hợp lệ"))
             
             //student chỉ có thể update các thông tin trong tập editable
             if (typeOfUser == 'student' && typeOfRequester == 'student')                 
