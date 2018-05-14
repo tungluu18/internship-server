@@ -8,7 +8,7 @@ module.exports = {
         try{
             if (req.query.id === undefined) return res.sendStatus(404)
             const result = await user.getById(req.query.id)
-            if (result.length == 0) res.send({success: false, error: "id không tồn tại"})
+            if (result.length == 0) return res.send({success: false, error: "id không tồn tại"})
             res.send(result[0])
         } catch (err) {
             res.send({success: false, error: err.message})
@@ -44,8 +44,8 @@ module.exports = {
             return res.send({error:"Tài khoản chưa đủ Tên tài khoản, Mật khẩu, Loại tài khoản."})
         
         try {
-            await user.add(username, password, type)
-            res.send({success: true, error: null})
+            const newId = await user.add(username, password, type)            
+            res.send({success: true, error: null, id: newId, 'type': type})
         } catch (err) {
             res.send({success: false, error: err.message})
         }

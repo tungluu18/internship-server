@@ -4,22 +4,27 @@ const secure = require('../control/secure');
 const student = require('./student');
 
 module.exports = {
+    findNewId: function(rows) {        
+        let newId = 1
+        for (let element of rows) {            
+            if (element.id !== newId) break            
+            newId++
+        }  
+        return newId
+    },
+
     add: async function(username, password, type) {                    
         if (type !== 'student' && type !== 'admin' && type !== 'lecturer' && type !=='partner')
             return Promise.reject(new Error('Loại tài khoản không hợp lệ'))
         try {
-            const rows = await knex('user').select()
-
-            //tìm id cho user mới khi chèn vào bảng : số nhỏ nhất chưa xuất hiện trong tập 'id'
-            let newId = 1;
-            for (let element of rows) if (element.id != newId) break; else newId++                       
-
+            const rows = await knex('user').select()                                    
+            const newId = this.findNewId(rows)
             for (let element of rows) if (element.username === username) return Promise.reject(new Error("Username đã tồn tại"))
             await knex('user').insert({
-                'id':newId, 'type':type, 
-                'username':username, 'password': secure.encrypt(password)})
-            await knex(`${type}`).insert({'id': newId})
-            return Promise.resolve()
+                'id': newId,            'type':type, 
+                'username':username,    'password': secure.encrypt(password)})
+            await knex(`${type}`).insert({'id': newId})            
+            return Promise.resolve(newId)
         } catch (error) {
             return Promise.reject(err)
         }        
@@ -56,7 +61,6 @@ module.exports = {
             if (result.length == 0) return Promise.reject(new Error("id không tồn tại"))
             return Promise.resolve(result[0].name)
         } catch (err) {
-            //console.log("ahihi")
             return Promise.reject(new Error(err))
         }
     },
