@@ -83,7 +83,7 @@ module.exports = {
         const studentFixed = ['name', 'mssv', 'class', 'khoa', 'nganh', 'diachi', 'ngaysinh', 'vnumail', 'GPA', 'namtotnghiep']
         const studentEditable = ['email', 'skypeID', 'facebook', 'phone', 'vitri', 'kynang', 'chungchi', 'kinhnghiem', 'sothich', 'dinhhuong', 'ghichu']        
         
-        try {
+        try {            
             const typeOfUser = await this.getType(id)
             const typeOfRequester = await this.getType(requesterId)
 

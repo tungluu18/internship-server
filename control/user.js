@@ -79,7 +79,8 @@ module.exports = {
         const id = req.params.id            
         try {
             const _user = await user.getById(id)               
-            if (!secure.compare(req.body.password, _user.password))
+            const type = await user.getType(id)
+            if (type != 'admin' && !secure.compare(req.body.password, _user.password))
                 return res.send({success: false, error: "Mật khẩu cũ không đúng"}) 
             if (req.body.newPassword != req.body.validateNewPassword) 
                 return res.send({success: false, error: "Mật khẩu mới nhập chưa chính xác"})

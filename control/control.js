@@ -1,14 +1,7 @@
 const express               = require('express')
 const jsonParser            = require('body-parser').json()
-
 const secure                = require('./secure')
-
 const userModel             = require('../model/user')
-
-const studentController     = require('./student')
-const lecturerController    = require('./lecturer')
-const partnerController     = require('./partner')
-const adminController       = require('./admin')
 const userController        = require('./user')
 
 module.exports = {
@@ -35,7 +28,7 @@ module.exports = {
         app.put('/api/user/profile/update/:id', jsonParser, secure.verifyToken, (req, res) => userController.update(req, res))
 
         //sửa password
-        app.put('/api/user/changePassword/:id', jsonParser, (req, res) => userController.updatePassword(req, res))
+        app.put('/api/user/changePassword/:id', jsonParser, secure.verifyToken, (req, res) => userController.updatePassword(req, res))
 
         // testing....  
         app.get('/api/test/:id', (req, res) => userController.getType(req, res))     
