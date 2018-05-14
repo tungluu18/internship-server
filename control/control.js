@@ -34,6 +34,8 @@ module.exports = {
         //put thông tin update cho tài khoản
         app.put('/api/user/profile/update/:id', jsonParser, secure.verifyToken, (req, res) => userController.update(req, res))
 
+        //sửa password
+        app.put('/api/user/changePassword/:id', jsonParser, (req, res) => userController.updatePassword(req, res))
 
         // testing....  
         app.get('/api/test/:id', (req, res) => userController.getType(req, res))     

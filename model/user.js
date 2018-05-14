@@ -65,8 +65,14 @@ module.exports = {
         }
     },
 
-    getById: function(id) {
-        return knex('user').where('id', id)        
+    getById: async function(id) {
+        try {
+            const result = await knex('user').where('id', id)                    
+            if (result.length == 0) return Promise.reject(new Error("id không tồn tại"))
+            return Promise.resolve(result[0])
+        } catch (err) {
+            return Promise.reject(err)
+        }
     },    
        
     getByType: function(type) {
@@ -93,5 +99,9 @@ module.exports = {
         } catch (err) {
             return Promise.reject(new Error("Thông tin không hợp lệ"))
         }
+    },
+
+    updatePassword: async function(id, password) {
+        return knex('user').where('id', id).update({'password': secure.encrypt(password)})
     }
 }

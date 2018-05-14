@@ -1,15 +1,14 @@
-const user      = require('../model/user');
-const jwt       = require('jsonwebtoken');
-
-const linkData  = 'http://localhost:3000';
+const user      = require('../model/user')
+const jwt       = require('jsonwebtoken')
+const secure    = require('./secure')
+const linkData  = 'http://localhost:3000'
 
 module.exports = {
     getById: async function(req, res) {       
         try{
             if (req.query.id === undefined) return res.sendStatus(404)
             const result = await user.getById(req.query.id)
-            if (result.length == 0) return res.send({success: false, error: "id không tồn tại"})
-            res.send(result[0])
+            res.send(result)
         } catch (err) {
             res.send({success: false, error: err.message})
         }
@@ -74,5 +73,20 @@ module.exports = {
         } catch (err) {
             res.send({success:false, error: err.message})
         }
-    }    
+    },
+
+    updatePassword: async function(req, res) {        
+        const id = req.params.id            
+        try {
+            const _user = await user.getById(id)               
+            if (!secure.compare(req.body.password, _user.password))
+                return res.send({success: false, error: "Mật khẩu cũ không đúng"}) 
+            if (req.body.newPassword != req.body.validateNewPassword) 
+                return res.send({success: false, error: "Mật khẩu mới nhập chưa chính xác"})
+            await user.updatePassword(id, req.body.newPassword)
+            res.send({success: true, error: null})
+        } catch (err) {
+            res.send({success: false, error: err.message})
+        }    
+    }
 } 
