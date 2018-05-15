@@ -21,8 +21,11 @@ module.exports = {
         //Xóa tài khoản
         app.delete('/api/user/profile/delete/:id', jsonParser, secure.verifyToken, (req, res) => userController.delete(req, res))
 
-        // get thông tin tất cả sinh viên
+        // get thông tin tất cả
         app.get('/api/admin/info/:userType', secure.verifyToken, (req, res) => userController.getAll(req, res))        
+        
+        //get thông tin 1 id
+        app.get('/api/user/profile/:id',  (req, res) => userController.getById(req, res))
         
         //put thông tin update cho tài khoản
         app.put('/api/user/profile/update/:id', jsonParser, secure.verifyToken, (req, res) => userController.update(req, res))

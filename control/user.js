@@ -6,9 +6,9 @@ const linkData  = 'http://localhost:3000'
 module.exports = {
     getById: async function(req, res) {       
         try{
-            if (req.query.id === undefined) return res.sendStatus(404)
-            const result = await user.getById(req.query.id)
-            res.send(result)
+            if (req.params.id === undefined) return res.send({success: false, error: "không có id"})
+            const result = await user.getProfile(req.params.id)
+            res.send({sucess: true, data: result, error: null})
         } catch (err) {
             res.send({success: false, error: err.message})
         }
@@ -56,8 +56,7 @@ module.exports = {
             res.send({success: true, error: null})
         } catch (err) {
             res.send({success: false, error: err.message})
-        }
-        
+        }        
     },
 
     update: async function(req, res) {                

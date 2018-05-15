@@ -74,7 +74,19 @@ module.exports = {
             return Promise.reject(err)
         }
     },    
-       
+      
+    getProfile: async function(id) {
+        try {
+            const type = await this.getType(id)
+            const result = await knex(`${type}`).where('id', id)
+            if (result.length == 0) return Promise.reject(new Error("id không tồn tại"))
+            return Promise.resolve(result[0])
+        } catch (err) {
+            return Promise.reject(err)
+        }
+    }
+
+    ,
     getByType: function(type) {
         return knex(`${type}`).select()
     },
