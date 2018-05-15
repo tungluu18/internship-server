@@ -8,7 +8,7 @@ module.exports = {
         try{
             if (req.params.id === undefined) return res.send({success: false, error: "không có id"})
             const result = await user.getProfile(req.params.id)
-            res.send({sucess: true, data: result, error: null})
+            res.send({success: true, data: result, error: null})
         } catch (err) {
             res.send({success: false, error: err.message})
         }
