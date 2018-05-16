@@ -113,6 +113,12 @@ module.exports = {
         }
     },
 
+    updateAvatar: async function(id, avatarLink) {
+        return knex('user').where('id', id).update({
+            'id': id, 'avatar': avatarLink
+        })
+    },
+
     updatePassword: async function(id, password) {
         return knex('user').where('id', id).update({'password': secure.encrypt(password)})
     }

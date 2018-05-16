@@ -33,6 +33,9 @@ module.exports = {
         //sửa password
         app.put('/api/user/changePassword/:id', jsonParser, secure.verifyToken, (req, res) => userController.updatePassword(req, res))
 
+        //sửa avatar
+        app.put('/api/user/profile/:id/avatar', jsonParser, (req, res) => userController.uploadAvatar)
+        
         // testing....  
         app.get('/api/test/:id', (req, res) => userController.getType(req, res))     
     }
