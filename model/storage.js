@@ -19,7 +19,7 @@ module.exports = {
   uploadAvatar: function(req, res) {
     this.upload(req, res, (err) => {
       if (err) return res.send({success:false, error: err.message})      
-      user.updateAvatar(req.params.id, req.file.filename)
+      user.updateAvatar(req.params.id, '/' + req.file.filename)
       return res.send({success: true, avatar: linkData + req.file.filename, error: err})
     })
   }
