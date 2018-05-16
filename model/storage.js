@@ -1,7 +1,8 @@
-const multer = require('multer')
-const path = require('path')
-const knex = require('knex')(require('../knexfile'))
-const linkData = 'http://localhost:3000/avatar/'
+const multer    = require('multer')
+const path      = require('path')
+const knex      = require('knex')(require('../knexfile'))
+const linkData  = 'http://localhost:3000/avatar/'
+const user      = require('./user') 
 
 module.exports = {
   upload: multer({
@@ -18,6 +19,7 @@ module.exports = {
   uploadAvatar: function(req, res) {
     this.upload(req, res, (err) => {
       if (err) return res.send({success:false, error: err.message})
+      user.updateAvatar(req.params.id, linkData + req.file.filename)
       return res.send({success: true, avatar: linkData + req.file.filename, error: err})
     })
   }
