@@ -1,28 +1,24 @@
 const multer = require('multer')
 const path = require('path')
+const knex = require('knex')(require('../knexfile'))
+const linkData = 'http://localhost:3000/avatar/'
 
 module.exports = {
-  storage:  multer.diskStorage({
-    destination: './data/avatar',
-    filename: (req, file, callback) => {
-      callback(null, file.fieldname 
-          + '-' + Date.now()
-          + path.extname(filename.originalname))
-    }
-  }),
+  upload: multer({
+     storage: multer.diskStorage({
+       destination: './data/avatar',
+       filename: (req, file, cb) => {
+         cb(null, file.fieldname + path.extname(file.originalname))
+       }
+     }),
 
-  upload : multer({
-      storage: this.storage,
-      limits: {fileSize: 10000000}
+     limits: {fileSize: 10000000}
   }).single('avatarImg'),
 
-  uploadAvatar: async function(req, res) {
-    console.log(req.file)
+  uploadAvatar: function(req, res) {
     this.upload(req, res, (err) => {
-      if (err) return Promise.reject(err)
-      console.log("ahihi")
-      console.log(req.file)
-      return Promise.resolve(req.filename)
+      if (err) return res.send({success:false, error: err.message})
+      return res.send({success: true, avatar: linkData + req.file.filename, error: err})
     })
   }
 }

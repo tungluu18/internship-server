@@ -89,18 +89,5 @@ module.exports = {
 		} catch (err) {
 			res.send({success: false, error: err.message})
 		}    
-	},
-
-	uploadAvatar: async function(req, res) {
-		const id = req.params.id
-		console.log(id)
-		console.log(req.file)
-		try {            
-			const avatarLink = await storage.uploadAvatar(req, res) + linkData
-			await user.updateAvatar(id, avatarLink)
-			res.send({success: true, error: avatarLink})
-		} catch (err) {
-			res.send({success: false, error: err.message})
-		}
 	}
 } 

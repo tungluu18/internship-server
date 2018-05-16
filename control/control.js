@@ -4,6 +4,8 @@ const secure                = require('./secure')
 const userModel             = require('../model/user')
 const userController        = require('./user')
 
+const storage               = require('../model/storage')
+
 module.exports = {
     route: function(app) {        
         //xử lý yêu cầu xác thực khi login
@@ -34,7 +36,7 @@ module.exports = {
         app.put('/api/user/changePassword/:id', jsonParser, secure.verifyToken, (req, res) => userController.updatePassword(req, res))
 
         //sửa avatar
-        app.put('/api/user/profile/:id/avatar', (req, res) => userController.uploadAvatar(req, res))
+        app.put('/api/user/profile/:id/avatar', (req, res) => storage.uploadAvatar(req, res))
 
         // testing....  
         app.get('/api/test/:id', (req, res) => userController.getType(req, res))     
