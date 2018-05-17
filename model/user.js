@@ -1,6 +1,6 @@
 const knex = require('knex')(require('../knexfile'));
 const secure = require('../control/secure');
-
+const storage = require('./storage')
 const student = require('./student');
 
 module.exports = {
@@ -115,6 +115,8 @@ module.exports = {
   },
 
   updateAvatar: async function (id, avatarLink) {
+    const oldAvatarLink = await this.getAvatar(id)    
+    if (oldAvatarLink) await storage.deleteFile(oldAvatarLink)    
     return knex('user').where('id', id).update({
       'id': id, 'avatar': avatarLink
     })

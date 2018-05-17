@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 12, 2018 at 06:32 PM
+-- Generation Time: May 17, 2018 at 05:41 AM
 -- Server version: 5.7.17-log
 -- PHP Version: 5.6.30
 
@@ -120,8 +120,9 @@ CREATE TABLE `partner` (
 --
 
 INSERT INTO `partner` (`id`, `name`, `contact`, `thongtin`) VALUES
-(3, 'SAMSUNG Việt Nam', NULL, NULL),
-(7, 'Framgia', NULL, NULL);
+(3, 'SAMSUNG Việt Nam', 'sadasdasdasd', 'Note 7 sẽ nổ vỡ mặt bạn'),
+(7, 'Framgia', NULL, NULL),
+(11, 'Toshiba Việt Nam', 'ahihi', 'điện tử điện lạnh');
 
 -- --------------------------------------------------------
 
@@ -159,10 +160,10 @@ CREATE TABLE `student` (
 --
 
 INSERT INTO `student` (`id`, `name`, `mssv`, `class`, `khoa`, `nganh`, `diachi`, `ngaysinh`, `vnumail`, `GPA`, `namtotnghiep`, `email`, `skypeID`, `facebook`, `phone`, `vitri`, `kynang`, `chungchi`, `kinhnghiem`, `sothich`, `dinhhuong`, `ghichu`) VALUES
-(1, 'Lưu Quang Tùng', '16020036', 'QH2016-I/CQ-C-CLC', 61, 'Công nghệ thông tin', NULL, '1998-12-18', '16020036@vnu.edu.vn', 2.9, 2020, 'tungluu18@gmail.com', '2000$', 'Tùng Lưu', '0964 537 271', 'Phó bí thư', 'Code bằng MS word', NULL, 'Lập trình pascal và C++ 3 năm', 'asdasd', NULL, NULL),
+(1, 'Lưu Quang Tùng', '16020036', 'QH2016-I/CQ-C-CLC', 61, 'Công nghệ thông tin', 'chùa láng', '1998-12-18', '16020036@vnu.edu.vn', 2.9, 2020, 'tungluu18@gmail.com', 'tungdeptrai', 'Tùng Lưu', '0964 537 271', 'Phó bí thư', 'Code bằng MS word', NULL, 'Lập trình pascal và C++ 3 năm', 'asdasd', 'thu nhập 2000$/ngày', 'em chỉ nói phét thôi'),
 (2, 'Con thủy quái', '16021294', 'QH2016-I/CQ-C-CLC', 61, 'Công nghệ thông tin', NULL, '1998-10-23', '16020069@vnu.edu.vn', 3.9, 2020, 'giangth2310@gmail.com', '5000$', 'Trương Hoàng Giang', '0964 537 272', 'Phó chi hội', 'Debug bằng mắt', NULL, 'React + Redux + Angular', '123123', NULL, NULL),
 (4, 'Trần Quang Bách', '16020001', 'QH2016-I/CQ-C-A-C', 61, 'Khoa học máy tính', NULL, '1998-06-05', '16020001@vnu.edu.vn', 4, 2020, 'bachquangtran98@gmail.com', '10000$', 'Quang Bitch', '0964 537 272', 'Khối trưởng\n', 'Viết Server bằng Assembly', NULL, 'ML + AI + Python + Data Analyst', 'hahaahah', NULL, NULL),
-(9, 'Doãn Chí Bình', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ahihik', NULL, NULL, NULL);
+(9, 'Doãn Chí Bình', '15020036', 'QH2015-I/CQ-C-A-K', 60, 'Công nghệ cop code', NULL, '1998-09-06', NULL, 1, NULL, 'ạdaksjdklajdasjkldajldjaskldjaskldjklasjdklasjdkla', NULL, NULL, NULL, NULL, NULL, NULL, 'ahihik', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -243,15 +244,16 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `username`, `password`, `type`, `avatar`) VALUES
-(1, 'tungluu18', '$2a$10$Zir6WjTWket3iLFT6FK1pueK7BBc8UY7ZWXlq44VqIOzkok2PyDwu', 'student', '/avatar/1.jpg'),
-(2, 'giangth2310', '$2a$10$x.THs51X7VVtuUFy/qaXDeLC99FnLrZmx4HNLp7UonnBceyPHSfly', 'student', '/avatar/2.jpg'),
-(3, 'samsungvn', '$2a$10$P2unJ0iu1smIsIuJq.meROfDxiOYk6/.pvBqV6NNUsFA7d5OtL.9W', 'partner', '/avatar/3.jpg'),
-(4, 'tranquangbach', '$2a$10$ecbRK4snDNwdjs91qcPxf.DHHfgk4hA/xCmmoJghC5DlohOglJemi', 'student', NULL),
+(1, 'tungluu18', '$2a$10$s3eC0Gv5hLesmzr2g5LQkOffnG/dCKNKP1aXGLrIIBrgKkrT9c2gO', 'student', '/avatar/avatarImg-1526535513037.jpg'),
+(2, 'giangth2310', '$2a$10$nBv85rt8bHnvuB5jZnR77O3zLQ5VSs.Qya6F.kFEyflWs7dxhmtki', 'student', '/avatar/2.jpg'),
+(3, 'samsungvn', '$2a$10$P2unJ0iu1smIsIuJq.meROfDxiOYk6/.pvBqV6NNUsFA7d5OtL.9W', 'partner', '/avatar/avatarImg-1526535617897.jpg'),
+(4, 'tranquangbach', '$2a$10$CgP3PfaIBongmztEaynlwuW/kA3dx5zVud/qdlnvv0TGQys5VAf3C', 'student', '/avatar/avatarImg-1526535540078.jpg'),
 (5, 'quanlysinhvien', '$2a$10$LnkVas0fW3e.n0OK.sAKTu7yD5EkTF3tH1C98khPPhhElKfDcWua2', 'admin', NULL),
 (6, 'ledinhthanh', '$2a$10$UccMFPoyBKiv/tKTCMBg4eVOV7/SHGbjb.w83EXb.yDaXtgBWfxSq', 'lecturer', NULL),
-(7, 'framgia', '$2a$10$FL0Gqr0DkjxEUafk8BWZpO.oIFMcjxm85sUvIEmFrrNfkE6Ya33Im', 'partner', NULL),
+(7, 'framgia', '$2a$10$FL0Gqr0DkjxEUafk8BWZpO.oIFMcjxm85sUvIEmFrrNfkE6Ya33Im', 'partner', '/avatar/avatarImg-1526535652363.jpg'),
 (8, 'pdt', '$2a$10$rJGuw8GzppfOwRQ7Cvr5f.7kLkPehpCy1oe/uk9ZRqeGYug3jT/0C', 'admin', NULL),
-(9, '15020063', '$2a$10$eIE6fUp5jHKOaMBRMCSWTuAOCZLUs2HVVfNaRRr.FE3bMulquptOO', 'student', NULL);
+(9, '15020063', '$2a$10$eIE6fUp5jHKOaMBRMCSWTuAOCZLUs2HVVfNaRRr.FE3bMulquptOO', 'student', '/avatar/avatarImg-1526535570759.jpg'),
+(11, 'toshiba', '$2a$10$EiC6fW6f0tXPCTcEMbC91.ZhdvHhquFRccrjcvyA3syN2uckRfTgy', 'partner', NULL);
 
 --
 -- Indexes for dumped tables
@@ -328,7 +330,7 @@ ALTER TABLE `lecturer`
 -- AUTO_INCREMENT for table `partner`
 --
 ALTER TABLE `partner`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT for table `student`
 --
@@ -343,12 +345,12 @@ ALTER TABLE `studenteditable`
 -- AUTO_INCREMENT for table `studentxdxd`
 --
 ALTER TABLE `studentxdxd`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 --
 -- Constraints for dumped tables
 --

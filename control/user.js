@@ -91,5 +91,16 @@ module.exports = {
 		} catch (err) {
 			res.send({ success: false, error: err.message })
 		}
+	},
+
+	updateAvatar: async function(req, res) {
+		const id = req.params.id
+		try {
+			const avatarLink = '/avatar/' + req.file.filename
+			await user.updateAvatar(id, avatarLink)
+			res.send({success: true, avatar: linkData + avatarLink})
+		} catch (err) {
+			res.send({success: false, error: err.message})
+		}
 	}
 } 

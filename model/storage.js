@@ -1,26 +1,21 @@
 const multer    = require('multer')
 const path      = require('path')
 const knex      = require('knex')(require('../knexfile'))
-const linkData  = 'http://localhost:3000/avatar/'
-const user      = require('./user') 
+const fs        = require('fs')
+const folder    = './data/'
 
 module.exports = {
-  upload: multer({
-     storage: multer.diskStorage({
-       destination: './data/avatar',
-       filename: (req, file, cb) => {
-         cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
-       }
-     }),
+  uploadAvatar: multer({
+    storage: multer.diskStorage({
+      destination: folder + 'avatar/',
+      filename: (req, file, callback) => {
+        callback(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
+      }
+    }),
+    limits: {fileSize: 10000000} // file avatar nặng không quá 10MB
+  }),  
 
-     limits: {fileSize: 10000000}
-  }).single('avatarImg'),
-
-  uploadAvatar: function(req, res) {
-    this.upload(req, res, (err) => {
-      if (err) return res.send({success:false, error: err.message})      
-      user.updateAvatar(req.params.id, '/avatar/' + req.file.filename)
-      return res.send({success: true, avatar: linkData + req.file.filename, error: err})
-    })
-  }
+  deleteFile: function(filename) {
+    fs.unlink(folder + filename, err => console.log(err))
+  }  
 }
