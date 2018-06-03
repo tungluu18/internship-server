@@ -3,7 +3,7 @@ const jsonParser            = require('body-parser').json()
 const secure                = require('./secure')
 const userModel             = require('../model/user')
 const userController        = require('./user')
-
+const partnerController     = require('./partner')
 const storage               = require('../model/storage')
 
 module.exports = {
@@ -46,6 +46,9 @@ module.exports = {
       next()
     })
     app.put('/api/user/profile/:id/avatar', (req, res) => userController.updateAvatar(req, res))
+
+    //thêm bài đăng tuyển dụng cho partner
+    app.post('/api/employInfo/create', secure.verifyToken, (req, res) => partnerController.addEmployInfo(req, res))
 
     // testing....  
     app.get('/api/test/:id', (req, res) => userController.getType(req, res))     
