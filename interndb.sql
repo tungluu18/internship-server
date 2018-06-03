@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 17, 2018 at 05:41 AM
+-- Generation Time: Jun 03, 2018 at 03:13 PM
 -- Server version: 5.7.17-log
 -- PHP Version: 5.6.30
 
@@ -42,6 +42,29 @@ CREATE TABLE `admin` (
 INSERT INTO `admin` (`id`, `name`, `donvi`, `vnumail`, `mail`, `phone`) VALUES
 (5, 'Quản lý sinh viên', 'Đại học Công nghệ Đại học Quốc gia Hà Nội', NULL, NULL, NULL),
 (8, 'Phòng Đào tạo', 'Đại học Công nghệ Đại học Quốc gia Hà Nội', NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `employinfo`
+--
+
+CREATE TABLE `employinfo` (
+  `employId` int(10) NOT NULL,
+  `companyId` int(10) NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
+  `content` text COLLATE utf8mb4_vietnamese_ci,
+  `date_create` varchar(255) COLLATE utf8mb4_vietnamese_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
+
+--
+-- Dumping data for table `employinfo`
+--
+
+INSERT INTO `employinfo` (`employId`, `companyId`, `title`, `content`, `date_create`) VALUES
+(1, 7, 'Tuyển dụng front-end', 'Yêu cầu 2 năm kinh nghiệm cắt sửa html css bootstrap.', '1528023770846'),
+(2, 7, 'Tuyển dụng fullstack', 'Salary 2000$ ez.', '1528023699685'),
+(3, 7, 'Tuyển dụng Back-end', '<p>Yêu cầu biết rip nick fb</p>\n', '1528024381408');
 
 -- --------------------------------------------------------
 
@@ -266,6 +289,13 @@ ALTER TABLE `admin`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `employinfo`
+--
+ALTER TABLE `employinfo`
+  ADD PRIMARY KEY (`employId`),
+  ADD KEY `fk_employeeinfo` (`companyId`);
+
+--
 -- Indexes for table `knex_migrations`
 --
 ALTER TABLE `knex_migrations`
@@ -360,6 +390,12 @@ ALTER TABLE `user`
 --
 ALTER TABLE `admin`
   ADD CONSTRAINT `fk_admin` FOREIGN KEY (`id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `employinfo`
+--
+ALTER TABLE `employinfo`
+  ADD CONSTRAINT `fk_employeeinfo` FOREIGN KEY (`companyId`) REFERENCES `partner` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `lecturer`
