@@ -5,7 +5,7 @@ const jwt       = require('jsonwebtoken')
 module.exports = {
   search: async function(req, res) {
    const keyword = req.query.keyword 
-   const filter = req.query.filter
+   const filter = req.query.filterBy
    try {
     let result = (keyword == "") ? (await employ.getAllEmployInfo())
                 : (await employ.getByFilter(filter, keyword))
