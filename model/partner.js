@@ -1,5 +1,6 @@
 const knex = require('knex')(require('../knexfile'))
 const striptags = require('striptags')
+const user = require('./user')
 
 module.exports = {  
   findNewId: function(rows) {
@@ -11,15 +12,15 @@ module.exports = {
     return newId
   },
 
-  add: async function(companyId, title, content) {
+  add: async function(partnerId, title, content) {
     try {
       const rows = await knex('employInfo').select()
       const employId = this.findNewId(rows)
-      const date = Date.now()            
+      const date = Date.now()    
       await knex('employInfo').insert({
-        'companyId': companyId,           'employId': employId, 
+        'partnerId': partnerId,           'employId': employId, 
         'title': title,                   'content': content, 
-        'plaintext': striptags(content),  'date_create': date  
+        'plaintext': striptags(content),  'date_create': date        
       })
     } catch (err) {
       return Promise.reject(err)
