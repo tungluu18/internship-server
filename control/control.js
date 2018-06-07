@@ -52,8 +52,11 @@ module.exports = {
     app.post('/api/employInfo/create', secure.verifyToken, (req, res) => partnerController.addEmployInfo(req, res))
 
     //chức năng tìm kiếm
-    app.post('/api/search', (req, res) => studentController.search(req, res))
+    app.get('/api/search', (req, res) => studentController.search(req, res))
     
+    //follow và unfollow
+    app.post('/api/student/follow', (req, res) => studentController.follow(req, res))
+    app.post('/api/student/unfollow', (req, res) => studentController.unfollow(req, res))
     // testing....  
     app.get('/api/test/:id', (req, res) => userController.getType(req, res))     
   }

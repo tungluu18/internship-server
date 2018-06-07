@@ -7,7 +7,9 @@ module.exports = {
     try {
       const employInfos = await knex('employinfo').select()
       for (e of employInfos) {
-        const [partnerName, partnerAvatar] = await Promise.all([user.getName(e.partnerId), user.getAvatar(e.partnerId)])
+        const [partnerName, partnerAvatar] = await Promise.all([
+          user.getName(e.partnerId), user.getAvatar(e.partnerId)
+        ])
         e.partnerName = partnerName
         e.partnerAvatar = partnerAvatar
       }
@@ -16,7 +18,6 @@ module.exports = {
       return Promise.reject(err)
     }    
   },
-
 
   getByFilter: async function(filter, keyword) {
     let search = new fulltextseachlight()
