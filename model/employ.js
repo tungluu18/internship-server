@@ -11,7 +11,9 @@ module.exports = {
           user.getName(e.partnerId), user.getAvatar(e.partnerId)
         ])
         e.partnerName = partnerName
-        e.partnerAvatar = partnerAvatar
+        e.partnerAvatar = 'localhost:3000' + partnerAvatar
+        e.content = undefined
+        e.date_create = undefined
       }
       return Promise.resolve(employInfos)
     } catch (err) {
@@ -22,7 +24,7 @@ module.exports = {
   getByFilter: async function(filter, keyword) {
     let search = new fulltextseachlight()
     if (filter == 'partner') filter = 'partnerName'
-    if (filter == 'content') filter = 'plaintext'
+    if (filter == 'content') filter = 'plaintext'    
     let filterSearch = (key, val) => (key == filter || key == 'employId')
     try {
       const employInfos = await this.getAllEmployInfo()    

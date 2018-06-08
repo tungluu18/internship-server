@@ -102,5 +102,28 @@ module.exports = {
     } catch (err) {
       res.send({success: false, error: err.message})
     }
+  },
+
+  sendMessage: async function(req, res) {
+    const senderId = req.body.senderId
+    const receiverId = req.body.receiverId
+    const replyTo = req.body.repyTo
+    const content = req.body.content
+    try {
+      await user.sendMessage(senderId, receiverId, replyTo, content)
+      res.send({success: true, error: null})
+    } catch (err) {
+      res.send({success: false, error: err.message})
+    }
+  },
+
+  receiveMessage: async function(req, res) {
+    const messageId = req.body.messageId
+    try {
+      const result = await user.receiveMessage(messageId)
+      res.send({success: true, result: result})
+    } catch (err) {
+      res.send({success: false, error: err.message})
+    }
   }
 } 

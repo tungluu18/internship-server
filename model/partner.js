@@ -1,21 +1,13 @@
 const knex = require('knex')(require('../knexfile'))
 const striptags = require('striptags')
 const user = require('./user')
+const utilize = require('./utilize')
 
-module.exports = {  
-  findNewId: function(rows) {
-    let newId = 1
-    for (let element of rows) {
-      if (element.employId !== newId) break
-      newId++
-    }
-    return newId
-  },
-
+module.exports = {    
   add: async function(partnerId, title, content) {
     try {
       const rows = await knex('employInfo').select()
-      const employId = this.findNewId(rows)
+      const employId = utilize.findNewIndex(rows, 'employId')
       const date = Date.now()    
       await knex('employInfo').insert({
         'partnerId': partnerId,           'employId': employId, 

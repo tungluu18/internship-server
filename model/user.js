@@ -2,23 +2,15 @@ const knex = require('knex')(require('../knexfile'));
 const secure = require('../control/secure');
 const storage = require('./storage')
 const student = require('./student');
+const utilize = require('./utilize')
 
-module.exports = {
-  findNewId: function (rows) {
-    let newId = 1
-    for (let element of rows) {
-      if (element.id !== newId) break
-      newId++
-    }
-    return newId
-  },
-
+module.exports = {  
   add: async function (username, password, type) {
     if (type !== 'student' && type !== 'admin' && type !== 'lecturer' && type !== 'partner')
       return Promise.reject(new Error('Loại tài khoản không hợp lệ'))
     try {
       const rows = await knex('user').select()
-      const newId = this.findNewId(rows)
+      const newId = utilize.findNewIndex(rows, 'id')
       for (let element of rows) if (element.username === username) return Promise.reject(new Error("Username đã tồn tại"))
       await knex('user').insert({
         'id': newId, 'type': type,
@@ -118,11 +110,48 @@ module.exports = {
     const oldAvatarLink = await this.getAvatar(id)    
     if (oldAvatarLink) await storage.deleteFile(oldAvatarLink)    
     return knex('user').where('id', id).update({
-      'id': id, 'avatar': avatarLink
+      id: id, avatar: avatarLink
     })
   },
 
   updatePassword: async function (id, password) {
-    return knex('user').where('id', id).update({ 'password': secure.encrypt(password) })
+    return knex('user').where('id', id).update({password: secure.encrypt(password) })
+  },
+
+  sendMessage: async function(senderId, receiverId, replyTo, content) {
+    try {
+      if (replyTo != null) if (!await utilize.isExisted('message', {messageId: replyTo})) 
+        return Promise.reject(new Error("Thư được phản hồi không tồn tại trên hệ thống"))
+      
+      const allMessage = await knex('message').select('messageId')
+      const newIndex = await utilize.findNewIndex(allMessage, 'messageId')
+      await knex('message').insert({        
+        messageId: newIndex, 
+        senderId: senderId, 
+        receiverId: receiverId, 
+        replyTo: replyTo, 
+        content: content, 
+        checked: false
+      })
+    } catch (err) {
+      return Promise.reject(err)
+    }
+  },
+
+  receiveMessage: async function(messageId) {
+    try {
+      const message = await utilize.getFirstElement('message', {messageId: messageId})
+      const [sender, receiver] = await Promise.all([
+        this.getName(message.senderId), 
+        this.getName(message.receiverId)
+      ])      
+      return {
+        content: message.content,
+        sender: sender,
+        receiver: receiver
+      }
+    } catch (err) {
+      return Promise.reject(err)
+    }
   }
 }
