@@ -8,7 +8,7 @@ module.exports = {
     try {
       const rows = await knex('employInfo').select()
       const employId = utilize.findNewIndex(rows, 'employId')
-      if (expireDate == null || Date.parse(expireDate) == NaN || Date.parse(expireDate) < Date.now()) 
+      if (expireDate == null || Date.parse(expireDate) == NaN) 
         return Promise.reject(new Error('Định dạng ngày không đúng'))
 
       await knex('employInfo').insert({
