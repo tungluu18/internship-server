@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jun 09, 2018 at 03:07 AM
+-- Generation Time: Jun 09, 2018 at 05:22 PM
 -- Server version: 5.7.17-log
 -- PHP Version: 5.6.30
 
@@ -236,6 +236,27 @@ INSERT INTO `partner` (`id`, `name`, `contact`, `thongtin`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `rateforstudent`
+--
+
+CREATE TABLE `rateforstudent` (
+  `partnerId` int(11) NOT NULL,
+  `studentId` int(11) NOT NULL,
+  `mark` int(11) DEFAULT NULL,
+  `comment` text
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `rateforstudent`
+--
+
+INSERT INTO `rateforstudent` (`partnerId`, `studentId`, `mark`, `comment`) VALUES
+(3, 1, 10, 'đẹp trai'),
+(3, 2, 2, 'dasa');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `student`
 --
 
@@ -303,6 +324,29 @@ INSERT INTO `studenteditable` (`id`, `email`, `skypeID`, `facebook`, `phone`, `v
 (1, 'tungluu18@gmail.com', 'asdasd', 'Tùng Lưu', '0964 537 271', 'Phó bí thư', 'Code bằng MS word', NULL, 'Lập trình pascal và C++ 3 năm', NULL, '2000$', NULL),
 (2, 'giangth2310@gmail.com', '123123', 'Trương Hoàng Giang', '0964 537 272', 'Phó chi hội', 'Debug bằng mắt', NULL, 'React + Redux + Angular', NULL, '5000$', 'aaaaa'),
 (4, 'bachquangtran98@gmail.com', 'hahaahah', 'Bách Quang', '0964 537 272', 'Khối trưởng', 'Viết Server bằng Assembly', NULL, 'ML + AI + Python + Data Analyst', NULL, '10000$', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `studentfollowme`
+--
+
+CREATE TABLE `studentfollowme` (
+  `studentId` int(11) NOT NULL,
+  `lectureId` int(11) NOT NULL,
+  `yearOfLecture` int(11) NOT NULL,
+  `linkOfReport` text,
+  `comment` text,
+  `mark` float DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `studentfollowme`
+--
+
+INSERT INTO `studentfollowme` (`studentId`, `lectureId`, `yearOfLecture`, `linkOfReport`, `comment`, `mark`) VALUES
+(1, 6, 2018, NULL, NULL, NULL),
+(2, 6, 2018, 'asdasdasdasdasdasdasdasdasdasdasdasdasdasd', 'đẹp trai', 2);
 
 -- --------------------------------------------------------
 
@@ -399,6 +443,13 @@ ALTER TABLE `partner`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `rateforstudent`
+--
+ALTER TABLE `rateforstudent`
+  ADD PRIMARY KEY (`partnerId`,`studentId`),
+  ADD KEY `studentid` (`studentId`);
+
+--
 -- Indexes for table `student`
 --
 ALTER TABLE `student`
@@ -409,6 +460,13 @@ ALTER TABLE `student`
 --
 ALTER TABLE `studenteditable`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `studentfollowme`
+--
+ALTER TABLE `studentfollowme`
+  ADD PRIMARY KEY (`studentId`),
+  ADD KEY `fkey` (`lectureId`);
 
 --
 -- Indexes for table `user`
@@ -513,6 +571,13 @@ ALTER TABLE `partner`
   ADD CONSTRAINT `fk_partner` FOREIGN KEY (`id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Constraints for table `rateforstudent`
+--
+ALTER TABLE `rateforstudent`
+  ADD CONSTRAINT `rateforstudent_ibfk_1` FOREIGN KEY (`studentId`) REFERENCES `student` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `rateforstudent_ibfk_2` FOREIGN KEY (`partnerId`) REFERENCES `partner` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Constraints for table `student`
 --
 ALTER TABLE `student`
@@ -523,6 +588,13 @@ ALTER TABLE `student`
 --
 ALTER TABLE `studenteditable`
   ADD CONSTRAINT `fk_studentEditable` FOREIGN KEY (`id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `studentfollowme`
+--
+ALTER TABLE `studentfollowme`
+  ADD CONSTRAINT `fkey` FOREIGN KEY (`lectureId`) REFERENCES `lecturer` (`id`),
+  ADD CONSTRAINT `fkey1` FOREIGN KEY (`studentId`) REFERENCES `student` (`id`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
