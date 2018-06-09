@@ -26,7 +26,6 @@ require("./control/control").route(app);
 
 
 // PORT: listen on port 3000 unless there exists a preconfigured port
-
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Listening on ${port}...`);
