@@ -6,6 +6,7 @@ const userController        = require('./user')
 const partnerController     = require('./partner')
 const studentController     = require('./student')
 const storage               = require('../model/storage')
+const employ                = require('../model/employ')
 
 module.exports = {
   route: function(app) {        
@@ -60,7 +61,7 @@ module.exports = {
     app.post('/api/message/send', (req, res) => userController.sendMessage(req, res))
     //nhận tin nhắn
     app.post('/api/message/receive', (req, res) => userController.receiveMessage(req, res))
-    
+
     /*=====================================================================================================================================*/
     /*=============================================== STUDENT' S FUNCTIONS ================================================================*/
     /*=====================================================================================================================================*/
@@ -72,6 +73,8 @@ module.exports = {
     //chức năng tìm kiếm
     app.get('/api/search', (req, res) => studentController.search(req, res))
 
+    //lấy html từng bài đăng cụ thể
+    app.get('/api/employInfo/:employId', (req, res) => employ.getById(req, res))
     //intern
     app.post('/api/student/intern/lecturer', (req, res) => studentController.internWithLecturer(req, res))
     

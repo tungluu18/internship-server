@@ -12,10 +12,10 @@ module.exports = {
         return Promise.reject(new Error('Định dạng ngày không đúng'))
 
       await knex('employInfo').insert({
-        partnerId: partnerId,           employId: employId, 
+        partnerId: partnerId,     employId: employId, 
         title: title,                   
-        content: content,               plaintext: striptags(content),  
-        postedDate: Date.now(),         expireDate: Date.parse(expireDate)
+        content: content,         plaintext: striptags(content),  
+        postedDate: Date.now(),   expireDate: Date.parse(expireDate)
       })
     } catch (err) {
       return Promise.reject(err)
