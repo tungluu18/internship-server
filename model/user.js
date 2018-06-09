@@ -6,7 +6,7 @@ const student = require('./student');
 module.exports = {
     add: async function(username, password, type) {                    
         if (type !== 'student' && type !== 'admin' && type !== 'lecturer' && type !=='partner')
-            return Promise.reject('Loại tài khoản không hợp lệ')
+            return Promise.reject(new Error('Loại tài khoản không hợp lệ'))
         try {
             const rows = await knex('user').select()
 
@@ -32,7 +32,7 @@ module.exports = {
     getType: async function(id) {
         try {
             const result = await knex('user').where('id', id)           
-            if (result.length == 0) return Promise.reject("id không tồn tại")
+            if (result.length == 0) return Promise.reject(new Error("id không tồn tại"))
             return Promise.resolve(result[0].type)
         } catch (err) {                        
             return Promise.reject(new Error(err))

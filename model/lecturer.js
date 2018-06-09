@@ -58,12 +58,9 @@ module.exports = {
                 return Promise.reject(new Error("Sinh viên chưa gửi báo cáo toàn văn, vì vậy bạn không thẻ cho điểm"));
             }
             await knex('studentfollowme').where('studentId', idOfStudent[0].studentId).update({
-                'commentOfLecture': comment,
+                'comment': comment,
                 'mark': mark
-            })
-            // lưu đánh giá và điểm dưới dạng file excel
-            var xls = json2xls(result);
-            await fs.writeFileSync('data/danhgiasinhvien/'+lectureId+'.xlsx',xls,'binary');
+            })            
             Promise.resolve();
         }catch(err){
             return Promise.reject(new Error(err));
@@ -85,6 +82,8 @@ module.exports = {
                 console.log(typeof res);
                 result.push(res[0]);
             }
+            var xls = json2xls(result);
+            await fs.writeFileSync('data/danhgiasinhvien/'+lectureId+'.xlsx',xls,'binary');
             return Promise.resolve(result);
         }
         catch(err){

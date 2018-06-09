@@ -61,6 +61,16 @@ module.exports = {
             lecturerController.downloadMarkAndComment(req,res);
         });
 
+        //Partner
+        // Cập nhật đánh giá quá trình thực tập của sinh viên
+        app.post('/api/partner/commentForStudent',jsonParser ,(req,res)=>{
+            console.log('adasd');
+            partnerController.commentForStudent(req,res);
+        });
+        app.get('/api/partner/seeProfileOfStudent',(req,res)=>{
+            partnerController.seeProfileOfStudent(req,res);
+        });
+
         
     }
 }

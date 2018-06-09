@@ -49,10 +49,10 @@ module.exports = {
             const studentId = await req.query.studentId;
             const comment = await req.body.comment;
             const mark = await req.body.mark;
-            console.log(lectureId)
-            console.log(studentId);
-            console.log(comment);
-            console.log(mark);
+            //console.log(lectureId)
+            //console.log(studentId);
+            //console.log(comment);
+            //console.log(mark);
             if (lectureId === undefined || studentId === undefined){
                 res.send({error: "Chưa có tên "});
             }
@@ -64,26 +64,27 @@ module.exports = {
                 console.log("sai ddiem");
                 res.send({error: "Điểm phải nằm trong khoảng từ 0-10"});
             }
+            if (comment === null){
+                res.send({error: "Chưa nhập đánh giá sinh viên"})
+            }
             await lecturer.addCommentAndMarkForStudent(lectureId, studentId, comment, mark).then(()=>{
                 console.log("Ok")    
                 res.send({success: true, 
                             error : null})
-            }).catch(e=>{
-                res.send(e.messenge);
             })
         }catch(err){
             res.send(err.messenge);
         }
     },
     // xuất thông tin sinh viên hướng dẫn ra file excel
-    getMarkAndCommentForStudentToXlss: async function(req,res){
+    getMarkAndCommentForStudent: async function(req,res){
         try{
             let lecturerId = await req.query.lecturerId; // lấy id của lecturer
             console.log(lecturerId);
             if (lecturerId === undefined){
                 return res.send(404);
             }
-            await lecturer.getMarkAndCommentForStudentToXlsx(lecturerId).then( r =>{
+            await lecturer.getMarkAndCommentForStudent(lecturerId).then( r =>{
                 res.send(r);  
             });
         }catch(err){
@@ -107,5 +108,6 @@ module.exports = {
             res.send(err.messenge);
         }
     }
+    
 
 }
