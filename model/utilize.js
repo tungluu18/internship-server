@@ -37,8 +37,6 @@ module.exports = {
     const year = thisDate.getFullYear()
     const month = thisDate.getMonth() + 1
     const day = thisDate.getDate()
-    //console.log(thisDate.getDate())
-    //console.log(year + '/' + month + '/' + day)
     return year + '/' + month + '/' + day
   }
 }
