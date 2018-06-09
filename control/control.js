@@ -75,6 +75,7 @@ module.exports = {
 
     //lấy html từng bài đăng cụ thể
     app.get('/api/employInfo/:employId', (req, res) => employ.getById(req, res))
+    
     //intern
     app.post('/api/student/intern/lecturer', (req, res) => studentController.internWithLecturer(req, res))
     
