@@ -30,5 +30,15 @@ module.exports = {
 
   getRequesterId: function(req) {
     return jwt.decode(req.headers['authorization']).id
+  },
+
+  formatDate: function(millisecond) {    
+    const thisDate = new Date(Number(millisecond))    
+    const year = thisDate.getFullYear()
+    const month = thisDate.getMonth() + 1
+    const day = thisDate.getDate()
+    //console.log(thisDate.getDate())
+    //console.log(year + '/' + month + '/' + day)
+    return year + '/' + month + '/' + day
   }
 }

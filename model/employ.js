@@ -1,6 +1,7 @@
 const knex = require('knex')(require('../knexfile'))
 const user = require('./user')
 const fulltextseachlight = require('full-text-search-light') 
+const utilize = require('./utilize')
 
 module.exports = {
   getAllEmployInfo: async function() {
@@ -13,7 +14,8 @@ module.exports = {
         e.partnerName = partnerName
         e.partnerAvatar = 'localhost:3000' + partnerAvatar
         e.content = undefined
-        e.date_create = undefined
+        e.postedDate = utilize.formatDate(e.postedDate)
+        e.expireDate = utilize.formatDate(e.expireDate)
       }
       return Promise.resolve(employInfos)
     } catch (err) {
