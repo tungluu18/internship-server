@@ -1,4 +1,5 @@
 const partner = require('../model/partner');
+const employ = require('../model/employ')
 
 module.exports = {
   addEmployInfo: async function (req, res) {
@@ -51,6 +52,18 @@ module.exports = {
       res.send({res: r});      
     } catch (err) {
       res.send({success: false, err: err.message});
+    }
+  },
+
+  editEmployInfo: async function(req, res) {
+    const title = req.body.title
+    const content = req.body.content
+    const expireDate = req.body.expireDate
+    try {
+      await employ.update(req.params.employId, title, content, expireDate)
+      res.send({success: true, error: null})
+    } catch (err) {
+      res.send({success: false, error: err.message})
     }
   }
 }

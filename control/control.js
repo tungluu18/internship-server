@@ -64,11 +64,7 @@ module.exports = {
     })
     app.put('/api/user/profile/:id/avatar', (req, res) => {
       userController.updateAvatar(req, res)
-    })
-    // thêm bài đăng tuyển dụng cho partner
-    app.post('/api/employInfo/create', secure.verifyToken, (req, res) => {
-      partnerController.addEmployInfo(req, res)
-    })
+    })   
     // gửi tin nhắn
     app.post('/api/message/send', (req, res) => {
       userController.sendMessage(req, res)
@@ -98,7 +94,7 @@ module.exports = {
       studentController.internWithLecturer(req, res)
     })
 
-    //Upload Báo cáo 
+    // Upload Báo cáo 
     app.post('/api/student/upload/document', storage.uploadDocument.single('document'), (err, req, res, next) => {
       if (err) {
         console.log(err)
@@ -144,11 +140,28 @@ module.exports = {
     /*=============================================== PARTNER' S FUNCTIONS ================================================================*/
     /*=====================================================================================================================================*/
     // Cập nhật đánh giá quá trình thực tập của sinh viên
-    app.post('/api/partner/commentForStudent', jsonParser, (req, res) => {
+    app.post('/api/partner/commentForStudent', secure.verifyToken, (req, res) => {
       partnerController.commentForStudent(req, res);
     });
-    app.get('/api/partner/seeProfileOfStudent', (req, res) => {
+    app.get('/api/partner/seeProfileOfStudent', secure.verifyToken, (req, res) => {
       partnerController.seeProfileOfStudent(req, res);
     });
+    // thêm bài đăng tuyển dụng cho partner
+    app.post('/api/employInfo/create', secure.verifyToken, (req, res) => {
+      partnerController.addEmployInfo(req, res)
+    })
+    // chỉnh sửa bài đăng tuyển dụng
+    app.put('/api/employInfo/edit/:employId', secure.verifyToken, (req, res) => {
+      partnerController.editEmployInfo(req, res)
+    })
+    // xóa bài đăng tuyển dụng
+    app.delete('/api/employInfo/delete/:employId', secure.verifyToken, (req, res) => {
+      try{
+        employ.delete(req.params.employId)
+        res.send({success: true, error: null})
+      } catch (err) {
+        res.send({success: false, error: err.message})
+      }
+    })
   }
 }

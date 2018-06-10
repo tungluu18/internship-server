@@ -56,7 +56,7 @@ module.exports = {
       ])      
       employ.plaintext = undefined
       employ.partnerName = partner.name
-      employ.partnerAvatar = partnerAvatar
+      employ.partnerAvatar = 'http://localhost:3000' + partnerAvatar
       employ.partnerContact = partner.contact
       employ.partnerThongtin = partner.thongtin
       employ.postedDate = utilize.formatDate(employ.postedDate)
@@ -65,6 +65,30 @@ module.exports = {
       res.send({res: employ})   
     } catch (err) {
       res.send({success:false, error:err.message}) 
+    }
+  },
+
+  update: async function(employId, title, content, expireDate) {
+    if (Date.parse(expireDate) == NaN) 
+      return Promise.reject(new Error('Ngày hết hạn bài đăng không hợp lệ'))
+    let newVersion = {title: title, content: content, expireDate: Date.parse(expireDate)}
+    if (title == null) newVersion.title = undefined
+    if (content == null) newVersion.content = undefined
+    if (expireDate == null) newVersion.expireDate = undefined
+    try {
+      if (!await utilize.isExisted('employinfo', {employId: employId})) 
+        return Promise.reject(new Error('Bài đăng không tồn tại'))
+      await knex('employinfo').where({employId: employId}).update(newVersion)      
+    } catch (err) {
+      return Promise.reject(err)
+    }
+  },
+
+  delete: async function(employId) {
+    try {
+      await knex('employinfo').where({employId: employId}).del()
+    } catch (err) {
+      return Promise.reject(err)
     }
   }
 }
