@@ -38,5 +38,18 @@ module.exports = {
     const month = thisDate.getMonth() + 1
     const day = thisDate.getDate()
     return year + '/' + month + '/' + day
+  },
+
+  getSenderAndReceiverUsername: async function(messages) {
+    const users = await knex('user').select()
+    let userNames = {}
+    for (e of users) userNames[e.id] = e.username
+    for (e of messages) {
+      e.senderUsername = userNames[e.senderId]
+      e.receiverUsername = userNames[e.receiverId]
+      e.senderId = undefined
+      e.receiverId = undefined
+    }
+    return Promise.resolve(messages) 
   }
 }

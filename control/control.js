@@ -66,11 +66,15 @@ module.exports = {
       userController.updateAvatar(req, res)
     })   
     // gửi tin nhắn
-    app.post('/api/message/send', (req, res) => {
+    app.put('/api/message/send', (req, res) => {
       userController.sendMessage(req, res)
     })
+    // xem tin nhắn
+    app.get('/api/message/view', (req, res) => {
+      userController.getMessageByFilter(req, res)
+    })
     // nhận tin nhắn
-    app.post('/api/message/receive', (req, res) => {
+    app.get('/api/message/view/:messageId', (req, res) => {
       userController.receiveMessage(req, res)
     })
 

@@ -1,7 +1,9 @@
 const user = require('../model/user')
 const jwt = require('jsonwebtoken')
 const secure = require('./secure')
+
 const storage = require('../model/storage')
+const utilize = require('../model/utilize')
 
 const linkData = 'http://localhost:3000'
 
@@ -105,22 +107,35 @@ module.exports = {
   },
 
   sendMessage: async function(req, res) {
-    const senderId = req.body.senderId
-    const receiverId = req.body.receiverId
-    const replyTo = req.body.repyTo
-    const content = req.body.content
+    const senderId = utilize.getRequesterId(req)
+    const receiverId = (await utilize.getFirstElement('user', {username: req.body.receiverUsername})).id    
+    const replyTo = req.body.replyTo
+    const title = req.body.title
+    const content = req.body.content        
     try {
-      await user.sendMessage(senderId, receiverId, replyTo, content)
+      await user.sendMessage(senderId, receiverId, replyTo, title, content)
       res.send({success: true, error: null})
     } catch (err) {
       res.send({success: false, error: err.message})
     }
   },
 
-  receiveMessage: async function(req, res) {
-    const messageId = req.body.messageId
+  getMessageByFilter: async function(req, res) {
+    const filter = req.query.filter
+    const requesterId = utilize.getRequesterId(req)
     try {
-      const result = await user.receiveMessage(messageId)
+      const result = await user.getMessageByFilter(requesterId, filter)
+      res.send({res: result})
+    } catch (err) {
+      res.send({success: false, error: err.message})
+    }
+  },
+
+  receiveMessage: async function(req, res) {
+    const requesterId = utilize.getRequesterId(req)
+    const messageId = req.params.messageId
+    try {
+      const result = await user.receiveMessage(requesterId, messageId)
       res.send({success: true, result: result})
     } catch (err) {
       res.send({success: false, error: err.message})

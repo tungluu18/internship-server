@@ -118,11 +118,13 @@ module.exports = {
     return knex('user').where('id', id).update({password: secure.encrypt(password) })
   },
 
-  sendMessage: async function(senderId, receiverId, replyTo, content) {
+  sendMessage: async function(senderId, receiverId, replyTo, title, content) {
     try {
-      if (replyTo != null) if (!await utilize.isExisted('message', {messageId: replyTo})) 
+      if (replyTo != null && !await utilize.isExisted('message', {messageId: replyTo})) 
         return Promise.reject(new Error("Thư được phản hồi không tồn tại trên hệ thống"))
-      
+      if (senderId == receiverId) 
+        return Promise.reject(new Error('Không gửi thư được cho chính mình đâu bạn nhé'))
+
       const allMessage = await knex('message').select('messageId')
       const newIndex = await utilize.findNewIndex(allMessage, 'messageId')
       await knex('message').insert({        
@@ -130,26 +132,45 @@ module.exports = {
         senderId: senderId, 
         receiverId: receiverId, 
         replyTo: replyTo, 
+        title: title,
         content: content, 
-        checked: false
+        seen: false
       })
     } catch (err) {
       return Promise.reject(err)
     }
   },
-
-  receiveMessage: async function(messageId) {
+  
+  getMessageByFilter: async function(requesterId, filter) {
     try {
-      const message = await utilize.getFirstElement('message', {messageId: messageId})
-      const [sender, receiver] = await Promise.all([
-        this.getName(message.senderId), 
-        this.getName(message.receiverId)
-      ])      
-      return {
-        content: message.content,
-        sender: sender,
-        receiver: receiver
-      }
+      let allMessage = await knex('message')
+                          .where('senderId', requesterId)
+                          .orWhere('receiverId', requesterId)
+                          .select()
+      let afterFiltered = []
+      if (filter == 'sent') 
+        afterFiltered = allMessage.filter(e => e.senderId == requesterId)
+      else if (filter == 'inbox') 
+        afterFiltered = allMessage.filter(e => e.receiverId == requesterId)
+      else if (filter == 'unseen') 
+        afterFiltered = allMessage.filter(e => e.receiverId == requesterId && e.seen == false)    
+      const result = await utilize.getSenderAndReceiverUsername(afterFiltered)
+      return Promise.resolve(result)
+    } catch (err) {
+      return Promise.reject(err)
+    }
+  },
+
+  receiveMessage: async function(requesterId, messageId) {
+    try {
+      const message = await utilize.getFirstElement('message', {messageId: messageId})      
+      if (requesterId != message.senderId && requesterId != message.receiverId)
+        return Promise.reject(new Error('Thư này không phải của bạn'))
+      if (message.receiverId == requesterId) 
+        await knex('message').where('messageId', messageId).update({'seen': 1})
+
+      const [result] = await utilize.getSenderAndReceiverUsername([message])      
+      return Promise.resolve(result)
     } catch (err) {
       return Promise.reject(err)
     }
