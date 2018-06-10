@@ -6,37 +6,42 @@ module.exports = {
   search: async function(req, res) {
    const keyword = req.query.keyword 
    const filter = req.query.filterBy
+   const requesterId = utilize.getRequesterId(req)
    try {
     let result = (keyword == "") ? (await employ.getAllEmployInfo())
                 : (await employ.getByFilter(filter, keyword))
+    for (e of result) e.following = await student.isFollowing(requesterId, e.employId)
     res.send({res: result})
    } catch (err) {
     res.send({error: err.message})
    } 
   },
 
-  follow: async function(req, res) {
+  toggleFollow : async function(req, res) {
     const requesterId = utilize.getRequesterId(req)
-    const employId = req.body.employId
+    const employId = req.params.employId
     try {
-  await student.follow(requesterId, employId)
-      res.send({success: true, error: null})
+      const [isStudentExisted, isEmployExisted] = await Promise.all([
+        utilize.isExisted('student', {id: requesterId}),
+        utilize.isExisted('employInfo', {employId: employId})
+      ])
+      if (!isStudentExisted) return res.send({success: false, error: "Sinh viên không hợp lệ"})
+      if (!isEmployExisted) return res.send({success: false, error: "Bài đăng tuyển dụng không tồn tại"})
+
+      if (await utilize.isExisted('following', {studentId: requesterId, employId: employId})) {
+        // đang follow -> unfollow
+        await student.unfollow(requesterId, employId)     
+        res.send({following: false})
+      } else {
+        // đang unfollow -> follow
+        await student.follow(requesterId, employId) 
+        res.send({following: true})
+      }
     } catch (err) {
-      res.send({success: false, error: err.message})
+      res.send({error: err.message})
     }
   },
-
-  unfollow: async function(req, res) {
-    const requesterId = utilize.getRequesterId(req)
-    const employId = req.body.employId
-    try {
-      await student.unfollow(requesterId, employId)
-      res.send({success: true, error: null})
-    } catch (err) {
-      res.send({success: false, error: err.message})
-    }
-  },
-
+  
   internWithLecturer: async function(req, res) {
     const requesterId = utilize.getRequesterId(req)
     const lecturerId = req.body.lecturerId

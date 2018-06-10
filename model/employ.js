@@ -1,7 +1,8 @@
+const fulltextseachlight = require('full-text-search-light') 
 const knex = require('knex')(require('../knexfile'))
 const user = require('./user')
-const fulltextseachlight = require('full-text-search-light') 
 const utilize = require('./utilize')
+const student = require('./student')
 
 module.exports = {
   getAllEmployInfo: async function() {
@@ -45,11 +46,13 @@ module.exports = {
 
   getById: async function(req, res) {
     try {
+      const requesterId = utilize.getRequesterId(req)
       const employId = req.params.employId
-      const employ = await utilize.getFirstElement('employinfo', {employId: employId})
-      const [partner, partnerAvatar] = await Promise.all([
+      const employ = await utilize.getFirstElement('employinfo', {employId: employId})      
+      const [partner, partnerAvatar, isFollowing] = await Promise.all([
         utilize.getFirstElement('partner', {id: employ.partnerId}),
-        user.getAvatar(employ.partnerId)
+        user.getAvatar(employ.partnerId),
+        student.isFollowing(requesterId, employId)
       ])      
       employ.plaintext = undefined
       employ.partnerName = partner.name
@@ -58,6 +61,7 @@ module.exports = {
       employ.partnerThongtin = partner.thongtin
       employ.postedDate = utilize.formatDate(employ.postedDate)
       employ.expireDate = utilize.formatDate(employ.expireDate)
+      employ.following = isFollowing
       res.send({res: employ})   
     } catch (err) {
       res.send({success:false, error:err.message}) 
