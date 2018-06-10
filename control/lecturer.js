@@ -29,6 +29,8 @@ module.exports = {
       });
     }
   },
+
+
   // Xem report của doanh nghiệp về sinh viên mình hướng dẫn (Những sinh viên đã có đánh giá)
   getReportForStudent: async function (req, res) {
     try {
@@ -43,6 +45,41 @@ module.exports = {
       });
     } catch (err) {
       res.send(err.messenge);
+    }
+  },
+
+
+
+  // Xem báo cáo toàn văn của sinh viên
+  seeFinalReportOfStudent: async function(req,res){
+    try{
+      let lecturerId = await req.query.lecturerId;
+      let studentId = await req.query.studentId;
+      if (lecturerId === undefined || studentId === undefined ){
+        return res.send(404);
+      }
+      var tempFile= await lecturer.seeFinalReportOfStudent(lecturerId,studentId);
+      console.log(tempFile);
+      
+      await res.send(tempFile);
+    }catch(err){
+      return res.send({error: err.message});
+    }
+  },
+  // Tải báo cáo toàn văn của sinh viên
+  downloadFinalReportOfStudent: async function(req,res){
+    try{
+      let lecturerId = await req.query.lecturerId;
+      let studentId = await req.query.studentId;
+      if (lecturerId === undefined || studentId === undefined){
+        return res.send(404);
+      }
+      var tempFile= await lecturer.seeFinalReportOfStudent(lecturerId,studentId);
+      console.log(tempFile);
+      
+      await res.download(tempFile.linkOfReport);
+    }catch(err){
+      return res.send({error: err.message});
     }
   },
   // đánh giá báo cáo toàn văn của sinh viên
@@ -76,6 +113,9 @@ module.exports = {
       res.send({success: false, error: err.message});
     }
   },
+
+
+
   // Xem báo cáo định kỳ của sinh viên
   seeWeeklyReportOfStudent: async function(req,res){
     try{
@@ -102,10 +142,10 @@ module.exports = {
       if (lecturerId === undefined || studentId === undefined || assignmentId === undefined){
         return res.send(404);
       }
-      var tempFile= await lecturer.downloadWeeklyReportOfStudent(lecturerId,studentId,assignmentId);
+      var tempFile= await lecturer.seeWeeklyReportOfStudent(lecturerId,studentId,assignmentId);
       console.log(tempFile);
       
-      await res.download(tempFile);
+      await res.download(tempFile.file);
     }catch(err){
       return res.send({error: err.message});
     }

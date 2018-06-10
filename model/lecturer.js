@@ -48,6 +48,25 @@ module.exports = {
     }
 
   },
+  // xem báo cáo toàn văn của sinh viên
+  seeFinalReportOfStudent: async function(lecturerId, studentId){
+    var idOfReport = await knex('studentfollowme').where('lecturerId', lecturerId).andWhere('studentId',studentId).select('linkOfReport');
+    try{
+      if (idOfReport.length === 0) {
+        return Promise.reject(new Error('Sinh viên chưa nộp báo cáo'));
+      }
+      if( idOfReport[0].linkOfReport == null){
+        return Promise.reject(new Error("sinh viên chưa nộp báo cáo"));
+      }
+      let dirname = __dirname
+      dirname = dirname.replace('model', 'data/');
+      
+      idOfReport[0].linkOfReport = dirname + idOfReport[0].linkOfReport;
+      return Promise.resolve(idOfReport[0]);
+    }catch (err){
+      return Promise.reject(new Error(err));
+    }
+  },
   /// cho điểm và đánh giá báo cáo toàn văn của sinh viên
   addCommentAndMarkForStudent: async function (lectureId, studentId, comment, mark) {
     try {
@@ -158,7 +177,10 @@ module.exports = {
     }catch (err){
       return Promise.reject(new Error(err));
     }
-  }
+  },
+
+
+  
   
 
 }

@@ -112,7 +112,15 @@ module.exports = {
     app.get('/api/lecturer/reportforstudent', (req, res) => {
       lecturerController.getReportForStudent(req, res);
     });
-    /// Đánh giá của giáo viên về sinh viên mà mình hướng dẫn
+    // tải báo cáo toàn văn của sinh viên
+    app.get('/api/lecturer/downloadFinalReportOfStudent', (req, res)=>{
+      lecturerController.downloadFinalReportOfStudent(req,res);
+    });
+    // xem báo cáo toàn văn của sinh viên
+    app.get('/api/lecturer/seeFinalReportOfStudent', (req, res)=>{
+      lecturerController.seeFinalReportOfStudent(req,res);
+    });
+    /// Đánh giá của giáo viên về sinh viên mà mình hướng dẫn thông qua báo cáo toàn văn
     app.post('/api/lecturer/addCommentAndMarkForStudent', jsonParser, (req, res) => {
       lecturerController.addCommentAndMarkForStudent(req, res);
     });
@@ -128,10 +136,11 @@ module.exports = {
     app.post('/api/lecturer/commentForWeeklyReportOfStudent', jsonParser, (req, res)=>{
       lecturerController.commentForWeeklyReportOfStudent(req,res);
     });
-    // xem báo cáo định kỳ của sinh viên
+    // tải báo cáo định kỳ của sinh viên
     app.get('/api/lecturer/downloadWeeklyReportOfStudent', (req, res)=>{
       lecturerController.downloadWeeklyReportOfStudent(req,res);
     });
+    // xem báo cáo định kỳ của sinh viên
     app.get('/api/lecturer/seeWeeklyReportOfStudent', (req, res)=>{
       lecturerController.seeWeeklyReportOfStudent(req,res);
     });
