@@ -52,7 +52,6 @@ module.exports = {
         user.getAvatar(employ.partnerId)
       ])      
       employ.plaintext = undefined
-      employ.title = undefined
       employ.partnerName = partner.name
       employ.partnerAvatar = partnerAvatar
       employ.partnerContact = partner.contact
