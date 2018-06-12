@@ -120,21 +120,18 @@ module.exports = {
 
   sendMessage: async function(senderId, receiverId, replyTo, title, content) {
     try {
-      if (replyTo != null && !await utilize.isExisted('message', {messageId: replyTo})) 
-        return Promise.reject(new Error("Thư được phản hồi không tồn tại trên hệ thống"))
-      if (senderId == receiverId) 
-        return Promise.reject(new Error('Không gửi thư được cho chính mình đâu bạn nhé'))
-
+      if (senderId == receiverId) return Promise.reject(new Error('Không gửi thư được cho chính mình đâu bạn nhé'))
+      const [senderExist, receiverExist, replyToExist] = await Promise.all([
+        utilize.isExisted('user', {id: senderId}),
+        utilize.isExisted('user', {id: receiverId}),
+        utilize.isExisted('message', {messageId: messageId})
+      ])
+      if (replyTo != null && !replyToExist) return Promise.reject(new Error("Thư được phản hồi không tồn tại trên hệ thống"))      
+      if (!receiverExist || !senderExist) return Promise.reject(new Error('username không hợp lệ'))
       const allMessage = await knex('message').select('messageId')
-      const newIndex = await utilize.findNewIndex(allMessage, 'messageId')
+      const newIndex = utilize.findNewIndex(allMessage, 'messageId')
       await knex('message').insert({        
-        messageId: newIndex, 
-        senderId: senderId, 
-        receiverId: receiverId, 
-        replyTo: replyTo, 
-        title: title,
-        content: content, 
-        seen: false
+        messageId: newIndex, senderId: senderId, receiverId: receiverId, replyTo: replyTo, title: title, content: content, seen: false
       })
     } catch (err) {
       return Promise.reject(err)

@@ -66,7 +66,7 @@ module.exports = {
       userController.updateAvatar(req, res)
     })   
     // gửi tin nhắn
-    app.put('/api/message/send', (req, res) => {
+    app.post('/api/message/send', (req, res) => {
       userController.sendMessage(req, res)
     })
     // xem tin nhắn
@@ -166,6 +166,19 @@ module.exports = {
       } catch (err) {
         res.send({success: false, error: err.message})
       }
+    })
+
+    /*=====================================================================================================================================*/
+    /*================================================= ADMIN' S FUNCTIONS ================================================================*/
+    /*=====================================================================================================================================*/
+    app.post('/api/admin/internshipTerm/create', (req, res) => {
+      adminController.createInternshipTerm(req, res)
+    })  
+    app.put('/api/admin/internshipTerm/update/:internshipTermId', (req, res) => {
+      adminController.updateInternshipTerm(req, res)
+    })
+    app.get('/api/admin/internshipTerm', (req, res) => {
+      adminController.getAllInternshipTerm(req, res)
     })
   }
 }

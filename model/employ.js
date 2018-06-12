@@ -69,7 +69,7 @@ module.exports = {
   },
 
   update: async function(employId, title, content, expireDate) {
-    if (Date.parse(expireDate) == NaN) 
+    if (isNaN(Date.parse(expireDate)))
       return Promise.reject(new Error('Ngày hết hạn bài đăng không hợp lệ'))
     let newVersion = {title: title, content: content, expireDate: Date.parse(expireDate)}
     if (title == null) newVersion.title = undefined
