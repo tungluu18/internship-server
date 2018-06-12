@@ -124,7 +124,7 @@ module.exports = {
       const [senderExist, receiverExist, replyToExist] = await Promise.all([
         utilize.isExisted('user', {id: senderId}),
         utilize.isExisted('user', {id: receiverId}),
-        utilize.isExisted('message', {messageId: messageId})
+        utilize.isExisted('message', {messageId: replyTo})
       ])
       if (replyTo != null && !replyToExist) return Promise.reject(new Error("Thư được phản hồi không tồn tại trên hệ thống"))      
       if (!receiverExist || !senderExist) return Promise.reject(new Error('username không hợp lệ'))

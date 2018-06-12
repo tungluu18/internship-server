@@ -111,7 +111,7 @@ module.exports = {
     const receiverId = (await utilize.getFirstElement('user', {username: req.body.receiverUsername})).id    
     const replyTo = req.body.replyTo
     const title = req.body.title
-    const content = req.body.content        
+    const content = req.body.content            
     try {
       await user.sendMessage(senderId, receiverId, replyTo, title, content)
       res.send({success: true, error: null})
