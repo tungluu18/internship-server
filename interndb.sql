@@ -2,10 +2,10 @@
 -- version 4.6.6
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Jun 10, 2018 at 06:34 PM
--- Server version: 5.7.17-log
--- PHP Version: 5.6.30
+-- Máy chủ: localhost
+-- Thời gian đã tạo: Th6 12, 2018 lúc 02:50 CH
+-- Phiên bản máy phục vụ: 5.7.17-log
+-- Phiên bản PHP: 5.6.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -17,13 +17,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `interndb`
+-- Cơ sở dữ liệu: `interndb`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `admin`
+-- Cấu trúc bảng cho bảng `admin`
 --
 
 CREATE TABLE `admin` (
@@ -36,7 +36,7 @@ CREATE TABLE `admin` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 
 --
--- Dumping data for table `admin`
+-- Đang đổ dữ liệu cho bảng `admin`
 --
 
 INSERT INTO `admin` (`id`, `name`, `donvi`, `vnumail`, `mail`, `phone`) VALUES
@@ -46,7 +46,7 @@ INSERT INTO `admin` (`id`, `name`, `donvi`, `vnumail`, `mail`, `phone`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `assignment`
+-- Cấu trúc bảng cho bảng `assignment`
 --
 
 CREATE TABLE `assignment` (
@@ -60,7 +60,7 @@ CREATE TABLE `assignment` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 
 --
--- Dumping data for table `assignment`
+-- Đang đổ dữ liệu cho bảng `assignment`
 --
 
 INSERT INTO `assignment` (`assignmentId`, `studentId`, `lecturerId`, `content`, `file`, `score`, `comment`) VALUES
@@ -69,7 +69,7 @@ INSERT INTO `assignment` (`assignmentId`, `studentId`, `lecturerId`, `content`, 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `employinfo`
+-- Cấu trúc bảng cho bảng `employinfo`
 --
 
 CREATE TABLE `employinfo` (
@@ -83,7 +83,7 @@ CREATE TABLE `employinfo` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 
 --
--- Dumping data for table `employinfo`
+-- Đang đổ dữ liệu cho bảng `employinfo`
 --
 
 INSERT INTO `employinfo` (`employId`, `partnerId`, `title`, `content`, `plaintext`, `postedDate`, `expireDate`) VALUES
@@ -94,7 +94,7 @@ INSERT INTO `employinfo` (`employId`, `partnerId`, `title`, `content`, `plaintex
 -- --------------------------------------------------------
 
 --
--- Table structure for table `following`
+-- Cấu trúc bảng cho bảng `following`
 --
 
 CREATE TABLE `following` (
@@ -104,7 +104,7 @@ CREATE TABLE `following` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 
 --
--- Dumping data for table `following`
+-- Đang đổ dữ liệu cho bảng `following`
 --
 
 INSERT INTO `following` (`employId`, `studentId`, `partnerId`) VALUES
@@ -115,7 +115,7 @@ INSERT INTO `following` (`employId`, `studentId`, `partnerId`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `intern`
+-- Cấu trúc bảng cho bảng `intern`
 --
 
 CREATE TABLE `intern` (
@@ -131,7 +131,7 @@ CREATE TABLE `intern` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 
 --
--- Dumping data for table `intern`
+-- Đang đổ dữ liệu cho bảng `intern`
 --
 
 INSERT INTO `intern` (`studentId`, `lecturerId`, `partnerId`, `partnerComment`, `lecturerComment`, `startTime`, `endTime`, `phase`, `year`) VALUES
@@ -140,7 +140,28 @@ INSERT INTO `intern` (`studentId`, `lecturerId`, `partnerId`, `partnerComment`, 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `knex_migrations`
+-- Cấu trúc bảng cho bảng `internshipterm`
+--
+
+CREATE TABLE `internshipterm` (
+  `internshipTermId` int(10) NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
+  `startTime` varchar(100) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
+  `endTime` varchar(100) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `internshipterm`
+--
+
+INSERT INTO `internshipterm` (`internshipTermId`, `name`, `startTime`, `endTime`) VALUES
+(1, 'Thực tập hè 2018', '1527786000000', '1530291600000'),
+(2, 'Thực tập mùa đông 2018', '1527786000000', '1530118800000');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `knex_migrations`
 --
 
 CREATE TABLE `knex_migrations` (
@@ -151,7 +172,7 @@ CREATE TABLE `knex_migrations` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 
 --
--- Dumping data for table `knex_migrations`
+-- Đang đổ dữ liệu cho bảng `knex_migrations`
 --
 
 INSERT INTO `knex_migrations` (`id`, `name`, `batch`, `migration_time`) VALUES
@@ -160,7 +181,7 @@ INSERT INTO `knex_migrations` (`id`, `name`, `batch`, `migration_time`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `knex_migrations_lock`
+-- Cấu trúc bảng cho bảng `knex_migrations_lock`
 --
 
 CREATE TABLE `knex_migrations_lock` (
@@ -168,7 +189,7 @@ CREATE TABLE `knex_migrations_lock` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 
 --
--- Dumping data for table `knex_migrations_lock`
+-- Đang đổ dữ liệu cho bảng `knex_migrations_lock`
 --
 
 INSERT INTO `knex_migrations_lock` (`is_locked`) VALUES
@@ -177,7 +198,7 @@ INSERT INTO `knex_migrations_lock` (`is_locked`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `lecturer`
+-- Cấu trúc bảng cho bảng `lecturer`
 --
 
 CREATE TABLE `lecturer` (
@@ -190,7 +211,7 @@ CREATE TABLE `lecturer` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 
 --
--- Dumping data for table `lecturer`
+-- Đang đổ dữ liệu cho bảng `lecturer`
 --
 
 INSERT INTO `lecturer` (`id`, `name`, `mail`, `vnumail`, `phone`, `ghichu`) VALUES
@@ -199,7 +220,7 @@ INSERT INTO `lecturer` (`id`, `name`, `mail`, `vnumail`, `phone`, `ghichu`) VALU
 -- --------------------------------------------------------
 
 --
--- Table structure for table `message`
+-- Cấu trúc bảng cho bảng `message`
 --
 
 CREATE TABLE `message` (
@@ -213,19 +234,22 @@ CREATE TABLE `message` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 
 --
--- Dumping data for table `message`
+-- Đang đổ dữ liệu cho bảng `message`
 --
 
 INSERT INTO `message` (`messageId`, `senderId`, `receiverId`, `title`, `replyTo`, `content`, `seen`) VALUES
 (1, 2, 6, 'Lời chào', NULL, 'Chào bạn nha!', 0),
 (2, 2, 6, 'Lời chào', NULL, 'Bye bạn nha!', 0),
 (3, 1, 2, 'Lời nhắc nhơ', NULL, 'Làm bài nào người anh em', 0),
-(4, 2, 1, 'Trả lời người anh em', NULL, 'Ok bro, Rush B non stop', 0);
+(4, 2, 1, 'Trả lời người anh em', NULL, 'Ok bro, Rush B non stop', 0),
+(5, 2, 1, 'Lời hỏi thăm', NULL, 'Chú ăn cơm chưa ? ', 0),
+(6, 1, 2, 'Chuyện yêu nước', NULL, 'Chú đừng đi theo bọn phản động đả kích mà đi biểu tình nhé', 0),
+(7, 2, 1, 'Làm bạn yên tâm', 6, 'Làm xong bài tập lớn anh mới vào Nam với bà con, chú cứ yên tâm ?', 0);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `partner`
+-- Cấu trúc bảng cho bảng `partner`
 --
 
 CREATE TABLE `partner` (
@@ -236,7 +260,7 @@ CREATE TABLE `partner` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 
 --
--- Dumping data for table `partner`
+-- Đang đổ dữ liệu cho bảng `partner`
 --
 
 INSERT INTO `partner` (`id`, `name`, `contact`, `thongtin`) VALUES
@@ -247,7 +271,7 @@ INSERT INTO `partner` (`id`, `name`, `contact`, `thongtin`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `rateforstudent`
+-- Cấu trúc bảng cho bảng `rateforstudent`
 --
 
 CREATE TABLE `rateforstudent` (
@@ -258,7 +282,7 @@ CREATE TABLE `rateforstudent` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `rateforstudent`
+-- Đang đổ dữ liệu cho bảng `rateforstudent`
 --
 
 INSERT INTO `rateforstudent` (`partnerId`, `studentId`, `mark`, `comment`) VALUES
@@ -268,7 +292,7 @@ INSERT INTO `rateforstudent` (`partnerId`, `studentId`, `mark`, `comment`) VALUE
 -- --------------------------------------------------------
 
 --
--- Table structure for table `student`
+-- Cấu trúc bảng cho bảng `student`
 --
 
 CREATE TABLE `student` (
@@ -297,7 +321,7 @@ CREATE TABLE `student` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 
 --
--- Dumping data for table `student`
+-- Đang đổ dữ liệu cho bảng `student`
 --
 
 INSERT INTO `student` (`id`, `name`, `mssv`, `class`, `khoa`, `nganh`, `diachi`, `ngaysinh`, `vnumail`, `GPA`, `namtotnghiep`, `email`, `skypeID`, `facebook`, `phone`, `vitri`, `kynang`, `chungchi`, `kinhnghiem`, `sothich`, `dinhhuong`, `ghichu`) VALUES
@@ -309,7 +333,7 @@ INSERT INTO `student` (`id`, `name`, `mssv`, `class`, `khoa`, `nganh`, `diachi`,
 -- --------------------------------------------------------
 
 --
--- Table structure for table `studenteditable`
+-- Cấu trúc bảng cho bảng `studenteditable`
 --
 
 CREATE TABLE `studenteditable` (
@@ -328,7 +352,7 @@ CREATE TABLE `studenteditable` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 
 --
--- Dumping data for table `studenteditable`
+-- Đang đổ dữ liệu cho bảng `studenteditable`
 --
 
 INSERT INTO `studenteditable` (`id`, `email`, `skypeID`, `facebook`, `phone`, `vitri`, `kynang`, `chungchi`, `kinhnghiem`, `sothich`, `dinhhuong`, `ghichu`) VALUES
@@ -339,7 +363,7 @@ INSERT INTO `studenteditable` (`id`, `email`, `skypeID`, `facebook`, `phone`, `v
 -- --------------------------------------------------------
 
 --
--- Table structure for table `studentfollowme`
+-- Cấu trúc bảng cho bảng `studentfollowme`
 --
 
 CREATE TABLE `studentfollowme` (
@@ -352,7 +376,7 @@ CREATE TABLE `studentfollowme` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `studentfollowme`
+-- Đang đổ dữ liệu cho bảng `studentfollowme`
 --
 
 INSERT INTO `studentfollowme` (`studentId`, `lectureId`, `yearOfLecture`, `linkOfReport`, `comment`, `mark`) VALUES
@@ -362,7 +386,7 @@ INSERT INTO `studentfollowme` (`studentId`, `lectureId`, `yearOfLecture`, `linkO
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user`
+-- Cấu trúc bảng cho bảng `user`
 --
 
 CREATE TABLE `user` (
@@ -374,7 +398,7 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 
 --
--- Dumping data for table `user`
+-- Đang đổ dữ liệu cho bảng `user`
 --
 
 INSERT INTO `user` (`id`, `username`, `password`, `type`, `avatar`) VALUES
@@ -390,38 +414,38 @@ INSERT INTO `user` (`id`, `username`, `password`, `type`, `avatar`) VALUES
 (11, 'toshiba', '$2a$10$EiC6fW6f0tXPCTcEMbC91.ZhdvHhquFRccrjcvyA3syN2uckRfTgy', 'partner', NULL);
 
 --
--- Indexes for dumped tables
+-- Chỉ mục cho các bảng đã đổ
 --
 
 --
--- Indexes for table `admin`
+-- Chỉ mục cho bảng `admin`
 --
 ALTER TABLE `admin`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `assignment`
+-- Chỉ mục cho bảng `assignment`
 --
 ALTER TABLE `assignment`
   ADD KEY `fk_assignment_student` (`studentId`),
   ADD KEY `fk_assignment_lecturer` (`lecturerId`);
 
 --
--- Indexes for table `employinfo`
+-- Chỉ mục cho bảng `employinfo`
 --
 ALTER TABLE `employinfo`
   ADD PRIMARY KEY (`employId`),
   ADD KEY `fk_employeeinfo` (`partnerId`);
 
 --
--- Indexes for table `following`
+-- Chỉ mục cho bảng `following`
 --
 ALTER TABLE `following`
   ADD KEY `following_ibfk_1` (`employId`),
   ADD KEY `following_ibfk_2` (`studentId`);
 
 --
--- Indexes for table `intern`
+-- Chỉ mục cho bảng `intern`
 --
 ALTER TABLE `intern`
   ADD KEY `fk_intern_student` (`studentId`),
@@ -429,133 +453,133 @@ ALTER TABLE `intern`
   ADD KEY `fk_intern_partner` (`partnerId`);
 
 --
--- Indexes for table `knex_migrations`
+-- Chỉ mục cho bảng `knex_migrations`
 --
 ALTER TABLE `knex_migrations`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `lecturer`
+-- Chỉ mục cho bảng `lecturer`
 --
 ALTER TABLE `lecturer`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `message`
+-- Chỉ mục cho bảng `message`
 --
 ALTER TABLE `message`
   ADD KEY `fk_message_senderId` (`senderId`),
   ADD KEY `fk_message_receiverId` (`receiverId`);
 
 --
--- Indexes for table `partner`
+-- Chỉ mục cho bảng `partner`
 --
 ALTER TABLE `partner`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `rateforstudent`
+-- Chỉ mục cho bảng `rateforstudent`
 --
 ALTER TABLE `rateforstudent`
   ADD PRIMARY KEY (`partnerId`,`studentId`),
   ADD KEY `studentid` (`studentId`);
 
 --
--- Indexes for table `student`
+-- Chỉ mục cho bảng `student`
 --
 ALTER TABLE `student`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `studenteditable`
+-- Chỉ mục cho bảng `studenteditable`
 --
 ALTER TABLE `studenteditable`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `studentfollowme`
+-- Chỉ mục cho bảng `studentfollowme`
 --
 ALTER TABLE `studentfollowme`
   ADD PRIMARY KEY (`studentId`),
   ADD KEY `fkey` (`lectureId`);
 
 --
--- Indexes for table `user`
+-- Chỉ mục cho bảng `user`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT cho các bảng đã đổ
 --
 
 --
--- AUTO_INCREMENT for table `admin`
+-- AUTO_INCREMENT cho bảng `admin`
 --
 ALTER TABLE `admin`
   MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
--- AUTO_INCREMENT for table `knex_migrations`
+-- AUTO_INCREMENT cho bảng `knex_migrations`
 --
 ALTER TABLE `knex_migrations`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
--- AUTO_INCREMENT for table `lecturer`
+-- AUTO_INCREMENT cho bảng `lecturer`
 --
 ALTER TABLE `lecturer`
   MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
--- AUTO_INCREMENT for table `partner`
+-- AUTO_INCREMENT cho bảng `partner`
 --
 ALTER TABLE `partner`
   MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 --
--- AUTO_INCREMENT for table `student`
+-- AUTO_INCREMENT cho bảng `student`
 --
 ALTER TABLE `student`
   MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 --
--- AUTO_INCREMENT for table `studenteditable`
+-- AUTO_INCREMENT cho bảng `studenteditable`
 --
 ALTER TABLE `studenteditable`
   MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
--- AUTO_INCREMENT for table `user`
+-- AUTO_INCREMENT cho bảng `user`
 --
 ALTER TABLE `user`
   MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 --
--- Constraints for dumped tables
+-- Các ràng buộc cho các bảng đã đổ
 --
 
 --
--- Constraints for table `admin`
+-- Các ràng buộc cho bảng `admin`
 --
 ALTER TABLE `admin`
   ADD CONSTRAINT `fk_admin` FOREIGN KEY (`id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `assignment`
+-- Các ràng buộc cho bảng `assignment`
 --
 ALTER TABLE `assignment`
   ADD CONSTRAINT `fk_assignment_lecturer` FOREIGN KEY (`lecturerId`) REFERENCES `lecturer` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_assignment_student` FOREIGN KEY (`studentId`) REFERENCES `student` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `employinfo`
+-- Các ràng buộc cho bảng `employinfo`
 --
 ALTER TABLE `employinfo`
   ADD CONSTRAINT `fk_employeeinfo` FOREIGN KEY (`partnerId`) REFERENCES `partner` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `following`
+-- Các ràng buộc cho bảng `following`
 --
 ALTER TABLE `following`
   ADD CONSTRAINT `following_ibfk_1` FOREIGN KEY (`employId`) REFERENCES `employinfo` (`employId`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `following_ibfk_2` FOREIGN KEY (`studentId`) REFERENCES `student` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `intern`
+-- Các ràng buộc cho bảng `intern`
 --
 ALTER TABLE `intern`
   ADD CONSTRAINT `fk_intern_lecturer` FOREIGN KEY (`lecturerId`) REFERENCES `lecturer` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -563,45 +587,45 @@ ALTER TABLE `intern`
   ADD CONSTRAINT `fk_intern_student` FOREIGN KEY (`studentId`) REFERENCES `student` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `lecturer`
+-- Các ràng buộc cho bảng `lecturer`
 --
 ALTER TABLE `lecturer`
   ADD CONSTRAINT `fk_lecturer` FOREIGN KEY (`id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `message`
+-- Các ràng buộc cho bảng `message`
 --
 ALTER TABLE `message`
   ADD CONSTRAINT `fk_message_receiverId` FOREIGN KEY (`receiverId`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_message_senderId` FOREIGN KEY (`senderId`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `partner`
+-- Các ràng buộc cho bảng `partner`
 --
 ALTER TABLE `partner`
   ADD CONSTRAINT `fk_partner` FOREIGN KEY (`id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `rateforstudent`
+-- Các ràng buộc cho bảng `rateforstudent`
 --
 ALTER TABLE `rateforstudent`
   ADD CONSTRAINT `rateforstudent_ibfk_1` FOREIGN KEY (`studentId`) REFERENCES `student` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `rateforstudent_ibfk_2` FOREIGN KEY (`partnerId`) REFERENCES `partner` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `student`
+-- Các ràng buộc cho bảng `student`
 --
 ALTER TABLE `student`
   ADD CONSTRAINT `student_ibfk_1` FOREIGN KEY (`id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `studenteditable`
+-- Các ràng buộc cho bảng `studenteditable`
 --
 ALTER TABLE `studenteditable`
   ADD CONSTRAINT `fk_studentEditable` FOREIGN KEY (`id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `studentfollowme`
+-- Các ràng buộc cho bảng `studentfollowme`
 --
 ALTER TABLE `studentfollowme`
   ADD CONSTRAINT `fkey` FOREIGN KEY (`lectureId`) REFERENCES `lecturer` (`id`),
