@@ -101,7 +101,7 @@ module.exports = {
 
 
     /*=====================================================================================================================================*/
-    /*=============================================== LECTURER' S FUNCTIONS ================================================================*/
+    /*=============================================== LECTURER' S FUNCTIONS ===============================================================*/
     /*=====================================================================================================================================*/
 
     // get thông tin sinh viên mà mình hướng dẫn theo nam
@@ -112,6 +112,8 @@ module.exports = {
     app.get('/api/lecturer/reportforstudent', (req, res) => {
       lecturerController.getReportForStudent(req, res);
     });
+
+
     // tải báo cáo toàn văn của sinh viên
     app.get('/api/lecturer/downloadFinalReportOfStudent', (req, res)=>{
       lecturerController.downloadFinalReportOfStudent(req,res);
@@ -132,6 +134,8 @@ module.exports = {
     app.get('/api/lecturer/downloadMarkAndComment', (req, res) => {
       lecturerController.downloadMarkAndComment(req, res);
     });
+
+    
     /// đánh giá báo cáo định kỳ của sinh viên
     app.post('/api/lecturer/commentForWeeklyReportOfStudent', jsonParser, (req, res)=>{
       lecturerController.commentForWeeklyReportOfStudent(req,res);

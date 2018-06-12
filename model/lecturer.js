@@ -48,6 +48,7 @@ module.exports = {
     }
 
   },
+  
   // xem báo cáo toàn văn của sinh viên
   seeFinalReportOfStudent: async function(lecturerId, studentId){
     var idOfReport = await knex('studentfollowme').where('lecturerId', lecturerId).andWhere('studentId',studentId).select('linkOfReport');
@@ -110,15 +111,15 @@ module.exports = {
     }
   },
   // tải thông tin điểm và đánh giá của sinh viên
-  downloadCommentAndMarkForStudent: async function (lectureId) {
-    const idOfStudent = await knex('studentfollowme').where('lectureId', lectureId);
+  downloadCommentAndMarkForStudent: async function (lecturerId) {
+    const idOfStudent = await knex('studentfollowme').where('lecturerId', lecturerId);
     try {
       if (idOfStudent.length === 0) {
         return Promise.reject(new Error('Bạn chưa nhận hướng dẫn sinh viên nào'));
       }
       let dirname = __dirname
       dirname = dirname.replace('model', 'data\\danhgiasinhvien\\')
-      var dir = dirname + lectureId + '.xlsx';
+      var dir = dirname + lecturerId + '.xlsx';
       return Promise.resolve(dir);
     } catch (errr) {
       return Promise.reject(new Error(err));
@@ -158,27 +159,7 @@ module.exports = {
     }catch (err){
       return Promise.reject(new Error(err));
     }
-  },
-  // tải báo cáo định kỳ của sinh viên
-  downloadWeeklyReportOfStudent: async function(lecturerId, studentId, assignmentId){
-    const idOfReport = await knex('assignment').where('lecturerId', lecturerId).andWhere('studentId',studentId).andWhere('assignmentId', assignmentId);
-    try{
-      if (idOfReport.length === 0){
-        return Promise.reject(new Error('Sinh viên chưa nộp báo cáo'));
-      }
-      let dirname = __dirname
-      dirname = dirname.replace('model', 'data/');
-      console.log(dirname);
-      dir = await knex('assignment').where('assignmentId', idOfReport[0].assignmentId).select('file');
-      console.log(dir[0].file)
-      var dirc = dirname + dir[0].file;
-      console.log
-      return Promise.resolve(dirc);
-    }catch (err){
-      return Promise.reject(new Error(err));
-    }
-  },
-
+  }
 
   
   
