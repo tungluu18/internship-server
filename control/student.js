@@ -42,11 +42,27 @@ module.exports = {
     }
   },
   
-  internWithLecturer: async function(req, res) {
-    const requesterId = utilize.getRequesterId(req)
+  registerInternship: async function(req, res) {
+    const studentId = utilize.getRequesterId(req)
     const lecturerId = req.body.lecturerId
+    const partnerId = req.body.partnerId
+    const internshipTermId = req.body.internshipTermId
     try {
-      await student.internWithLecturer(requesterId, lecturerId)
+      let [studentExist, lecturerExist, partnerExist, internshipTermExist] 
+        = await Promise.all([
+          utilize.isExisted('student', {id: studentId}),
+          utilize.isExisted('lecturer', {id: lecturerId}),
+          utilize.isExisted('partner', {id: partnerId}),          
+          utilize.isExisted('internshipterm', {internshipTermId: internshipTermId})
+      ])      
+      if (partnerId == 0) partnerExist = true
+      if (!studentExist || !partnerExist || !lecturerExist || !internshipTermExist)
+        return res.send({success: false, error: 'Không hợp lệ'})
+      if (!await utilize.isExisted('studentfollowme', {studentId: studentId, lecturerId: lecturerId}))
+        return res.send({success: false, error: 'Sinh viên phải đăng kí giáo viên hướng dẫn'})
+      if (partnerId != 0 && !await utilize.isExisted('following', {studentId: studentId, partnerId: partnerId, status: 'Accepted'}))
+        return res.send({success: false, error: 'Sinh vien phải đăng kí đối tác mà mình đã được nhận'})
+      await student.registerInternship(studentId, lecturerId, partnerId, internshipTermId)        
       res.send({success: true, error: null})
     } catch (err) {
       res.send({success: false, error: err.message})

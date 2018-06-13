@@ -91,5 +91,19 @@ module.exports = {
     } catch (err) {
       return Promise.reject(err)
     }
+  },
+
+  registerInternship: async function(studentId, lecturerId, partnerId, internshipTermId) {
+    try {
+      if (await utilize.isExisted('intern', {studentId : studentId, internshipTermId: internshipTermId}))
+        await knex('intern').update({lecturerId: lecturerId, partnerId: partnerId})
+          .where({studentId: studentId, internshipTermId: internshipTermId})
+      else 
+        await knex('intern').insert({studentId: studentId, lecturerId: lecturerId, 
+          partnerId: partnerId, internshipTermId: internshipTermId})
+      return Promise.resolve()
+    } catch (err) {
+      return Promise.reject(err)
+    }
   }
 }

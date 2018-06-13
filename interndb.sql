@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: localhost
--- Thời gian đã tạo: Th6 13, 2018 lúc 02:47 CH
+-- Thời gian đã tạo: Th6 13, 2018 lúc 03:56 CH
 -- Phiên bản máy phục vụ: 5.7.17-log
 -- Phiên bản PHP: 5.6.30
 
@@ -127,6 +127,14 @@ CREATE TABLE `intern` (
   `lecturerComment` text COLLATE utf8mb4_vietnamese_ci,
   `internshipTermId` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `intern`
+--
+
+INSERT INTO `intern` (`studentId`, `lecturerId`, `partnerId`, `partnerComment`, `lecturerComment`, `internshipTermId`) VALUES
+(1, 6, 7, NULL, NULL, 2),
+(1, 6, 0, NULL, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -362,7 +370,7 @@ INSERT INTO `studenteditable` (`id`, `email`, `skypeID`, `facebook`, `phone`, `v
 
 CREATE TABLE `studentfollowme` (
   `studentId` int(11) NOT NULL,
-  `lectureId` int(11) NOT NULL,
+  `lecturerId` int(11) NOT NULL,
   `yearOfLecture` int(11) NOT NULL,
   `linkOfReport` text,
   `comment` text,
@@ -373,7 +381,7 @@ CREATE TABLE `studentfollowme` (
 -- Đang đổ dữ liệu cho bảng `studentfollowme`
 --
 
-INSERT INTO `studentfollowme` (`studentId`, `lectureId`, `yearOfLecture`, `linkOfReport`, `comment`, `mark`) VALUES
+INSERT INTO `studentfollowme` (`studentId`, `lecturerId`, `yearOfLecture`, `linkOfReport`, `comment`, `mark`) VALUES
 (1, 6, 2018, NULL, NULL, NULL),
 (2, 10, 2018, 'asdasdasdasdasdasdasdasdasdasdasdasdasdasd', 'đẹp trai', 2);
 
@@ -406,7 +414,9 @@ INSERT INTO `user` (`id`, `username`, `password`, `type`, `avatar`) VALUES
 (8, 'pdt', '$2a$10$rJGuw8GzppfOwRQ7Cvr5f.7kLkPehpCy1oe/uk9ZRqeGYug3jT/0C', 'admin', '/avatar/0.jpg'),
 (9, '15020063', '$2a$10$eIE6fUp5jHKOaMBRMCSWTuAOCZLUs2HVVfNaRRr.FE3bMulquptOO', 'student', '/avatar/avatarImg-1526535570759.jpg'),
 (10, 'phamngochung', '$2a$10$.pYgd8NFmHlbw9ex5IAnTeDQy6nZ43fE3gJJw9dFeU5VZdpwdHtY2', 'lecturer', '/avatar/0.jpg'),
-(11, 'toshiba', '$2a$10$EiC6fW6f0tXPCTcEMbC91.ZhdvHhquFRccrjcvyA3syN2uckRfTgy', 'partner', '/avatar/0.jpg');
+(11, 'toshiba', '$2a$10$EiC6fW6f0tXPCTcEMbC91.ZhdvHhquFRccrjcvyA3syN2uckRfTgy', 'partner', '/avatar/0.jpg'),
+(12, '', '', '', '/avatar/0.jpg'),
+(13, '', '', '', '/avatar/0.jpg');
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -503,7 +513,7 @@ ALTER TABLE `studenteditable`
 --
 ALTER TABLE `studentfollowme`
   ADD PRIMARY KEY (`studentId`),
-  ADD KEY `fkey` (`lectureId`);
+  ADD KEY `fkey` (`lecturerId`);
 
 --
 -- Chỉ mục cho bảng `user`
@@ -549,7 +559,7 @@ ALTER TABLE `studenteditable`
 -- AUTO_INCREMENT cho bảng `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 --
 -- Các ràng buộc cho các bảng đã đổ
 --
@@ -586,7 +596,6 @@ ALTER TABLE `following`
 ALTER TABLE `intern`
   ADD CONSTRAINT `fk_intern_internshipTermId` FOREIGN KEY (`internshipTermId`) REFERENCES `internshipterm` (`internshipTermId`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_intern_lecturer` FOREIGN KEY (`lecturerId`) REFERENCES `lecturer` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_intern_partner` FOREIGN KEY (`partnerId`) REFERENCES `partner` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_intern_student` FOREIGN KEY (`studentId`) REFERENCES `student` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
@@ -631,7 +640,7 @@ ALTER TABLE `studenteditable`
 -- Các ràng buộc cho bảng `studentfollowme`
 --
 ALTER TABLE `studentfollowme`
-  ADD CONSTRAINT `fkey` FOREIGN KEY (`lectureId`) REFERENCES `lecturer` (`id`),
+  ADD CONSTRAINT `fkey` FOREIGN KEY (`lecturerId`) REFERENCES `lecturer` (`id`),
   ADD CONSTRAINT `fkey1` FOREIGN KEY (`studentId`) REFERENCES `student` (`id`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

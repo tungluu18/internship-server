@@ -115,7 +115,10 @@ module.exports = {
     app.post('/api/student/registerLecturer', secure.verifyToken, (req, res) => {
       studentController.registerLecturer(req, res)
     })
-
+    // đăng kí thực tập
+    app.post('/api/student/internship/register', secure.verifyToken, (req, res) => {
+      studentController.registerInternship(req, res)
+    })
     /*=====================================================================================================================================*/
     /*=============================================== LECTURER' S FUNCTIONS ================================================================*/
     /*=====================================================================================================================================*/
