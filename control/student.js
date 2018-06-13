@@ -81,5 +81,22 @@ module.exports = {
     } catch (err) {
       res.send({success: false, error: err.message})
     }
+  },
+
+  registerLecturer: async function(req, res) {
+    const studentId = utilize.getRequesterId(req)
+    const lecturerId = req.query.lecturerId    
+    try {
+      const [studentExist, lecturerExist] = await Promise.all([
+          utilize.isExisted('student', {id: studentId}),
+          utilize.isExisted('lecturer', {id: lecturerId})
+      ])
+      if (!studentExist) return res.send({success: false, error: 'Sinh viên không có trong hệ thống'})
+      if (!lecturerExist) return res.send({success: false, error: 'Giảng viên không có trong hệ thống'})
+      await student.registerLecturer(studentId, lecturerId)
+      res.send({success: true, error: null})
+    } catch (err) {
+      res.send({success: false, error: err.message})
+    }
   }
 }

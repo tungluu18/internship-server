@@ -29,6 +29,7 @@ module.exports = {
   },
 
   getRequesterId: function(req) {
+    if (req.headers['authorization'] == null) throw new Error('Request không hợp lệ')    
     return jwt.decode(req.headers['authorization']).id
   },
 

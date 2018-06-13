@@ -77,5 +77,19 @@ module.exports = {
     } catch (err) {
       return Promise.reject(err)
     }
+  },
+
+  registerLecturer: async function(studentId, lecturerId) {
+    try {
+      if (await utilize.isExisted('studentfollowme', {studentId: studentId})) 
+        await knex('studentfollowme').update({
+          lectureId: lecturerId
+        }).where({studentId: studentId})
+      else 
+        await knex('studentfollowme').insert({studentId: studentId, lectureId: lecturerId})
+      return Promise.resolve()
+    } catch (err) {
+      return Promise.reject(err)
+    }
   }
 }

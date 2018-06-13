@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: localhost
--- Thời gian đã tạo: Th6 12, 2018 lúc 02:50 CH
+-- Thời gian đã tạo: Th6 13, 2018 lúc 10:04 SA
 -- Phiên bản máy phục vụ: 5.7.17-log
 -- Phiên bản PHP: 5.6.30
 
@@ -124,18 +124,8 @@ CREATE TABLE `intern` (
   `partnerId` int(10) DEFAULT NULL,
   `partnerComment` text COLLATE utf8mb4_vietnamese_ci,
   `lecturerComment` text COLLATE utf8mb4_vietnamese_ci,
-  `startTime` date DEFAULT NULL,
-  `endTime` date DEFAULT NULL,
-  `phase` int(1) NOT NULL,
-  `year` year(4) NOT NULL
+  `internshipTermId` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
-
---
--- Đang đổ dữ liệu cho bảng `intern`
---
-
-INSERT INTO `intern` (`studentId`, `lecturerId`, `partnerId`, `partnerComment`, `lecturerComment`, `startTime`, `endTime`, `phase`, `year`) VALUES
-(1, 6, NULL, NULL, NULL, NULL, NULL, 1, 2018);
 
 -- --------------------------------------------------------
 
@@ -215,7 +205,8 @@ CREATE TABLE `lecturer` (
 --
 
 INSERT INTO `lecturer` (`id`, `name`, `mail`, `vnumail`, `phone`, `ghichu`) VALUES
-(6, 'Lê Đình Thanh', 'ledinhthanh@gmail.com', 'thanhld@vnu.edu.vn', '0987 257 504 ', NULL);
+(6, 'Lê Đình Thanh', 'ledinhthanh@gmail.com', 'thanhld@vnu.edu.vn', '0987 257 504 ', NULL),
+(10, 'Phạm Ngọc Hùng', 'hungpn@gmail.com', 'hungpn@vnu.edu.vn', NULL, 'Không cần phải nói thêm gì cả.');
 
 -- --------------------------------------------------------
 
@@ -241,10 +232,12 @@ INSERT INTO `message` (`messageId`, `senderId`, `receiverId`, `title`, `replyTo`
 (1, 2, 6, 'Lời chào', NULL, 'Chào bạn nha!', 0),
 (2, 2, 6, 'Lời chào', NULL, 'Bye bạn nha!', 0),
 (3, 1, 2, 'Lời nhắc nhơ', NULL, 'Làm bài nào người anh em', 0),
-(4, 2, 1, 'Trả lời người anh em', NULL, 'Ok bro, Rush B non stop', 0),
-(5, 2, 1, 'Lời hỏi thăm', NULL, 'Chú ăn cơm chưa ? ', 0),
+(4, 2, 1, 'Trả lời người anh em', NULL, 'Ok bro, Rush B non stop', 1),
+(5, 2, 1, 'Lời hỏi thăm', NULL, 'Chú ăn cơm chưa ? ', 1),
 (6, 1, 2, 'Chuyện yêu nước', NULL, 'Chú đừng đi theo bọn phản động đả kích mà đi biểu tình nhé', 0),
-(7, 2, 1, 'Làm bạn yên tâm', 6, 'Làm xong bài tập lớn anh mới vào Nam với bà con, chú cứ yên tâm ?', 0);
+(7, 2, 1, 'Làm bạn yên tâm', 6, 'Làm xong bài tập lớn anh mới vào Nam với bà con, chú cứ yên tâm ?', 1),
+(8, 2, 1, 'abcd', NULL, '<p>ahihi</p>\n', 1),
+(9, 2, 1, 'adsad', NULL, '<p></p>\n<img src=\"https://lonelyplanetwp.imgix.net/2017/11/winter-lights-roppongi-tokyo-b4f60a4cc18b.jpg?crop=entropy&fit=crop&h=421&sharp=10&vib=20&w=748\" alt=\"undefined\" style=\"float:none;height: 200px;width: 500px\"/>\n<p></p>\n', 1);
 
 -- --------------------------------------------------------
 
@@ -381,7 +374,7 @@ CREATE TABLE `studentfollowme` (
 
 INSERT INTO `studentfollowme` (`studentId`, `lectureId`, `yearOfLecture`, `linkOfReport`, `comment`, `mark`) VALUES
 (1, 6, 2018, NULL, NULL, NULL),
-(2, 6, 2018, 'asdasdasdasdasdasdasdasdasdasdasdasdasdasd', 'đẹp trai', 2);
+(2, 10, 2018, 'asdasdasdasdasdasdasdasdasdasdasdasdasdasd', 'đẹp trai', 2);
 
 -- --------------------------------------------------------
 
@@ -394,7 +387,7 @@ CREATE TABLE `user` (
   `username` varchar(30) COLLATE utf8mb4_vietnamese_ci NOT NULL,
   `password` varchar(200) COLLATE utf8mb4_vietnamese_ci NOT NULL,
   `type` varchar(10) COLLATE utf8mb4_vietnamese_ci NOT NULL,
-  `avatar` varchar(200) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL
+  `avatar` varchar(200) COLLATE utf8mb4_vietnamese_ci DEFAULT '/avatar/0.jpg'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 
 --
@@ -406,12 +399,13 @@ INSERT INTO `user` (`id`, `username`, `password`, `type`, `avatar`) VALUES
 (2, 'giangth2310', '$2a$10$GR/6qJRtydP65Q9VerpDoOrdUZYKcH6uheAgGzkWvp8283hO5HysG', 'student', '/avatar/2.jpg'),
 (3, 'samsungvn', '$2a$10$P2unJ0iu1smIsIuJq.meROfDxiOYk6/.pvBqV6NNUsFA7d5OtL.9W', 'partner', '/avatar/avatarImg-1526535617897.jpg'),
 (4, 'tranquangbach', '$2a$10$CgP3PfaIBongmztEaynlwuW/kA3dx5zVud/qdlnvv0TGQys5VAf3C', 'student', '/avatar/avatarImg-1526535540078.jpg'),
-(5, 'quanlysinhvien', '$2a$10$LnkVas0fW3e.n0OK.sAKTu7yD5EkTF3tH1C98khPPhhElKfDcWua2', 'admin', NULL),
-(6, 'ledinhthanh', '$2a$10$UccMFPoyBKiv/tKTCMBg4eVOV7/SHGbjb.w83EXb.yDaXtgBWfxSq', 'lecturer', NULL),
+(5, 'quanlysinhvien', '$2a$10$LnkVas0fW3e.n0OK.sAKTu7yD5EkTF3tH1C98khPPhhElKfDcWua2', 'admin', '/avatar/0.jpg'),
+(6, 'ledinhthanh', '$2a$10$UccMFPoyBKiv/tKTCMBg4eVOV7/SHGbjb.w83EXb.yDaXtgBWfxSq', 'lecturer', '/avatar/0.jpg'),
 (7, 'framgia', '$2a$10$FL0Gqr0DkjxEUafk8BWZpO.oIFMcjxm85sUvIEmFrrNfkE6Ya33Im', 'partner', '/avatar/avatarImg-1526535652363.jpg'),
-(8, 'pdt', '$2a$10$rJGuw8GzppfOwRQ7Cvr5f.7kLkPehpCy1oe/uk9ZRqeGYug3jT/0C', 'admin', NULL),
+(8, 'pdt', '$2a$10$rJGuw8GzppfOwRQ7Cvr5f.7kLkPehpCy1oe/uk9ZRqeGYug3jT/0C', 'admin', '/avatar/0.jpg'),
 (9, '15020063', '$2a$10$eIE6fUp5jHKOaMBRMCSWTuAOCZLUs2HVVfNaRRr.FE3bMulquptOO', 'student', '/avatar/avatarImg-1526535570759.jpg'),
-(11, 'toshiba', '$2a$10$EiC6fW6f0tXPCTcEMbC91.ZhdvHhquFRccrjcvyA3syN2uckRfTgy', 'partner', NULL);
+(10, 'phamngochung', '$2a$10$.pYgd8NFmHlbw9ex5IAnTeDQy6nZ43fE3gJJw9dFeU5VZdpwdHtY2', 'lecturer', '/avatar/0.jpg'),
+(11, 'toshiba', '$2a$10$EiC6fW6f0tXPCTcEMbC91.ZhdvHhquFRccrjcvyA3syN2uckRfTgy', 'partner', '/avatar/0.jpg');
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -450,7 +444,14 @@ ALTER TABLE `following`
 ALTER TABLE `intern`
   ADD KEY `fk_intern_student` (`studentId`),
   ADD KEY `fk_intern_lecturer` (`lecturerId`),
-  ADD KEY `fk_intern_partner` (`partnerId`);
+  ADD KEY `fk_intern_partner` (`partnerId`),
+  ADD KEY `fk_intern_internshipTermId` (`internshipTermId`);
+
+--
+-- Chỉ mục cho bảng `internshipterm`
+--
+ALTER TABLE `internshipterm`
+  ADD PRIMARY KEY (`internshipTermId`);
 
 --
 -- Chỉ mục cho bảng `knex_migrations`
@@ -582,6 +583,7 @@ ALTER TABLE `following`
 -- Các ràng buộc cho bảng `intern`
 --
 ALTER TABLE `intern`
+  ADD CONSTRAINT `fk_intern_internshipTermId` FOREIGN KEY (`internshipTermId`) REFERENCES `internshipterm` (`internshipTermId`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_intern_lecturer` FOREIGN KEY (`lecturerId`) REFERENCES `lecturer` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_intern_partner` FOREIGN KEY (`partnerId`) REFERENCES `partner` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_intern_student` FOREIGN KEY (`studentId`) REFERENCES `student` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;

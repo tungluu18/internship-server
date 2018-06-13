@@ -77,7 +77,10 @@ module.exports = {
     app.get('/api/message/view/:messageId', (req, res) => {
       userController.receiveMessage(req, res)
     })
-
+    // lấy tất cả thông tin 
+    app.get('/api/profile/:type', (req, res) => {
+      userController.getByType(req, res)
+    })
     /*=====================================================================================================================================*/
     /*=============================================== STUDENT' S FUNCTIONS ================================================================*/
     /*=====================================================================================================================================*/
@@ -97,7 +100,6 @@ module.exports = {
     app.post('/api/student/intern/lecturer', (req, res) => {
       studentController.internWithLecturer(req, res)
     })
-
     // Upload Báo cáo 
     app.post('/api/student/upload/document', storage.uploadDocument.single('document'), (err, req, res, next) => {
       if (err) {
@@ -109,11 +111,9 @@ module.exports = {
     app.post('/api/student/upload/document', (req, res) => {
       studentController.uploadAssignment(req, res)
     })
-
-    // testing....  
-    app.post('/api/test', (req, res) => {
-      const utilize = require('../model/utilize')
-      res.send({ result: utilize.isExisted(req.body.table, req.body.condition) })
+    // đăng kí giảng viên hướng dẫn
+    app.post('/api/student/registerLecturer', secure.verifyToken, (req, res) => {
+      studentController.registerLecturer(req, res)
     })
 
     /*=====================================================================================================================================*/

@@ -77,12 +77,19 @@ module.exports = {
     } catch (err) {
       return Promise.reject(err)
     }
-  }
-
-  ,
-  getByType: function (type) {
-    return knex(`${type}`).select()
   },
+
+  getByType: async function(type) {
+    if (type != 'student' && type != 'partner' && type != 'lecturer' && type != 'admin')
+      throw new Error('Truy vấn không hợp lệ')
+    try {
+      const result = await knex(type).select()
+      for (e of result) e.avatarLink = 'http://localhost:3000' + await this.getAvatar(e.id)
+      return Promise.resolve(result)
+    } catch (err) {
+      return Promise.reject(err)
+    }
+  },  
 
   update: async function (requesterId, id, info) {
     const studentFixed = ['name', 'mssv', 'class', 'khoa', 'nganh', 'diachi', 'ngaysinh', 'vnumail', 'GPA', 'namtotnghiep']
@@ -108,7 +115,7 @@ module.exports = {
 
   updateAvatar: async function (id, avatarLink) {
     const oldAvatarLink = await this.getAvatar(id)    
-    if (oldAvatarLink) await storage.deleteFile(oldAvatarLink)    
+    if (oldAvatarLink != '/avatar/0.jpg') await storage.deleteFile(oldAvatarLink)    
     return knex('user').where('id', id).update({
       id: id, avatar: avatarLink
     })

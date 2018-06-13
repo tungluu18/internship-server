@@ -40,6 +40,16 @@ module.exports = {
     }
   },
 
+  getByType: async function(req, res) {
+    const type = req.params.type
+    try {
+      const result = await user.getByType(type)
+      res.send({res: result})
+    } catch (err) {
+      res.send({success: false, error: err.message})
+    }
+  },
+
   add: async function (req, res) {
     const username = req.body.username
     const password = req.body.password
