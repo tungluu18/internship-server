@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: localhost
--- Thời gian đã tạo: Th6 13, 2018 lúc 10:04 SA
+-- Thời gian đã tạo: Th6 13, 2018 lúc 02:47 CH
 -- Phiên bản máy phục vụ: 5.7.17-log
 -- Phiên bản PHP: 5.6.30
 
@@ -100,17 +100,18 @@ INSERT INTO `employinfo` (`employId`, `partnerId`, `title`, `content`, `plaintex
 CREATE TABLE `following` (
   `employId` int(10) DEFAULT NULL,
   `studentId` int(10) DEFAULT NULL,
-  `partnerId` int(10) NOT NULL
+  `partnerId` int(10) NOT NULL,
+  `status` varchar(50) COLLATE utf8mb4_vietnamese_ci NOT NULL DEFAULT 'waiting for interview'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 
 --
 -- Đang đổ dữ liệu cho bảng `following`
 --
 
-INSERT INTO `following` (`employId`, `studentId`, `partnerId`) VALUES
-(1, 1, 7),
-(2, 1, 7),
-(3, 1, 7);
+INSERT INTO `following` (`employId`, `studentId`, `partnerId`, `status`) VALUES
+(1, 1, 7, 'waiting for interview'),
+(2, 1, 7, 'Accepted'),
+(3, 1, 7, 'Rejected');
 
 -- --------------------------------------------------------
 

@@ -85,7 +85,7 @@ module.exports = {
     try {
       const result = await knex(type).select()
       for (e of result) e.avatarLink = 'http://localhost:3000' + await this.getAvatar(e.id)
-      return Promise.resolve(result)
+        return Promise.resolve(result)
     } catch (err) {
       return Promise.reject(err)
     }
@@ -98,11 +98,6 @@ module.exports = {
     try {
       const typeOfUser = await this.getType(id)
       const typeOfRequester = await this.getType(requesterId)
-
-      // if (typeOfUser == 'admin' && id != requesterId) //admin không được update profile của admin khác
-      //     return Promise.reject(new Error("Thay đổi không hợp lệ"))
-
-      //student chỉ có thể update các thông tin trong tập editable
       if (typeOfUser == 'student' && typeOfRequester == 'student')
         for (p of studentFixed) info[p] = undefined
       info['id'] = id       //'info' rỗng khi chèn vào bảng sẽ báo lỗi 

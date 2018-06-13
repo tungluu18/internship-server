@@ -135,7 +135,7 @@ module.exports = {
     app.get('/api/lecturer/getMarkAndCommentForStudent', (req, res) => {
       lecturerController.getMarkAndCommentForStudent(req, res);
     });
-    //tải về file điểm và đánh giá
+    // tải về file điểm và đánh giá
     app.get('/api/lecturer/downloadMarkAndComment', (req, res) => {
       lecturerController.downloadMarkAndComment(req, res);
     });
@@ -167,7 +167,14 @@ module.exports = {
         res.send({success: false, error: err.message})
       }
     })
-
+    // kiểm tra tất cả các student đang follow mình
+    app.get('/api/partner/following', (req, res) => {
+      partnerController.getFollower(req, res)
+    })
+    // partner xác nhận sinh viên được nhận hay không
+    app.put('/api/partner/following/:employId', (req, res) => {
+      partnerController.judgeFollow(req, res)
+    })
     /*=====================================================================================================================================*/
     /*================================================= ADMIN' S FUNCTIONS ================================================================*/
     /*=====================================================================================================================================*/

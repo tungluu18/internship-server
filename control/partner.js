@@ -1,5 +1,6 @@
 const partner = require('../model/partner');
 const employ = require('../model/employ')
+const utilize = require('../model/utilize')
 
 module.exports = {
   addEmployInfo: async function (req, res) {
@@ -61,6 +62,30 @@ module.exports = {
     const expireDate = req.body.expireDate
     try {
       await employ.update(req.params.employId, title, content, expireDate)
+      res.send({success: true, error: null})
+    } catch (err) {
+      res.send({success: false, error: err.message})
+    }
+  },
+
+  getFollower: async function(req, res) {    
+    try {
+      const partnerId = utilize.getRequesterId(req)
+      const result = await partner.getFollower(partnerId)
+      return res.send({res: result})
+    } catch (err) {
+      res.send({success: false, error: err.message})
+    }
+  },
+
+  judgeFollow: async function(req, res) {
+    try {
+      const partnerId = utilize.getRequesterId(req)
+      const employId = req.params.employId
+      const judgement = req.body.judgement
+      if (! await utilize.isExisted('following', {employId: employId, partnerId: partnerId}))
+        return res.send({success: false, error: 'Truy vấn không hợp lệ'})
+      await partner.judgeFollow(employId, judgement)
       res.send({success: true, error: null})
     } catch (err) {
       res.send({success: false, error: err.message})

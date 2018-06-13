@@ -1,4 +1,5 @@
 const knex = require('knex')(require('../knexfile'));
+const user = require('./user')
 
 module.exports = {
   add: async function (partnerId, title, content, expireDate) {
@@ -51,6 +52,27 @@ module.exports = {
       return Promise.resolve(result);
     } catch (err) {
       return Promise.reject(new Error(err));
+    }
+  },
+
+  getFollower: async function(partnerId) {
+    try {
+      let result = await knex('following').select()
+                        .join('student', 'student.id', 'following.studentId')                        
+                        .where({partnerId: partnerId})
+      for (e of result) e.avatarLink = await user.getAvatar(e.studentId)
+      return Promise.resolve(result)
+    } catch (err) {
+      return Promise.reject(err)
+    }
+  },
+
+  judgeFollow: async function(employId, judgement) {
+    try {
+      await knex('following').update({status: judgement}).where({employId: employId})
+      return Promise.resolve()
+    } catch (err) {
+      return Promise.reject(err)
     }
   }
 }
