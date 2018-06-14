@@ -1,5 +1,7 @@
 const knex = require('knex')(require('../knexfile'));
 const user = require('./user')
+const utilize = require('./utilize')
+const striptags = require('striptags')
 
 module.exports = {
   add: async function (partnerId, title, content, expireDate) {
@@ -16,6 +18,7 @@ module.exports = {
         postedDate: Date.now(), expireDate: Date.parse(expireDate)
       })
     } catch (err) {
+      console.log(err)
       return Promise.reject(err)
     }
   },

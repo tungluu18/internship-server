@@ -1,6 +1,8 @@
 const partner = require('../model/partner');
 const employ = require('../model/employ')
 const utilize = require('../model/utilize')
+const jwt = require('jsonwebtoken')
+const user = require('../model/user')
 
 module.exports = {
   addEmployInfo: async function (req, res) {
@@ -12,6 +14,7 @@ module.exports = {
       await partner.add(requesterId, req.body.title, req.body.content, req.body.expireDate)
       res.send({ success: true, error: null })
     } catch (err) {
+      console.log(err)
       res.send({ success: false, error: err.message })
     }
   },

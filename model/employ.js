@@ -12,7 +12,6 @@ module.exports = {
         const [partnerName, partnerAvatar] = await Promise.all([
           user.getName(e.partnerId), user.getAvatar(e.partnerId)
         ])        
-        console.log(e.employId + ' ' + partnerAvatar)
         e.partnerName = partnerName
         e.partnerAvatar = 'http://localhost:3000/avatar/0.jpg'
         e.partnerAvatar = 'http://localhost:3000' + partnerAvatar
@@ -41,7 +40,6 @@ module.exports = {
         while (employInfos[i].employId != searchResult[j].employId) ++i
         res.push(employInfos[i++])
       }
-      console.log(employInfos)
       return Promise.resolve(res)
     } catch (err) {
       return Promise.reject(err)
