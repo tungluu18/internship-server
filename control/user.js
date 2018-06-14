@@ -78,6 +78,7 @@ module.exports = {
   update: async function (req, res) {
     const id = req.params.id
     const decoded = jwt.decode(req.headers['authorization'])
+    console.log(req.body)
     try {
       const typeOfUser = await user.getType(decoded.id);
       if (id != decoded.id && typeOfUser != 'admin')

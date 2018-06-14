@@ -74,8 +74,8 @@ module.exports = {
       let result = await knex(`${type}`).where('id', id)
       if (result.length == 0) return Promise.reject(new Error("id không tồn tại"))
       result[0].avatarLink = 'http://localhost:3000' + await this.getAvatar(id)
-      result[0][`${type}Id`] = result[0].id
-      result[0].id = undefined
+      // result[0][`${type}Id`] = result[0].id
+      //result[0].id = undefined
       return Promise.resolve(result[0])
     } catch (err) {
       return Promise.reject(err)
@@ -97,16 +97,19 @@ module.exports = {
   update: async function (requesterId, id, info) {
     const studentFixed = ['name', 'mssv', 'class', 'khoa', 'nganh', 'diachi', 'ngaysinh', 'vnumail', 'GPA', 'namtotnghiep']
     const studentEditable = ['email', 'skypeID', 'facebook', 'phone', 'vitri', 'kynang', 'chungchi', 'kinhnghiem', 'sothich', 'dinhhuong', 'ghichu']
-
+    //console.log(requesterId + ' ' + id)
+    // console.log(info)
     try {
       const typeOfUser = await this.getType(id)
       const typeOfRequester = await this.getType(requesterId)
       if (typeOfUser == 'student' && typeOfRequester == 'student')
         for (p of studentFixed) info[p] = undefined
       info['id'] = id       //'info' rỗng khi chèn vào bảng sẽ báo lỗi 
+      info.avatarLink = undefined
       await knex(`${typeOfUser}`).where('id', id).update(info)
       return Promise.resolve()
     } catch (err) {
+      console.log(err.message)
       return Promise.reject(new Error("Thông tin không hợp lệ"))
     }
   },
