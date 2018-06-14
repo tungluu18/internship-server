@@ -122,15 +122,17 @@ module.exports = {
       return Promise.reject(new Error(err));
     }
   },
-
+  // Lấy các sinh viên mình đang hướng dẫn thực tập
   getStudent: async function(lecturerId) {
     try {
       let students = await knex('intern').select().where({lecturerId, lecturerId})
       for (let e of students) {
         e.studentName = await user.getName(e.studentId)
+        e.studentAvatar = 'http://localhost:3000' + await user.getAvatar(e.studentId)
         if (e.partnerId) e.partnerName = await user.getName(e.partnerId)
         e.internshipTermName = (await utilize.getFirstElement('internshipterm', {
           internshipTermId: e.internshipTermId})).name
+        e.partnerName = (e.partnerId) ? await user.getName(e.partnerId) : 'Đại học Công Nghệ'
       }
       return students
     } catch (err) {
@@ -139,9 +141,15 @@ module.exports = {
     }
   },
   // Lấy các báo cáo sinh viên nộp cho mình
-  getAssignment: async function(lecturerId) {
+  getAssignment: async function(lecturerId, studentId, type) {
     try {
+      const finalAssignment = await knex('intern').select('assignmentId').whereNotNull('assignmentId')
+      const finalAssignmentId = finalAssignment.map(e => e.assignmentId)      
       let assignments = await knex('assignment').select().where({lecturerId: lecturerId})
+      if (type =='final')
+        assignments = assignments.filter(e => utilize.inArray(finalAssignmentId, e.assignmentId))
+      else 
+        assignments = assignments.filter(e => !utilize.inArray(finalAssignmentId, e.assignmentId))
       for (let e of assignments) {
         e.studentName = await user.getName(e.studentId)
         if (e.file) e.file = 'http://localhost:3000' + e.file

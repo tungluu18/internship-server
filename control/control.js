@@ -118,9 +118,12 @@ module.exports = {
     })
     // sửa báo cáo đã nộp
     app.put('/api/student/assignment/:assignmentId', storage.uploadDocument.single('document'), (err, req, res, next) => {
+      console.log("dmm")
+      console.log(req)
       if (err) {
         console.log(err)
-        return res.send({success: false, error: err})
+        return res.send({success: false, 
+          error: err})
       }
       next()
     })
@@ -152,15 +155,15 @@ module.exports = {
     /*=============================================== LECTURER' S FUNCTIONS ================================================================*/
     /*=====================================================================================================================================*/
     // lấy thông tin các sinh viên mà mình hướng dẫn
-    app.get('/api/lecturer/student', (req, res) => {
+    app.get('/api/lecturer/student', secure.verifyToken, (req, res) => {
       lecturerController.getStudent(req, res)
     })
     // get thông tin sinh viên mà mình hướng dẫn theo nam
-    app.get('/api/lecturer/studentfollow', (req, res) => {
+    app.get('/api/lecturer/studentfollow', secure.verifyToken, (req, res) => {
       lecturerController.getStudentFollow(req, res);
     });
     // get báo cáo của công ty về sinh viên mà mình hướng dẫn
-    app.get('/api/lecturer/reportforstudent', (req, res) => {
+    app.get('/api/lecturer/reportforstudent', secure.verifyToken, (req, res) => {
       lecturerController.getReportForStudent(req, res);
     });    
     // Lấy điểm và đánh giá của sinh viên

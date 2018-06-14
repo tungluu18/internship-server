@@ -110,8 +110,10 @@ module.exports = {
   // Lấy các báo cáo sinh viên nộp cho mình
   getAssignment: async function(req, res) {
     const lecturerId = utilize.getRequesterId(req)
+    const studentId = req.query.studentId
+    const type = req.query.type
     try {
-      const result = await lecturer.getAssignment(lecturerId)
+      const result = await lecturer.getAssignment(lecturerId, studentId, type)
       res.send({success: true, res: result})
     } catch (err) {
       console.log(err)

@@ -99,9 +99,13 @@ module.exports = {
     }
   },
 
-  getAssignment: async function(studentId) {
+  getAssignment: async function(studentId, type) {
     try {
-      let result = await knex('assignment').select().where({studentId: studentId})
+      const finalAssignment = await knex('intern').select('assignmentId').whereNotNull('assignmentId')
+      const finalAssignmentId = finalAssignment.map(e => e.assignmentId)
+      let result = (type == 'weekly')
+                    ? await knex('assignment').select().where({studentId: studentId}).whereNotIn('assignmentId', finalAssignmentId)
+                    : await knex('assignment').select().where({studentId: studentId}).whereIn('assignmentId', finalAssignmentId)
       for (let e of result) if (e.file) e.file = 'http://localhost:3000' + e.file
       return Promise.resolve(result)
     } catch (err) {
@@ -112,6 +116,13 @@ module.exports = {
 
   deleteAssignment: async function(assignmentId) {
     try {
+      const finalAssignment = await knex('intern').select('assignmentId').whereNotNull('assignmentId')
+      const finalAssignmentId = finalAssignment.map(e => e.assignmentId)
+      for (let e of finalAssignmentId) if (e == assignmentId) {
+        await knex('intern').where({assignmentId: assignmentId}).update({assignmentId: null})        
+        break
+      }
+
       const assignment = await utilize.getFirstElement('assignment', {assignmentId: assignmentId})
       if (assignment && assignment.file) await storage.deleteFile(assignment.file)
       await knex('assignment').where({assignmentId: assignmentId}).del()

@@ -133,9 +133,10 @@ module.exports = {
       const name = 'Báo cáo ngày ' + utilize.formatDate(Date.now())
       await student.uploadAssignment(assignmentId, content, documentLink)
       await knex('assignment').update({name: name}).where({assignmentId: assignmentId})
-      //if (type == 'final') await knex('intern')
-      //  .update({assignmentId: assignmentId})
-      //  .where({studentId: studentId, lecturerId: lecturerId, assignmentId: null})
+      if (type == 'final') {        
+        await knex('intern').update({assignmentId: assignmentId})
+        .where({studentId: studentId, lecturerId: lecturerId, assignmentId: null})
+      }
       res.send({success: true, error: null})
     } catch (err) {
       console.log(err)
@@ -145,8 +146,9 @@ module.exports = {
 
   getAssignment: async function(req, res) {
     const studentId = utilize.getRequesterId(req)
+    const type = req.query.type
     try {
-      const result = await student.getAssignment(studentId)
+      const result = await student.getAssignment(studentId, type)
       res.send({success: true, res: result})
     } catch (err) {
       console.log(err)

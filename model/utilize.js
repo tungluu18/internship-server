@@ -53,5 +53,10 @@ module.exports = {
       e.receiverId = undefined
     }
     return Promise.resolve(messages) 
+  },
+
+  inArray: function(arr, a) {
+    for (e of arr) if (e == a) return true
+    return false
   }
 }
