@@ -83,11 +83,21 @@ module.exports = {
     try {
       if (await utilize.isExisted('studentfollowme', {studentId: studentId})) 
         await knex('studentfollowme').update({
-          lectureId: lecturerId
+          lecturerId: lecturerId
         }).where({studentId: studentId})
       else 
-        await knex('studentfollowme').insert({studentId: studentId, lectureId: lecturerId})
+        await knex('studentfollowme').insert({studentId: studentId, lecturerId: lecturerId})
       return Promise.resolve()
+    } catch (err) {
+      return Promise.reject(err)
+    }
+  },
+
+  getLecturer: async function(studentId) {
+    try {
+      const x = await utilize.getFirstElement('studentfollowme', {studentId: studentId})
+      if (x == null) return Promise.reject(new Error('Sinh viên chưa đăng kí giảng viên'))
+      return Promise.resolve(x.lecturerId)      
     } catch (err) {
       return Promise.reject(err)
     }
@@ -102,6 +112,15 @@ module.exports = {
         await knex('intern').insert({studentId: studentId, lecturerId: lecturerId, 
           partnerId: partnerId, internshipTermId: internshipTermId})
       return Promise.resolve()
+    } catch (err) {
+      return Promise.reject(err)
+    }
+  },
+
+  getInternship: async function(studentId) {
+    try {
+      const res = await knex('intern').select().where({studentId: studentId})
+      return Promise.resolve(res)
     } catch (err) {
       return Promise.reject(err)
     }

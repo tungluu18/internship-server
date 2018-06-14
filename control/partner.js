@@ -90,5 +90,15 @@ module.exports = {
     } catch (err) {
       res.send({success: false, error: err.message})
     }
+  },
+
+  getInternship: async function(req, res) {
+    const partnerId = utilize.getRequesterId(req)
+    try {
+      const result = await partner.getInternship(partnerId)  
+      res.send({success: true, res: result})
+    } catch (err) {
+      res.send({success: false, error: err.message})
+    }
   }
 }

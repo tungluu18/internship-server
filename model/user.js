@@ -71,8 +71,11 @@ module.exports = {
   getProfile: async function (id) {
     try {
       const type = await this.getType(id)
-      const result = await knex(`${type}`).where('id', id)
+      let result = await knex(`${type}`).where('id', id)
       if (result.length == 0) return Promise.reject(new Error("id không tồn tại"))
+      result[0].avatarLink = 'http://localhost:3000' + await this.getAvatar(id)
+      result[0][`${type}Id`] = result[0].id
+      result[0].id = undefined
       return Promise.resolve(result[0])
     } catch (err) {
       return Promise.reject(err)

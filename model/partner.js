@@ -74,5 +74,17 @@ module.exports = {
     } catch (err) {
       return Promise.reject(err)
     }
+  },
+
+  getInternship: async function(partnerId) {
+    try {
+      const result = await knex('intern').select()              
+              .join('student', 'intern.studentId', 'student.id')
+              .where('partnerId', partnerId)
+              
+      return Promise.resolve(result)
+    } catch (err) {
+      return Promise.reject(err)
+    }
   }
 }

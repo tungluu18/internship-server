@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: localhost
--- Thời gian đã tạo: Th6 13, 2018 lúc 03:56 CH
+-- Thời gian đã tạo: Th6 14, 2018 lúc 06:47 SA
 -- Phiên bản máy phục vụ: 5.7.17-log
 -- Phiên bản PHP: 5.6.30
 
@@ -120,6 +120,7 @@ INSERT INTO `following` (`employId`, `studentId`, `partnerId`, `status`) VALUES
 --
 
 CREATE TABLE `intern` (
+  `internId` int(10) NOT NULL,
   `studentId` int(10) NOT NULL,
   `lecturerId` int(10) NOT NULL,
   `partnerId` int(10) DEFAULT NULL,
@@ -132,9 +133,9 @@ CREATE TABLE `intern` (
 -- Đang đổ dữ liệu cho bảng `intern`
 --
 
-INSERT INTO `intern` (`studentId`, `lecturerId`, `partnerId`, `partnerComment`, `lecturerComment`, `internshipTermId`) VALUES
-(1, 6, 7, NULL, NULL, 2),
-(1, 6, 0, NULL, NULL, 1);
+INSERT INTO `intern` (`internId`, `studentId`, `lecturerId`, `partnerId`, `partnerComment`, `lecturerComment`, `internshipTermId`) VALUES
+(1, 1, 6, 7, NULL, NULL, 2),
+(2, 1, 6, 7, NULL, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -382,7 +383,7 @@ CREATE TABLE `studentfollowme` (
 --
 
 INSERT INTO `studentfollowme` (`studentId`, `lecturerId`, `yearOfLecture`, `linkOfReport`, `comment`, `mark`) VALUES
-(1, 6, 2018, NULL, NULL, NULL),
+(1, 6, 0, NULL, NULL, NULL),
 (2, 10, 2018, 'asdasdasdasdasdasdasdasdasdasdasdasdasdasd', 'đẹp trai', 2);
 
 -- --------------------------------------------------------
@@ -453,6 +454,7 @@ ALTER TABLE `following`
 -- Chỉ mục cho bảng `intern`
 --
 ALTER TABLE `intern`
+  ADD PRIMARY KEY (`internId`),
   ADD KEY `fk_intern_student` (`studentId`),
   ADD KEY `fk_intern_lecturer` (`lecturerId`),
   ADD KEY `fk_intern_partner` (`partnerId`),
@@ -530,6 +532,11 @@ ALTER TABLE `user`
 --
 ALTER TABLE `admin`
   MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+--
+-- AUTO_INCREMENT cho bảng `intern`
+--
+ALTER TABLE `intern`
+  MODIFY `internId` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT cho bảng `knex_migrations`
 --

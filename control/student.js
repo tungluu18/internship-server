@@ -1,6 +1,8 @@
 const student   = require('../model/student');
 const employ    = require('../model/employ')
 const utilize   = require('../model/utilize')
+const user      = require('../model/user')
+const knex      = require('knex')(require('../knexfile'))
 
 module.exports = {
   search: async function(req, res) {
@@ -58,12 +60,29 @@ module.exports = {
       if (partnerId == 0) partnerExist = true
       if (!studentExist || !partnerExist || !lecturerExist || !internshipTermExist)
         return res.send({success: false, error: 'Không hợp lệ'})
-      if (!await utilize.isExisted('studentfollowme', {studentId: studentId, lecturerId: lecturerId}))
-        return res.send({success: false, error: 'Sinh viên phải đăng kí giáo viên hướng dẫn'})
       if (partnerId != 0 && !await utilize.isExisted('following', {studentId: studentId, partnerId: partnerId, status: 'Accepted'}))
         return res.send({success: false, error: 'Sinh vien phải đăng kí đối tác mà mình đã được nhận'})
+      await student.registerLecturer(studentId, lecturerId)
       await student.registerInternship(studentId, lecturerId, partnerId, internshipTermId)        
       res.send({success: true, error: null})
+    } catch (err) {
+      res.send({success: false, error: err.message})
+    }
+  },
+
+  getInternship: async function(req, res) {
+    const studentId = utilize.getRequesterId(req)
+    if (!await utilize.isExisted('student', {id: studentId})) 
+      return res.send({success: false, error: 'Sinh viên không hợp lệ'})
+    try {
+      let result = await student.getInternship(studentId)
+      for (e of result) {
+        if (e.partnerId) e.partnerName = await user.getName(e.partnerId)
+        e.lecturerName = await user.getName(e.lecturerId)
+        const internshipTerm = await knex('internshipterm').select().where({internshipTermId: e.internshipTermId})        
+        e.internshipTermName = internshipTerm[0].name
+      }
+      res.send({success: true, res: result})
     } catch (err) {
       res.send({success: false, error: err.message})
     }
@@ -77,7 +96,7 @@ module.exports = {
     const studentId = req.body.studentId
     const lecturerId = req.body.lecturerId
     try {
-
+      student.createAssignment(studentId, lecturerId)
       res.send({success: true, error: null})
     } catch (err) {
       res.send({success: false, error: err.message})
@@ -111,6 +130,19 @@ module.exports = {
       if (!lecturerExist) return res.send({success: false, error: 'Giảng viên không có trong hệ thống'})
       await student.registerLecturer(studentId, lecturerId)
       res.send({success: true, error: null})
+    } catch (err) {
+      res.send({success: false, error: err.message})
+    }
+  },
+
+  getLecturer: async function(req, res) {
+    const studentId = utilize.getRequesterId(req)
+    try {
+      if (!await utilize.isExisted('student', {id: studentId}))
+        return res.send({success: false, error: 'Sinh viên không hợp lệ'})
+      const lecturerId = await student.getLecturer(studentId)
+      const lecturer = await user.getProfile(lecturerId)
+      res.send({success: true, res: lecturer})
     } catch (err) {
       res.send({success: false, error: err.message})
     }

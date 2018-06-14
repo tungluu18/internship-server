@@ -115,9 +115,17 @@ module.exports = {
     app.post('/api/student/registerLecturer', secure.verifyToken, (req, res) => {
       studentController.registerLecturer(req, res)
     })
+    // xem giảng viên hướng dẫn
+    app.get('/api/student/lecturer', secure.verifyToken, (req, res) => {
+      studentController.getLecturer(req, res)
+    }) 
     // đăng kí thực tập
     app.post('/api/student/internship/register', secure.verifyToken, (req, res) => {
       studentController.registerInternship(req, res)
+    })
+    // xem các đợt thực tập đã đăng kí
+    app.get('/api/student/internship', secure.verifyToken, (req, res) => {
+      studentController.getInternship(req, res)
     })
     /*=====================================================================================================================================*/
     /*=============================================== LECTURER' S FUNCTIONS ================================================================*/
@@ -177,6 +185,10 @@ module.exports = {
     // partner xác nhận sinh viên được nhận hay không
     app.put('/api/partner/following/:employId', (req, res) => {
       partnerController.judgeFollow(req, res)
+    })
+    // lấy tất cả các sinh viên đang thực tập tại công ty mình
+    app.get('/api/partner/internship', (req, res) => {
+      partnerController.getInternship(req, res)
     })
     /*=====================================================================================================================================*/
     /*================================================= ADMIN' S FUNCTIONS ================================================================*/
