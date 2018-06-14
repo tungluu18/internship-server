@@ -38,7 +38,8 @@ module.exports = {
     const year = thisDate.getFullYear()
     const month = thisDate.getMonth() + 1
     const day = thisDate.getDate()
-    return year + '/' + month + '/' + day
+    // return year + '/' + month + '/' + day
+    return day + '/' + month + '/' + year
   },
 
   getSenderAndReceiverUsername: async function(messages) {

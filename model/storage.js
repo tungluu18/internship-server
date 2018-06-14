@@ -42,6 +42,8 @@ module.exports = {
   }),
   
   deleteFile: function(filename) {
-    fs.unlink(folder + filename, err => console.log(err))
+    fs.unlink(folder + filename, (err) => {
+      if (err) console.log('ahihi' + err)
+    })
   }  
 }

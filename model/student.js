@@ -71,7 +71,7 @@ module.exports = {
   },
 
   createAssignment: async function(studentId, lecturerId) {
-    const newIndex = utilize.findNewIndex('assignment', 'assignmentId')
+    const newIndex = utilize.findNewIndex(await knex('assignment').select('assignmentId'), 'assignmentId')        
     try {
       await knex('assignment').insert({
         assignmentId: newIndex, 
@@ -84,14 +84,39 @@ module.exports = {
     }
   },
 
-  uploadAssignment: async function(assignmentId, content, documentLink) {
+  uploadAssignment: async function(assignmentId, content, documentLink) {    
     try {
+      if (documentLink == null) documentLink = undefined
+      if (content == null) content == undefined
       const assignment = await utilize.getFirstElement('assignment', {assignmentId: assignmentId})      
-      if (assignment.file != null) await storage.deleteFile(assignment.file)
+      if (documentLink && assignment.file) await storage.deleteFile(assignment.file)
       await knex('assignment')
         .where({assignmentId: assignmentId})
         .update({content: content, file: documentLink})            
     } catch (err) {
+      console.log(err)
+      return Promise.reject(err)
+    }
+  },
+
+  getAssignment: async function(studentId) {
+    try {
+      const result = await knex('assignment').select().where({studentId: studentId})
+      return Promise.resolve(result)
+    } catch (err) {
+      console.log(err)
+      return Promise.reject(err)
+    }
+  },
+
+  deleteAssignment: async function(assignmentId) {
+    try {
+      const assignment = await utilize.getFirstElement('assignment', {assignmentId: assignmentId})
+      if (assignment && assignment.file) await storage.deleteFile(assignment.file)
+      await knex('assignment').where({assignmentId: assignmentId}).del()
+      return Promise.resolve()
+    } catch (err) {
+      console.log(err)
       return Promise.reject(err)
     }
   },

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: localhost
--- Thời gian đã tạo: Th6 14, 2018 lúc 01:30 CH
+-- Thời gian đã tạo: Th6 14, 2018 lúc 03:35 CH
 -- Phiên bản máy phục vụ: 5.7.17-log
 -- Phiên bản PHP: 5.6.30
 
@@ -53,6 +53,7 @@ CREATE TABLE `assignment` (
   `assignmentId` int(10) NOT NULL,
   `studentId` int(10) NOT NULL,
   `lecturerId` int(10) NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
   `content` text COLLATE utf8mb4_vietnamese_ci,
   `file` varchar(255) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
   `score` double DEFAULT NULL,
@@ -63,8 +64,8 @@ CREATE TABLE `assignment` (
 -- Đang đổ dữ liệu cho bảng `assignment`
 --
 
-INSERT INTO `assignment` (`assignmentId`, `studentId`, `lecturerId`, `content`, `file`, `score`, `comment`) VALUES
-(1, 1, 6, 'Bảng điểm K61 - C - CLC', '/document/[1528467462083]De-thi-MMT.docx', NULL, NULL);
+INSERT INTO `assignment` (`assignmentId`, `studentId`, `lecturerId`, `name`, `content`, `file`, `score`, `comment`) VALUES
+(1, 1, 6, 'Báo cáo ngày 14/6/2018', 'ahihi', '/document/[1528990457719]He thong quan ly thuc tap.pdf', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -128,7 +129,7 @@ CREATE TABLE `intern` (
   `lecturerId` int(10) NOT NULL,
   `partnerId` int(10) DEFAULT NULL,
   `partnerComment` text COLLATE utf8mb4_vietnamese_ci,
-  `lecturerComment` text COLLATE utf8mb4_vietnamese_ci,
+  `assignmentId` int(11) DEFAULT NULL,
   `internshipTermId` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 
@@ -136,7 +137,7 @@ CREATE TABLE `intern` (
 -- Đang đổ dữ liệu cho bảng `intern`
 --
 
-INSERT INTO `intern` (`internId`, `studentId`, `lecturerId`, `partnerId`, `partnerComment`, `lecturerComment`, `internshipTermId`) VALUES
+INSERT INTO `intern` (`internId`, `studentId`, `lecturerId`, `partnerId`, `partnerComment`, `assignmentId`, `internshipTermId`) VALUES
 (1, 1, 6, 7, NULL, NULL, 2),
 (2, 1, 6, 0, NULL, NULL, 1),
 (3, 2, 6, 0, NULL, NULL, 1);
@@ -255,7 +256,8 @@ INSERT INTO `message` (`messageId`, `senderId`, `receiverId`, `title`, `replyTo`
 (10, 2, 1, 'as', NULL, '<p>213312</p>\n', 0),
 (11, 2, 1, 'Re: Chuyện yêu nước', 6, '<p>Uwf</p>\n', 1),
 (12, 2, 1, 'Hello', NULL, '<p>Hello</p>\n', 1),
-(13, 2, 1, 'sds', NULL, '<p>wqwwqeqeqwqeq</p>\n', 0);
+(13, 2, 1, 'sds', NULL, '<p>wqwwqeqeqwqeq</p>\n', 0),
+(14, 7, 1, 'Chào em', NULL, '<p>Chào em nhé</p>\n', 1);
 
 -- --------------------------------------------------------
 
@@ -441,6 +443,7 @@ ALTER TABLE `admin`
 -- Chỉ mục cho bảng `assignment`
 --
 ALTER TABLE `assignment`
+  ADD PRIMARY KEY (`assignmentId`),
   ADD KEY `fk_assignment_student` (`studentId`),
   ADD KEY `fk_assignment_lecturer` (`lecturerId`);
 

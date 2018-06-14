@@ -102,26 +102,62 @@ module.exports = {
     
   },
 
-  createAssignment: async function(req, res) {
-    const studentId = req.body.studentId
-    const lecturerId = req.body.lecturerId
+  editAssignment: async function(req, res) {
+    const studentId = utilize.getRequesterId(req)
+    const lecturerId = (await utilize.getFirstElement('studentfollowme', {
+      studentId: studentId})).lecturerId    
+
+    const documentLink = (req.file != null) ? ('/document/' + req.file.filename) : null
+    const content = req.body.content    
+      
+    const type = req.body.type
+    const assignmentId = req.params.assignmentId
+
     try {
-      student.createAssignment(studentId, lecturerId)
+      await student.uploadAssignment(assignmentId, content, documentLink)
       res.send({success: true, error: null})
     } catch (err) {
       res.send({success: false, error: err.message})
     }
   },
   
-  uploadAssignment: async function(req, res) {
-    const documentLink = '/document/' + req.file.filename
-    let assignmentId          
+  createAssignment: async function(req, res) {
+    const documentLink = (req.file != null) ? ('/document/' + req.file.filename) : null
+    const content = req.body.content
+    const studentId = utilize.getRequesterId(req)
+    const lecturerId = (await utilize.getFirstElement('studentfollowme', {
+      studentId: studentId})).lecturerId    
+    const type = req.body.type
+    try {      
+      assignmentId = await student.createAssignment(studentId, lecturerId)      
+      const name = 'Báo cáo ngày ' + utilize.formatDate(Date.now())
+      await student.uploadAssignment(assignmentId, content, documentLink)
+      await knex('assignment').update({name: name}).where({assignmentId: assignmentId})
+      //if (type == 'final') await knex('intern')
+      //  .update({assignmentId: assignmentId})
+      //  .where({studentId: studentId, lecturerId: lecturerId, assignmentId: null})
+      res.send({success: true, error: null})
+    } catch (err) {
+      console.log(err)
+      res.send({success: false, error: err.message})
+    }
+  },
+
+  getAssignment: async function(req, res) {
+    const studentId = utilize.getRequesterId(req)
     try {
-      if (req.body.assignmentId == -1)  //create new assignment
-        assignmentId = await student.createAssignment(req.body.studentId, req.body.lecturerId)
-      else 
-        assignmentId = req.body.assignmentId
-      student.uploadAssignment(assignmentId, req.body.content, documentLink)
+      const result = await student.getAssignment(studentId)
+      res.send({success: true, res: result})
+    } catch (err) {
+      console.log(err)
+      res.send({success: false, error: err.message})
+    }
+  },
+  
+  deleteAssignment: async function(req, res) {
+    const assignmentId = req.params.assignmentId
+    try {
+      await student.deleteAssignment(assignmentId)
       res.send({success: true, error: null})
     } catch (err) {
       res.send({success: false, error: err.message})

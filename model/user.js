@@ -16,7 +16,7 @@ module.exports = {
         'id': newId, 'type': type,
         'username': username, 'password': secure.encrypt(password)
       })
-      await knex(`${type}`).insert({ 'id': newId })
+      await knex(`${type}`).insert({'id': newId})
       return Promise.resolve(newId)
     } catch (error) {
       return Promise.reject(err)

@@ -2,6 +2,7 @@ const lecturer = require('../model/lecturer');
 const http = require('http'),
   fs = require('fs'),
   path = require('path');
+const utilize = require('../model/utilize')
 
 module.exports = {
   getStudentFollow: async function (req, res) {
@@ -102,7 +103,16 @@ module.exports = {
     catch (err) {
       res.send({error: err.message});
     }
+  },
+
+  getStudent: async function(req, res) {
+    const lectureId = utilize.getRequesterId(req)
+    try {
+      const result = await lecturer.getStudent(lectureId)
+      res.send({success: true, res: result})
+    } catch (err) {
+      console.log(err)
+      res.send({success: false, error: err.message})
+    }
   }
-
-
 }

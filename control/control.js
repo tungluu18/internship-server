@@ -102,15 +102,34 @@ module.exports = {
       employ.getById(req, res)
     })
     // Upload Báo cáo 
-    app.post('/api/student/upload/document', storage.uploadDocument.single('document'), (err, req, res, next) => {
+    app.post('/api/student/assignment', storage.uploadDocument.single('document'), (err, req, res, next) => {
       if (err) {
         console.log(err)
-        return res.send({ success: false, error: err.message })
+        return res.send({ success: false, error: err})
       }
       next()
     })
-    app.post('/api/student/upload/document', (req, res) => {
-      studentController.uploadAssignment(req, res)
+    app.post('/api/student/assignment', (req, res) => {
+      studentController.createAssignment(req, res)
+    })
+    // lấy tất cả các báo cáo đã nộp
+    app.get('/api/student/assignment', (req, res) => {
+      studentController.getAssignment(req, res)
+    })
+    // sửa báo cáo đã nộp
+    app.put('/api/student/assignment/:assignmentId', storage.uploadDocument.single('document'), (err, req, res, next) => {
+      if (err) {
+        console.log(err)
+        return res.send({success: false, error: err})
+      }
+      next()
+    })
+    app.put('/api/student/assignment/:assignmentId', (req, res) => {
+      studentController.editAssignment(req, res)
+    })
+    // xóa báo cáo đã nộp
+    app.delete('/api/student/assignment/:assignmentId', (req, res) => {
+      studentController.deleteAssignment(req, res)
     })
     // đăng kí giảng viên hướng dẫn
     app.post('/api/student/registerLecturer', secure.verifyToken, (req, res) => {
@@ -132,6 +151,10 @@ module.exports = {
     /*=====================================================================================================================================*/
     /*=============================================== LECTURER' S FUNCTIONS ================================================================*/
     /*=====================================================================================================================================*/
+    // lấy thông tin các sinh viên mà mình hướng dẫn
+    app.get('/api/lecturer/student', (req, res) => {
+      lecturerController.getStudent(req, res)
+    })
     // get thông tin sinh viên mà mình hướng dẫn theo nam
     app.get('/api/lecturer/studentfollow', (req, res) => {
       lecturerController.getStudentFollow(req, res);

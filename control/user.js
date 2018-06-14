@@ -135,7 +135,8 @@ module.exports = {
     const filter = req.query.filter
     const requesterId = utilize.getRequesterId(req)
     try {
-      const result = await user.getMessageByFilter(requesterId, filter)
+      let result = await user.getMessageByFilter(requesterId, filter)
+      result.reverse()
       res.send({res: result})
     } catch (err) {
       res.send({success: false, error: err.message})

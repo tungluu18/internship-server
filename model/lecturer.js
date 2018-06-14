@@ -1,6 +1,8 @@
 const knex = require('knex')(require('../knexfile'));
 const json2xls = require('json2xls');
 const fs = require('fs');
+const user = require('./user')
+const utilize = require('./utilize')
 
 module.exports = {
   // Lấy thông tin sinh viên do giáo viên hướng dẫn theo năm.
@@ -67,6 +69,7 @@ module.exports = {
     }
 
   },
+
   //in ra danh sách sinh viên mình hướng dẫn và điểm đánh giá tương ứng
   getMarkAndCommentForStudent: async function (lectureId) {
     try {
@@ -89,6 +92,7 @@ module.exports = {
       return Promise.reject(new Error(err));
     }
   },
+
   downloadCommentAndMarkForStudent: async function (lectureId) {
     const idOfStudent = await knex('studentfollowme').where('lectureId', lectureId);
     try {
@@ -101,6 +105,42 @@ module.exports = {
       return Promise.resolve(dir);
     } catch (errr) {
       return Promise.reject(new Error(err));
+    }
+  },
+
+  // xem báo cáo định kỳ của sinh viên
+  seeWeeklyReportOfStudent: async function(lecturerId, studentId, assignmentId){
+    const idOfReport = await knex('assignment').where('lecturerId', lecturerId).andWhere('studentId',studentId).andWhere('assignmentId', assignmentId);
+    try{
+      if (idOfReport.length === 0){
+        return Promise.reject(new Error('Sinh viên chưa nộp báo cáo'));
+      }
+      let dirname = __dirname
+      dirname = dirname.replace('model', 'data/');
+      console.log(dirname);
+      dir = await knex('assignment').where('assignmentId', idOfReport[0].assignmentId).select('file','content');
+      console.log(dir[0].file)
+      dir[0].file = dirname + dir[0].file;
+      console.log
+      return Promise.resolve(dir[0]);
+    }catch (err){
+      return Promise.reject(new Error(err));
+    }
+  },
+
+  getStudent: async function(lecturerId) {
+    try {
+      let students = await knex('intern').select().where({lecturerId, lecturerId})
+      for (let e of students) {
+        e.studentName = await user.getName(e.studentId)
+        if (e.partnerId) e.partnerName = await user.getName(e.partnerId)
+        e.internshipTermName = (await utilize.getFirstElement('internshipterm', {
+          internshipTermId: e.internshipTermId})).name
+      }
+      return students
+    } catch (err) {
+      console.log(err)
+      return Promise.reject(err)
     }
   }
 }
