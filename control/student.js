@@ -43,6 +43,17 @@ module.exports = {
       res.send({error: err.message})
     }
   },
+
+  isFollowing: async function(studentId, employId) {
+    try {
+      if (await utilize.isExisted('following', {studentId: studentId, employId: employId}))
+        return Promise.resolve(true)
+      else 
+        return Promise.resolve(false)
+    } catch (err) {
+      return Promise.reject(err)
+    }
+  },
   
   getFollowing: async function(req, res) {
     const studentId = utilize.getRequesterId(req)
