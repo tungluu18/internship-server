@@ -94,13 +94,28 @@ module.exports = {
       res.send({success: false, error: err.message})
     }
   },
-
+  // lấy danh sách các sinh viên thực tập tại công ty
   getInternship: async function(req, res) {
     const partnerId = utilize.getRequesterId(req)
     try {
       const result = await partner.getInternship(partnerId)  
       res.send({success: true, res: result})
     } catch (err) {
+      res.send({success: false, error: err.message})
+    }
+  },
+  // đánh giá kết quả thực tập cho một sinh viên
+  judgeInternship: async function(req, res) {
+    const partnerId = utilize.getRequesterId(req)
+    const internId = req.params.internId
+    const comment = req.body.comment
+    if (comment == "") return res.send({success: false, error: 'Bạn chưa nhập nội dung đánh giá'})
+    try {
+      if (!await utilize.isExisted('intern', {partnerId: partnerId, internId: internId}))
+        return res.send({success: false, error: 'Không có quyền đánh giá sinh viên thực tập này'})
+      await partner.judgeInternship(internId, comment)
+      res.send({success: true, error: null})
+    } catch(err) {
       res.send({success: false, error: err.message})
     }
   }

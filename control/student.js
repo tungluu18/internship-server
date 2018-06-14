@@ -194,5 +194,17 @@ module.exports = {
     } catch (err) {
       res.send({success: false, error: err.message})
     }
+  },
+
+  getPartnerReview: async function(req, res) {
+    const studentId = req.query.studentId
+    const partnerId = req.query.partnerId
+    try {
+      const result = await student.getPartnerReview(studentId, partnerId)
+      res.send({success: true, res: result})
+    } catch (err) {
+      console.log(err)
+      res.send({success: false, error: err.message})
+    }
   }
 }

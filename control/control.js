@@ -221,7 +221,13 @@ module.exports = {
     app.get('/api/partner/internship', (req, res) => {
       partnerController.getInternship(req, res)
     })
-    
+    app.put('/api/partner/internship/judge/:internId', secure.verifyToken, (req, res) => {
+      partnerController.judgeInternship(req, res)
+    })
+    // Lấy các nhận xét của doanh nghiệp cho sinh viên
+    app.get('/api/internReview', (req, res) => {
+      studentController.getPartnerReview(req, res)
+    })
     /*=====================================================================================================================================*/
     /*================================================= ADMIN' S FUNCTIONS ================================================================*/
     /*=====================================================================================================================================*/

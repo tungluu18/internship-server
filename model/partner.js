@@ -81,11 +81,26 @@ module.exports = {
 
   getInternship: async function(partnerId) {
     try {
-      const result = await knex('intern').select()              
+      let result = await knex('intern').select()              
               .join('student', 'intern.studentId', 'student.id')
               .where('partnerId', partnerId)
-
+      for (let e of result) {
+        [e.studentName, e.studentAvatar] = await Promise.all([
+          user.getName(e.studentId), user.getAvatar(e.studentId) 
+        ])
+        e.studentAvatar = 'http://localhost:3000' + e.studentAvatar
+        e.internshipTermName = (await knex('internshipterm').select().where({internshipTermId: e.internshipTermId}))[0].name
+      }
       return Promise.resolve(result)
+    } catch (err) {
+      return Promise.reject(err)
+    }
+  },
+
+  judgeInternship: async function(internId, comment) {
+    try {
+      await knex('intern').where({internId: internId}).update({partnerComment: comment})
+      return Promise.resolve()
     } catch (err) {
       return Promise.reject(err)
     }

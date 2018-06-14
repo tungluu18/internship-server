@@ -178,5 +178,33 @@ module.exports = {
     } catch (err) {
       return Promise.reject(err)
     }
+  },
+
+  getPartnerReview: async function(studentId, partnerId) {
+    if (studentId == null) studentId = undefined
+    if (partnerId == null) partnerId = undefined
+    try {
+      let condition = {}
+      if (partnerId != null) condition.partnerId = partnerId
+      if (studentId != null) condition.studentId = studentId
+      let result = await knex('intern').select().where(condition)      
+      for (let e of result) {
+        [e.studentName, e.studentAvatar] = await Promise.all([
+          user.getName(e.studentId), user.getAvatar(e.studentId)
+        ])
+        e.studentAvatar = 'http://localhost:3000' + e.studentAvatar
+        if (e.partnerId) {
+          [e.partnerName, e.partnerAvatar] = await Promise.all([
+            user.getName(e.partnerId), user.getAvatar(e.partnerId)
+          ])
+          e.partnerAvatar = 'http://localhost:3000' + e.partnerAvatar
+        }
+        e.internshipTermName = (await knex('internshipterm').select().where({internshipTermId: e.internshipTermId}))[0].name
+      }
+      return Promise.resolve(result)
+    } catch(err) {
+      console.log(err)
+      return Promise.reject(err)
+    }
   }
 }
