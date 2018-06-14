@@ -43,7 +43,7 @@ module.exports = {
       userController.getAll(req, res)
     })
     // get thông tin 1 id
-    app.get('/api/user/profile/:id', (req, res) => {
+    app.get('/api/user/profile/:id', secure.verifyToken, (req, res) => {
       userController.getById(req, res)
     })
     // put thông tin update cho tài khoản
@@ -62,23 +62,23 @@ module.exports = {
       }
       next()
     })
-    app.put('/api/user/profile/:id/avatar', (req, res) => {
+    app.put('/api/user/profile/:id/avatar', secure.verifyToken, (req, res) => {
       userController.updateAvatar(req, res)
     })   
     // gửi tin nhắn
-    app.post('/api/message/send', (req, res) => {
+    app.post('/api/message/send', secure.verifyToken, (req, res) => {
       userController.sendMessage(req, res)
     })
     // xem tin nhắn
-    app.get('/api/message/view', (req, res) => {
+    app.get('/api/message/view', secure.verifyToken, (req, res) => {
       userController.getMessageByFilter(req, res)
     })
     // nhận tin nhắn
-    app.get('/api/message/view/:messageId', (req, res) => {
+    app.get('/api/message/view/:messageId', secure.verifyToken, (req, res) => {
       userController.receiveMessage(req, res)
     })
     // lấy tất cả thông tin 
-    app.get('/api/profile/:type', (req, res) => {
+    app.get('/api/profile/:type', secure.verifyToken, (req, res) => {
       userController.getByType(req, res)
     })
     
@@ -94,11 +94,11 @@ module.exports = {
       studentController.getFollowing(req, res)
     })
     // chức năng tìm kiếm
-    app.get('/api/search', (req, res) => {
+    app.get('/api/search', secure.verifyToken, (req, res) => {
       studentController.search(req, res)
     })
     // lấy html từng bài đăng cụ thể
-    app.get('/api/employInfo/:employId', (req, res) => {
+    app.get('/api/employInfo/:employId', secure.verifyToken, (req, res) => {
       employ.getById(req, res)
     })
     // Upload Báo cáo 
@@ -109,11 +109,11 @@ module.exports = {
       }
       next()
     })
-    app.post('/api/student/assignment', (req, res) => {
+    app.post('/api/student/assignment', secure.verifyToken, (req, res) => {
       studentController.createAssignment(req, res)
     })
     // lấy tất cả các báo cáo đã nộp
-    app.get('/api/student/assignment', (req, res) => {
+    app.get('/api/student/assignment', secure.verifyToken, (req, res) => {
       studentController.getAssignment(req, res)
     })
     // sửa báo cáo đã nộp
@@ -124,11 +124,11 @@ module.exports = {
       }
       next()
     })
-    app.put('/api/student/assignment/:assignmentId', (req, res) => {
+    app.put('/api/student/assignment/:assignmentId', secure.verifyToken, (req, res) => {
       studentController.editAssignment(req, res)
     })
     // xóa báo cáo đã nộp
-    app.delete('/api/student/assignment/:assignmentId', (req, res) => {
+    app.delete('/api/student/assignment/:assignmentId', secure.verifyToken, (req, res) => {
       studentController.deleteAssignment(req, res)
     })
     // đăng kí giảng viên hướng dẫn
@@ -162,11 +162,7 @@ module.exports = {
     // get báo cáo của công ty về sinh viên mà mình hướng dẫn
     app.get('/api/lecturer/reportforstudent', (req, res) => {
       lecturerController.getReportForStudent(req, res);
-    });
-    /// Đánh giá của giáo viên về sinh viên mà mình hướng dẫn
-    app.post('/api/lecturer/addCommentAndMarkForStudent', jsonParser, (req, res) => {
-      lecturerController.addCommentAndMarkForStudent(req, res);
-    });
+    });    
     // Lấy điểm và đánh giá của sinh viên
     app.get('/api/lecturer/getMarkAndCommentForStudent', (req, res) => {
       lecturerController.getMarkAndCommentForStudent(req, res);
@@ -175,7 +171,14 @@ module.exports = {
     app.get('/api/lecturer/downloadMarkAndComment', (req, res) => {
       lecturerController.downloadMarkAndComment(req, res);
     });
-
+    // lấy các báo cáo của sinh viên nộp cho mình
+    app.get('/api/lecturer/assignment', secure.verifyToken, (req, res) => {
+      lecturerController.getAssignment(req, res)
+    })
+    /// Đánh giá của giảng viên về báo cáo của sinh viên
+    app.put('/api/lecturer/assignment/judge/:assignmentId', secure.verifyToken, (req, res) => {
+      lecturerController.judgeAssignment(req, res);
+    });
     /*=====================================================================================================================================*/
     /*=============================================== PARTNER' S FUNCTIONS ================================================================*/
     /*=====================================================================================================================================*/
@@ -219,13 +222,13 @@ module.exports = {
     /*=====================================================================================================================================*/
     /*================================================= ADMIN' S FUNCTIONS ================================================================*/
     /*=====================================================================================================================================*/
-    app.post('/api/admin/internshipTerm/create', (req, res) => {
+    app.post('/api/admin/internshipTerm/create', secure.verifyToken, (req, res) => {
       adminController.createInternshipTerm(req, res)
     })  
-    app.put('/api/admin/internshipTerm/update/:internshipTermId', (req, res) => {
+    app.put('/api/admin/internshipTerm/update/:internshipTermId', secure.verifyToken, (req, res) => {
       adminController.updateInternshipTerm(req, res)
     })
-    app.get('/api/admin/internshipTerm', (req, res) => {
+    app.get('/api/admin/internshipTerm', secure.verifyToken, (req, res) => {
       adminController.getAllInternshipTerm(req, res)
     })
   }

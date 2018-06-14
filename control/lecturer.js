@@ -46,31 +46,23 @@ module.exports = {
       res.send(err.messenge);
     }
   },
-  addCommentAndMarkForStudent: async function (req, res) {
+  judgeAssignment: async function (req, res) {
     try {
-      const lectureId = await req.query.lectureId;
-      const studentId = await req.query.studentId;
+      const assignmentId = req.params.assignmentId
+      const lecturerId = utilize.getRequesterId(req)
+
       const comment = await req.body.comment;
-      const mark = await req.body.mark;
-      //console.log(lectureId)
-      //console.log(studentId);
-      //console.log(comment);
-      //console.log(mark);
-      if (lectureId === undefined || studentId === undefined) {
-        res.send({ error: "Chưa có tên " });
-      }
-      if (comment === undefined || mark === undefined) {
-        console.log("sai comment")
-        res.send({ error: "Bạn chưa nhập đủ thông tin cho sinh viên" });
-      }
-      if (mark < 0 || mark > 10) {
-        console.log("sai ddiem");
-        res.send({ error: "Điểm phải nằm trong khoảng từ 0-10" });
-      }
-      if (comment === null) {
-        res.send({ error: "Chưa nhập đánh giá sinh viên" })
-      }
-      await lecturer.addCommentAndMarkForStudent(lectureId, studentId, comment, mark)
+      const score = await req.body.score;
+      // if (lectureId === undefined || studentId === undefined) {
+      //   res.send({ error: "Chưa có tên " });
+      // }
+      if (comment === undefined || score === undefined) 
+        return res.send({success: false, error: "Bạn chưa nhập đủ thông tin cho sinh viên" })
+      if (score < 0 || score > 10) 
+        return res.send({success: false, error: "Điểm phải nằm trong khoảng từ 0-10" })
+      if (!await utilize.isExisted('assignment', {lecturerId: lecturerId, assignmentId: assignmentId}))
+        return res.send({success: false, error: 'bạn không thể chấm điểm báo cáo này'})
+      await lecturer.judgeAssignment(assignmentId, comment, score)
       res.send({success: true, error: null})      
     } catch (err) {      
       res.send({success: false, error: err.message});
@@ -104,7 +96,7 @@ module.exports = {
       res.send({error: err.message});
     }
   },
-
+  // Lấy các sinh viên mình đang hướng dẫn thực tập
   getStudent: async function(req, res) {
     const lectureId = utilize.getRequesterId(req)
     try {
@@ -114,5 +106,17 @@ module.exports = {
       console.log(err)
       res.send({success: false, error: err.message})
     }
+  },
+  // Lấy các báo cáo sinh viên nộp cho mình
+  getAssignment: async function(req, res) {
+    const lecturerId = utilize.getRequesterId(req)
+    try {
+      const result = await lecturer.getAssignment(lecturerId)
+      res.send({success: true, res: result})
+    } catch (err) {
+      console.log(err)
+      res.send({success: false, error: null})
+    }   
   }
+
 }

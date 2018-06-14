@@ -101,7 +101,8 @@ module.exports = {
 
   getAssignment: async function(studentId) {
     try {
-      const result = await knex('assignment').select().where({studentId: studentId})
+      let result = await knex('assignment').select().where({studentId: studentId})
+      for (let e of result) if (e.file) e.file = 'http://localhost:3000' + e.file
       return Promise.resolve(result)
     } catch (err) {
       console.log(err)

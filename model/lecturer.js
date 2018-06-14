@@ -50,20 +50,15 @@ module.exports = {
     }
 
   },
-  addCommentAndMarkForStudent: async function (lectureId, studentId, comment, mark) {
+  judgeAssignment: async function (assignmentId, comment, score) {    
     try {
-      const idOfStudent = await knex('studentfollowme').where('lectureId', lectureId).andWhere('studentId', studentId);
-      if (idOfStudent.length === 0) {
-        return Promise.reject(new Error("Bạn không có sinh viên để cho điểm"));
-      }
-      if (idOfStudent[0].linkOfReport === null) {
-        return Promise.reject(new Error("Sinh viên chưa gửi báo cáo toàn văn, vì vậy bạn không thẻ cho điểm"));
-      }
-      await knex('studentfollowme').where('studentId', idOfStudent[0].studentId).update({
+      const assignment = await utilize.getFirstElement('assignment', {assignmentId: assignmentId})
+      if (assignment.file == null) return Promise.reject(new Error('Sinh viên chưa nộp báo cáo'))      
+      await knex('assignment').where({assignmentId: assignmentId}).update({
         'comment': comment,
-        'mark': mark
+        'score': score
       })
-      Promise.resolve();
+      return Promise.resolve();
     } catch (err) {
       return Promise.reject(new Error(err));
     }
@@ -138,6 +133,20 @@ module.exports = {
           internshipTermId: e.internshipTermId})).name
       }
       return students
+    } catch (err) {
+      console.log(err)
+      return Promise.reject(err)
+    }
+  },
+  // Lấy các báo cáo sinh viên nộp cho mình
+  getAssignment: async function(lecturerId) {
+    try {
+      let assignments = await knex('assignment').select().where({lecturerId: lecturerId})
+      for (let e of assignments) {
+        e.studentName = await user.getName(e.studentId)
+        if (e.file) e.file = 'http://localhost:3000' + e.file
+      }
+      return Promise.resolve(assignments)
     } catch (err) {
       console.log(err)
       return Promise.reject(err)
