@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: localhost
--- Thời gian đã tạo: Th6 14, 2018 lúc 06:47 SA
+-- Thời gian đã tạo: Th6 14, 2018 lúc 07:06 SA
 -- Phiên bản máy phục vụ: 5.7.17-log
 -- Phiên bản PHP: 5.6.30
 
@@ -98,6 +98,7 @@ INSERT INTO `employinfo` (`employId`, `partnerId`, `title`, `content`, `plaintex
 --
 
 CREATE TABLE `following` (
+  `followingId` int(11) NOT NULL,
   `employId` int(10) DEFAULT NULL,
   `studentId` int(10) DEFAULT NULL,
   `partnerId` int(10) NOT NULL,
@@ -108,10 +109,10 @@ CREATE TABLE `following` (
 -- Đang đổ dữ liệu cho bảng `following`
 --
 
-INSERT INTO `following` (`employId`, `studentId`, `partnerId`, `status`) VALUES
-(1, 1, 7, 'waiting for interview'),
-(2, 1, 7, 'Accepted'),
-(3, 1, 7, 'Rejected');
+INSERT INTO `following` (`followingId`, `employId`, `studentId`, `partnerId`, `status`) VALUES
+(1, 1, 1, 7, 'waiting for interview'),
+(3, 3, 1, 7, 'Rejected'),
+(4, 3, 2, 7, 'waiting for interview');
 
 -- --------------------------------------------------------
 
@@ -447,6 +448,7 @@ ALTER TABLE `employinfo`
 -- Chỉ mục cho bảng `following`
 --
 ALTER TABLE `following`
+  ADD PRIMARY KEY (`followingId`),
   ADD KEY `following_ibfk_1` (`employId`),
   ADD KEY `following_ibfk_2` (`studentId`);
 
@@ -532,6 +534,11 @@ ALTER TABLE `user`
 --
 ALTER TABLE `admin`
   MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+--
+-- AUTO_INCREMENT cho bảng `following`
+--
+ALTER TABLE `following`
+  MODIFY `followingId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT cho bảng `intern`
 --
