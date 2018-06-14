@@ -2,6 +2,7 @@ const knex = require('knex')(require('../knexfile'));
 const _ = require('lodash');
 const utilize = require('./utilize')
 const storage = require('./storage')
+const user = require('./user')
 
 module.exports = {
   follow: async function(studentId, employId) {
@@ -28,12 +29,17 @@ module.exports = {
     }
   },
 
-  isFollowing: async function(studentId, employId) {
+  getFollowing: async function(studentId) {
     try {
-      if (await utilize.isExisted('following', {studentId: studentId, employId: employId}))
-        return Promise.resolve(true)
-      else 
-        return Promise.resolve(false)
+      let following = await knex('following').select()
+                          .join('employinfo', 'following.employId', 'employinfo.employId')
+                          .where({studentId: studentId})
+      for (e of following) {
+        e.content = undefined
+        e.partnerName = await user.getName(e.partnerId)
+        e.partnerAvatar = 'http://localhost:3000' + await user.getAvatar(e.partnerId)
+      }
+      return Promise.resolve(following)
     } catch (err) {
       return Promise.reject(err)
     }

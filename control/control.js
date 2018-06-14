@@ -88,6 +88,10 @@ module.exports = {
     app.put('/api/employInfo/:employId', secure.verifyToken, (req, res) => {
       studentController.toggleFollow(req, res)
     })
+    // xem trạng thái ứng tuyển
+    app.get('/api/student/following', secure.verifyToken, (req, res) => {
+      studentController.getFollowing(req, res)
+    })
     // chức năng tìm kiếm
     app.get('/api/search', (req, res) => {
       studentController.search(req, res)
@@ -95,10 +99,6 @@ module.exports = {
     // lấy html từng bài đăng cụ thể
     app.get('/api/employInfo/:employId', (req, res) => {
       employ.getById(req, res)
-    })
-    // intern
-    app.post('/api/student/intern/lecturer', (req, res) => {
-      studentController.internWithLecturer(req, res)
     })
     // Upload Báo cáo 
     app.post('/api/student/upload/document', storage.uploadDocument.single('document'), (err, req, res, next) => {
@@ -127,6 +127,7 @@ module.exports = {
     app.get('/api/student/internship', secure.verifyToken, (req, res) => {
       studentController.getInternship(req, res)
     })
+
     /*=====================================================================================================================================*/
     /*=============================================== LECTURER' S FUNCTIONS ================================================================*/
     /*=====================================================================================================================================*/

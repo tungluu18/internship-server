@@ -44,6 +44,16 @@ module.exports = {
     }
   },
   
+  getFollowing: async function(req, res) {
+    const studentId = utilize.getRequesterId(req)
+    try {
+      const following = await student.getFollowing(studentId)
+      res.send({success: true, res: following})
+    } catch (err) {
+      res.send({success: false, error: err.message})
+    }
+  },
+
   registerInternship: async function(req, res) {
     const studentId = utilize.getRequesterId(req)
     const lecturerId = req.body.lecturerId

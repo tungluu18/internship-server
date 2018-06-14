@@ -13,6 +13,7 @@ module.exports = {
           user.getName(e.partnerId), user.getAvatar(e.partnerId)
         ])
         e.partnerName = partnerName
+        e.partnerAvatar = 'http://localhost:3000/avatar/0.jpg'
         e.partnerAvatar = 'http://localhost:3000' + partnerAvatar
         e.content = undefined
         e.postedDate = utilize.formatDate(e.postedDate)
