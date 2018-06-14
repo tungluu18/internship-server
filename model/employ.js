@@ -8,6 +8,7 @@ module.exports = {
   getAllEmployInfo: async function() {
     try {
       let employInfos = await knex('employinfo').select()
+      employInfos = employInfos.sort((a, b) => Number(b.postedDate) - Number(a.postedDate))
       for (let e of employInfos) {
         const [partnerName, partnerAvatar] = await Promise.all([
           user.getName(e.partnerId), user.getAvatar(e.partnerId)
@@ -19,7 +20,6 @@ module.exports = {
         e.postedDate = utilize.formatDate(e.postedDate)
         e.expireDate = utilize.formatDate(e.expireDate)
       }
-      // console.log(employInfos)
       return Promise.resolve(employInfos)
     } catch (err) {
       return Promise.reject(err)

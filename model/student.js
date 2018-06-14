@@ -201,7 +201,7 @@ module.exports = {
         }
         e.internshipTermName = (await knex('internshipterm').select().where({internshipTermId: e.internshipTermId}))[0].name
       }
-      return Promise.resolve(result)
+      return Promise.resolve(result[0])
     } catch(err) {
       console.log(err)
       return Promise.reject(err)
