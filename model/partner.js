@@ -60,7 +60,7 @@ module.exports = {
       let result = await knex('following').select()
                         .join('student', 'student.id', 'following.studentId')                        
                         .where({partnerId: partnerId})
-      for (e of result) e.avatarLink = 'http://localhost:3000' + await user.getAvatar(e.studentId)
+      for (let e of result) e.avatarLink = 'http://localhost:3000' + await user.getAvatar(e.studentId)
       return Promise.resolve(result)
     } catch (err) {
       return Promise.reject(err)

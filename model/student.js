@@ -29,12 +29,23 @@ module.exports = {
     }
   },
 
+  isFollowing: async function(studentId, employId) {
+    try {
+      if (await utilize.isExisted('following', {studentId: studentId, employId: employId}))
+        return Promise.resolve(true)
+      else 
+        return Promise.resolve(false)
+    } catch (err) {
+      return Promise.reject(err)
+    }
+  },
+  
   getFollowing: async function(studentId) {
     try {
       let following = await knex('following').select()
                           .join('employinfo', 'following.employId', 'employinfo.employId')
                           .where({studentId: studentId})
-      for (e of following) {
+      for (let e of following) {
         e.content = undefined
         e.partnerName = await user.getName(e.partnerId)
         e.partnerAvatar = 'http://localhost:3000' + await user.getAvatar(e.partnerId)

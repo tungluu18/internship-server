@@ -30,7 +30,7 @@ module.exports = {
   getAllInternshipTerm: async function() {
     try {
       const result = await knex('internshipterm').select()
-      for (e of result) {
+      for (let e of result) {
         e.startTime = utilize.formatDate(e.startTime)
         e.endTime = utilize.formatDate(e.endTime)
       }

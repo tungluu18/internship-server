@@ -12,7 +12,7 @@ module.exports = {
    try {
     let result = (keyword == "") ? (await employ.getAllEmployInfo())
                 : (await employ.getByFilter(filter, keyword))
-    for (e of result) e.following = await student.isFollowing(requesterId, e.employId)
+    for (let e of result) e.following = await student.isFollowing(requesterId, e.employId)
     res.send({res: result})
    } catch (err) {
     res.send({error: err.message})
@@ -42,19 +42,8 @@ module.exports = {
     } catch (err) {
       res.send({error: err.message})
     }
-  },
+  },  
 
-  isFollowing: async function(studentId, employId) {
-    try {
-      if (await utilize.isExisted('following', {studentId: studentId, employId: employId}))
-        return Promise.resolve(true)
-      else 
-        return Promise.resolve(false)
-    } catch (err) {
-      return Promise.reject(err)
-    }
-  },
-  
   getFollowing: async function(req, res) {
     const studentId = utilize.getRequesterId(req)
     try {
@@ -97,7 +86,7 @@ module.exports = {
       return res.send({success: false, error: 'Sinh viên không hợp lệ'})
     try {
       let result = await student.getInternship(studentId)
-      for (e of result) {
+      for (let e of result) {
         if (e.partnerId) e.partnerName = await user.getName(e.partnerId)
         e.lecturerName = await user.getName(e.lecturerId)
         const internshipTerm = await knex('internshipterm').select().where({internshipTermId: e.internshipTermId})        

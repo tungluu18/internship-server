@@ -7,11 +7,12 @@ const student = require('./student')
 module.exports = {
   getAllEmployInfo: async function() {
     try {
-      const employInfos = await knex('employinfo').select()
-      for (e of employInfos) {
+      let employInfos = await knex('employinfo').select()
+      for (let e of employInfos) {
         const [partnerName, partnerAvatar] = await Promise.all([
           user.getName(e.partnerId), user.getAvatar(e.partnerId)
-        ])
+        ])        
+        console.log(e.employId + ' ' + partnerAvatar)
         e.partnerName = partnerName
         e.partnerAvatar = 'http://localhost:3000/avatar/0.jpg'
         e.partnerAvatar = 'http://localhost:3000' + partnerAvatar
@@ -19,6 +20,7 @@ module.exports = {
         e.postedDate = utilize.formatDate(e.postedDate)
         e.expireDate = utilize.formatDate(e.expireDate)
       }
+      // console.log(employInfos)
       return Promise.resolve(employInfos)
     } catch (err) {
       return Promise.reject(err)
@@ -32,13 +34,14 @@ module.exports = {
     let filterSearch = (key, val) => (key == filter || key == 'employId')
     try {
       const employInfos = await this.getAllEmployInfo()    
-      for (e of employInfos) search.add(e, filterSearch)
+      for (let e of employInfos) search.add(e, filterSearch)
       let searchResult = search.search(keyword)
       let res = []
       for (let i = 0, j = 0; j < searchResult.length; ++j) {
         while (employInfos[i].employId != searchResult[j].employId) ++i
         res.push(employInfos[i++])
       }
+      console.log(employInfos)
       return Promise.resolve(res)
     } catch (err) {
       return Promise.reject(err)
