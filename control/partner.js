@@ -81,11 +81,11 @@ module.exports = {
   judgeFollow: async function(req, res) {
     try {
       const partnerId = utilize.getRequesterId(req)
-      const employId = req.params.employId
+      const followingId = req.params.followingId
       const judgement = req.body.judgement
-      if (! await utilize.isExisted('following', {employId: employId, partnerId: partnerId}))
+      if (! await utilize.isExisted('following', {followingId: followingId, partnerId: partnerId}))
         return res.send({success: false, error: 'Truy vấn không hợp lệ'})
-      await partner.judgeFollow(employId, judgement)
+      await partner.judgeFollow(followingId, judgement)
       res.send({success: true, error: null})
     } catch (err) {
       res.send({success: false, error: err.message})

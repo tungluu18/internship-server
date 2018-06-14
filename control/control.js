@@ -183,13 +183,14 @@ module.exports = {
       partnerController.getFollower(req, res)
     })
     // partner xác nhận sinh viên được nhận hay không
-    app.put('/api/partner/following/:employId', (req, res) => {
+    app.put('/api/partner/following/:followingId', (req, res) => {
       partnerController.judgeFollow(req, res)
     })
     // lấy tất cả các sinh viên đang thực tập tại công ty mình
     app.get('/api/partner/internship', (req, res) => {
       partnerController.getInternship(req, res)
     })
+    
     /*=====================================================================================================================================*/
     /*================================================= ADMIN' S FUNCTIONS ================================================================*/
     /*=====================================================================================================================================*/

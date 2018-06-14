@@ -67,9 +67,9 @@ module.exports = {
     }
   },
 
-  judgeFollow: async function(employId, judgement) {
+  judgeFollow: async function(followingId, judgement) {
     try {
-      await knex('following').update({status: judgement}).where({employId: employId})
+      await knex('following').update({status: judgement}).where({followingId: followingId})
       return Promise.resolve()
     } catch (err) {
       return Promise.reject(err)
@@ -81,7 +81,7 @@ module.exports = {
       const result = await knex('intern').select()              
               .join('student', 'intern.studentId', 'student.id')
               .where('partnerId', partnerId)
-              
+
       return Promise.resolve(result)
     } catch (err) {
       return Promise.reject(err)
